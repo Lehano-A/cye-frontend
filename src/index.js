@@ -5,6 +5,8 @@ import { ThemeProvider } from '@mui/material/styles'
 import theme from './themes/default'
 import { Provider } from 'react-redux'
 import store from './redux/store'
+import '@fontsource/roboto';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 

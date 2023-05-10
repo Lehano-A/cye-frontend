@@ -26,7 +26,7 @@ function InputSearch() {
   return (
     <StyledTextField
       autoComplete='off'
-      placeholder="Например: Nesquik"
+      placeholder="Например: Хрутка"
       focused={false}
       onChange={handleInputChange}
       value={inputValue}
