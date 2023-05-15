@@ -2,7 +2,7 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue } from "../../redux/reducers/InputSearchSlice";
+import { setInputValue } from "../../redux/reducers/inputSearchSlice";
 
 
 const StyledTextField = styled(TextField)(() => {
@@ -11,6 +11,7 @@ const StyledTextField = styled(TextField)(() => {
     marginRight: '25px',
   }
 });
+
 
 
 function InputSearch() {

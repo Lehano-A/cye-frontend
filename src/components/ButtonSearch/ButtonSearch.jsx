@@ -3,7 +3,6 @@ import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 
-
 const StyledButton = styled(Button)(({ theme }) => {
   const primaryLight = theme.palette.primary.light;
 
@@ -21,6 +20,7 @@ const StyledButton = styled(Button)(({ theme }) => {
     },
   }
 });
+
 
 
 function ButtonSearch() {
