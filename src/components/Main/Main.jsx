@@ -5,6 +5,13 @@ import FormSearch from "../FormSearch/FormSearch";
 import BoxSearchResult from "../BoxSearchResult/BoxSearchResult";
 import ModalProduct from "../ModalProduct/ModalProduct";
 
+const styleBox = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '120px',
+}
+
 
 function Main() {
 
@@ -12,12 +19,7 @@ function Main() {
 
   return (
     <>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: '150px',
-      }}>
+      <Box sx={styleBox}>
         <FormSearch />
       </Box>
 

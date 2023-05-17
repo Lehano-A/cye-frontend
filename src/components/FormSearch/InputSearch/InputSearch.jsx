@@ -1,17 +1,14 @@
 import React from "react";
 import { TextField } from "@mui/material";
-import { styled } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue } from "../../redux/reducers/inputSearchSlice";
-
+import { setInputValue } from "../../../redux/reducers/inputSearchSlice";
+import { styled } from "@mui/system";
 
 const StyledTextField = styled(TextField)(() => {
   return {
-    width: '500px',
-    marginRight: '25px',
+    width: '100%',
   }
 });
-
 
 
 function InputSearch() {
@@ -19,10 +16,10 @@ function InputSearch() {
   const inputValue = useSelector(state => state.inputSearch.value)
   const dispatch = useDispatch();
 
+
   const handleInputChange = (e) => {
     dispatch(setInputValue(e.target.value))
   }
-
 
   return (
     <StyledTextField

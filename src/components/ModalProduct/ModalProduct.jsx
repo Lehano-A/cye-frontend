@@ -8,14 +8,15 @@ import { setSelectedCard } from "../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
 
 const StyledImage = styled.img`
-  width: 200px;
-  height: 300px;
-  margin-right: 120px;
-  object-fit: cover;
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+  margin-right: 30px;
 `
 const styleCommonBox = {
   display: 'flex',
   flexDirection: 'row',
+  justifyContent: 'space-between'
 }
 
 const styleMainBox = {
@@ -30,7 +31,7 @@ const styleMainBox = {
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
   borderRadius: 3,
-  padding: '80px 60px 0 130px'
+  padding: '80px 60px 0 30px'
 }
 
 const styleButtonClose = {
@@ -51,13 +52,14 @@ const styleSlotProps = {
 }
 
 
+
 function ModalProduct() {
 
   const dispatch = useDispatch()
   const isVisible = useSelector(state => state.modalCardProduct.visible)
   const product = useSelector(state => state.selectedCardProduct.selectedCard)
 
-  const { title, image, description, nutritionalValue } = product
+  const { title, image, composition, nutritionalValue } = product
 
 
   const handleClose = () => {
@@ -75,6 +77,7 @@ function ModalProduct() {
         </IconButton>
 
         <Box sx={styleCommonBox}>
+
           <StyledImage src={image} />
 
           <Box>
@@ -82,11 +85,10 @@ function ModalProduct() {
 
             <Box>
               <Typography variant="h6" fontSize="16px" fontWeight={700}>Состав</Typography>
-              <Typography variant="body2">{description}</Typography>
+              <Typography variant="body2">{composition}</Typography>
             </Box>
 
             <TableNutritionalValue data={nutritionalValue} />
-
           </Box>
 
         </Box>

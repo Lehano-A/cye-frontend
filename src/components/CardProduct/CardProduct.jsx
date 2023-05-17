@@ -11,18 +11,14 @@ const StyledTypography = styled(Typography)`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 15px;
 `
-const styleCard = {
-  width: '200px'
+const styleCardMedia = {
+  maxHeight: '250px',
+  height: '100%',
+  objectFit: 'contain',
 }
 
-const styleCardMedia = {
-  height: '200px',
-  objectFit: 'contain',
-  marginTop: '15px'
-}
 
 
 function CardProduct(props) {
@@ -39,10 +35,9 @@ function CardProduct(props) {
 
   return (
     <Card
-      sx={styleCard}
       onClick={handleCardClick}
     >
-      <CardActionArea >
+      <CardActionArea>
         <CardMedia
           component="img"
           image={image}

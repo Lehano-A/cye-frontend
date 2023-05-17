@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setFetchFoundProducts } from "../../redux/reducers/searchQueryProductSlice";
-import { Box } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import CardProduct from "../CardProduct/CardProduct";
 import api from "../../api/api";
 
-const styleBox = {
-  display: 'flex',
-  justifyContent: 'space-evenly',
-  width: '1000px',
-  margin: '130px auto 0',
+const styleGrid = {
+  margin: '90px auto 0',
 }
 
 
@@ -28,25 +24,25 @@ function BoxSearchResult() {
 
 
   return (
-    <Box sx={styleBox}>
-      <Grid
-        container
-        spacing={4}
-        rowSpacing={3}
-        columnSpacing={3}
-        columns={4}
-      >
-        {foundProducts && foundProducts.map((product) => {
 
-          return (
-            <Grid key={product.id}>
-              <CardProduct title={product.title} image={product.image} product={product} />
-            </Grid>
-          )
-        })}
+    <Grid
+      container
+      columnSpacing={{ xs: 0, sm: 5 }}
+      rowSpacing={5}
+      sx={styleGrid}
+      justifyContent={{ xs: 'center', sm: 'flex-start' }}
+      maxWidth='lg'
+    >
+      {foundProducts && foundProducts.map((product) => {
 
-      </Grid>
-    </Box>
+        return (
+          <Grid xs={8} sm={6} md={4} lg={3} item key={product.id}>
+            <CardProduct title={product.title} image={product.image} product={product} />
+          </Grid>
+        )
+      })}
+
+    </Grid>
   )
 }
 
