@@ -15,6 +15,7 @@ function BoxSearchResult() {
   const dispatch = useDispatch()
   const foundProducts = useSelector(state => state.searchQueryProduct.foundProducts)
 
+  
   // Временно тут - инициирует работу поиска продукта
   useEffect(() => {
     const getProducts = api.getProducts()
@@ -36,7 +37,7 @@ function BoxSearchResult() {
       {foundProducts && foundProducts.map((product) => {
 
         return (
-          <Grid xs={8} sm={6} md={4} lg={3} item key={product.id}>
+          <Grid xs={8} sm={6} md={4} lg={3} key={product.id}>
             <CardProduct title={product.title} image={product.image} product={product} />
           </Grid>
         )

@@ -5,6 +5,7 @@ const theme = createTheme({
   shadows: {
     none: 'none',
     1: 'none',
+    8: 'none'
   },
   typography: {
     fontFamily: 'Roboto'

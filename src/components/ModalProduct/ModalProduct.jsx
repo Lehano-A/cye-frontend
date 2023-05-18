@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Modal, Box, IconButton, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,6 +6,9 @@ import { changeVisibleModal } from "../../redux/reducers/modalCardProductSlice";
 import styled from "styled-components";
 import { setSelectedCard } from "../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
+import { setValueInterpretation } from "../../redux/reducers/popperInterpretationSlice";
+import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
+import Ingredient from "./Ingredient/Ingredient";
 
 const StyledImage = styled.img`
   width: 400px;
@@ -52,49 +55,87 @@ const styleSlotProps = {
 }
 
 
+const titleProps = {
+  variant: 'h4',
+  mb: '50px',
+  fontSize: '16px',
+  fontWeight: 700,
+}
 
 function ModalProduct() {
 
   const dispatch = useDispatch()
-  const isVisible = useSelector(state => state.modalCardProduct.visible)
+  const isVisibleModal = useSelector(state => state.modalCardProduct.visible)
   const product = useSelector(state => state.selectedCardProduct.selectedCard)
+  const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
+  const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
   const { title, image, composition, nutritionalValue } = product
+  const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 
-  const handleClose = () => {
+  useEffect(() => {
+    if (!refSelectedIngredient) {
+      dispatch(setValueInterpretation(''))
+    }
+  }, [dispatch, isVisiblePopper, refSelectedIngredient])
+
+
+  const handleCloseModal = () => {
     dispatch(setSelectedCard(null))     // сбрасываем стэйт выбранной карточки
     dispatch(changeVisibleModal(false)) // закрывает модальное окно продукта
   }
 
 
   return (
-    <Modal open={isVisible} onClose={handleClose} slotProps={styleSlotProps}>
-      <Box sx={styleMainBox}>
+    <>
+      <Modal disableEnforceFocus={true} open={isVisibleModal} onClose={handleCloseModal} slotProps={styleSlotProps}>
+        <Box sx={styleMainBox}>
 
-        <IconButton onClick={handleClose} sx={styleButtonClose}>
-          <CloseIcon sx={styleIcon} />
-        </IconButton>
+          <IconButton onClick={handleCloseModal} sx={styleButtonClose}>
+            <CloseIcon sx={styleIcon} />
+          </IconButton>
 
-        <Box sx={styleCommonBox}>
-
-          <StyledImage src={image} />
-
-          <Box>
-            <Typography variant="h3" mb="50px" fontSize="18px" fontWeight={700}>{title}</Typography>
+          <Box sx={styleCommonBox}>
+            <StyledImage src={image} />
 
             <Box>
-              <Typography variant="h6" fontSize="16px" fontWeight={700}>Состав</Typography>
-              <Typography variant="body2">{composition}</Typography>
+              <Typography {...titleProps}>
+                {title}
+              </Typography>
+
+              <Box>
+                <Typography
+                  variant="h6"
+                  fontSize="16px"
+                  fontWeight={700}
+                >
+                  Состав
+                </Typography>
+
+                {composition.map((item, id) => {
+                  return (
+                    <Ingredient key={id} item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
+                  )
+                })}
+
+              </Box>
+
+              <TableNutritionalValue data={nutritionalValue} />
             </Box>
 
-            <TableNutritionalValue data={nutritionalValue} />
           </Box>
 
-        </Box>
+          {refSelectedIngredient && (
+            <PopperInterpretation
+              refIngredient={refSelectedIngredient}
+              interpretationValue={interpretationValue}
+            />
+          )}
 
-      </Box>
-    </Modal>
+        </Box>
+      </Modal>
+    </>
   )
 }
 

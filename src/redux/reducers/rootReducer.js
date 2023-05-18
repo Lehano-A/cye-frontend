@@ -3,6 +3,7 @@ import inputSearchSlice from "./inputSearchSlice";
 import searchQueryProductSlice from "./searchQueryProductSlice";
 import modalCardProductSlice from "./modalCardProductSlice";
 import selectedCardProductSlice from "./selectedCardProductSlice";
+import popperInterpretationSlice from "./popperInterpretationSlice";
 
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   searchQueryProduct: searchQueryProductSlice,
   modalCardProduct: modalCardProductSlice,
   selectedCardProduct: selectedCardProductSlice,
+  popperInterpretation: popperInterpretationSlice,
 })
 
 export default rootReducer;
