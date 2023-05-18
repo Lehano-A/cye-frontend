@@ -117,4 +117,3 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
 }
 
 export default PopperInterpretation
-

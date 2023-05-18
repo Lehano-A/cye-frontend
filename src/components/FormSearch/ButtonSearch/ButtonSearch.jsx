@@ -7,8 +7,8 @@ const StyledButton = styled(Button)(({ theme }) => {
   const primaryLight = theme.palette.primary.light;
 
   return {
-    width: '65px',
-    height: '65px',
+    width: '64px',
+    height: '64px',
     backgroundColor: primaryLight,
     transition: 'all 0.2s',
     '&:hover': {
@@ -16,11 +16,15 @@ const StyledButton = styled(Button)(({ theme }) => {
     },
 
     '&:active': {
-      transform: 'scale(0.9)'
+      transform: 'scale(0.88)'
     },
   }
 });
 
+const styleIcon = {
+  width: '32px',
+  height: '32px',
+}
 
 
 function ButtonSearch() {
@@ -30,7 +34,7 @@ function ButtonSearch() {
       type='submit'
       variant="contained"
     >
-      <SearchIcon fontSize="large" />
+      <SearchIcon sx={styleIcon} fontSize="large" />
     </StyledButton>
 
   )
