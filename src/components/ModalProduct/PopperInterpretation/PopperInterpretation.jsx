@@ -77,7 +77,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
           {
             name: "offset",
             options: {
-              offset: [0, -1], // смещение вверх, чтобы не создавалось пустова пространства между целевым элементом и Popper
+              offset: [0, -1], // смещение вверх, чтобы не создавалось пустого пространства между целевым элементом и Popper
             }
           },
           {

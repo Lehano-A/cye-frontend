@@ -9,6 +9,8 @@ import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue
 import { setValueInterpretation } from "../../redux/reducers/popperInterpretationSlice";
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Ingredient from "./Ingredient/Ingredient";
+import Composition from "./Composition/Composition";
+import NoteToComposition from "./NoteToComposition/NoteToComposition";
 
 const StyledImage = styled.img`
   width: 400px;
@@ -70,7 +72,7 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, image, composition, nutritionalValue } = product
+  const { title, image, composition, noteToComposition, nutritionalValue } = product
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 
@@ -105,19 +107,13 @@ function ModalProduct() {
               </Typography>
 
               <Box>
-                <Typography
-                  variant="h6"
-                  fontSize="16px"
-                  fontWeight={700}
-                >
-                  Состав
-                </Typography>
 
-                {composition.map((item, id) => {
-                  return (
-                    <Ingredient key={id} item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
-                  )
-                })}
+                <Composition
+                  data={composition}
+                  setRefSelectedIngredient={setRefSelectedIngredient}
+                />
+
+                {noteToComposition && <NoteToComposition data={noteToComposition} />}
 
               </Box>
 
@@ -134,9 +130,16 @@ function ModalProduct() {
           )}
 
         </Box>
-      </Modal>
+      </Modal >
     </>
   )
 }
 
 export default ModalProduct
+
+
+// {composition.map((item, id) => {
+//   return (
+//     <Ingredient key={id} item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
+//   )
+// })}

@@ -9,7 +9,7 @@ function Ingredient({ item, setRefSelectedIngredient }) {
 
   const dispatch = useDispatch()
 
-   const handleClickIngredient = (e, value) => {
+  const handleClickIngredient = (e, value) => {
     setRefSelectedIngredient(e.currentTarget)
 
     dispatch(setValueInterpretation(value))
