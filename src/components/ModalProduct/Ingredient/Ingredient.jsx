@@ -2,8 +2,17 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { toggleVisiblePopper, setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
+import styled from 'styled-components';
 
+const StyledTypography = styled(Typography)`
+display: 'inline-block';
+cursor: ${(props) => (props.interpretation && 'pointer')};
+font-weight: ${(props) => (props.interpretation && 'bold')};
 
+&:hover {
+  text-decoration: ${(props) => (props.interpretation && 'underline dashed')};
+}
+`
 
 function Ingredient({ item, setRefSelectedIngredient }) {
 
@@ -17,13 +26,13 @@ function Ingredient({ item, setRefSelectedIngredient }) {
   }
 
   return (
-    <Typography
-      sx={{ display: 'inline-block', cursor: item.interpretation && 'pointer' }}
+    <StyledTypography
       onClick={(e) => item.interpretation && handleClickIngredient(e, item.interpretation)}
       variant="body2"
+      interpretation={item.interpretation}
     >
       {item.ingredient ? item.ingredient : item}
-    </Typography>
+    </StyledTypography>
   )
 }
 

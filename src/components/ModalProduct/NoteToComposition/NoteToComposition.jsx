@@ -13,7 +13,7 @@ function NoteToComposition({ data }) {
         Примечание к составу
       </Typography>
 
-      <Typography variant="body2">{data}</Typography>
+      <Typography sx={{ pt: 1 }} variant="body2">{data}</Typography>
     </Box>
   )
 }

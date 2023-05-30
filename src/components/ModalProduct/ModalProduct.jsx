@@ -11,6 +11,7 @@ import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Ingredient from "./Ingredient/Ingredient";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
+import Company from "./Company/Company";
 
 const StyledImage = styled.img`
   width: 400px;
@@ -20,7 +21,6 @@ const StyledImage = styled.img`
 `
 const styleCommonBox = {
   display: 'flex',
-  flexDirection: 'row',
   justifyContent: 'space-between'
 }
 
@@ -72,7 +72,7 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, image, composition, noteToComposition, nutritionalValue } = product
+  const { title, image, composition, noteToComposition, nutritionalValue, company } = product
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 
@@ -106,8 +106,7 @@ function ModalProduct() {
                 {title}
               </Typography>
 
-              <Box>
-
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <Composition
                   data={composition}
                   setRefSelectedIngredient={setRefSelectedIngredient}
@@ -115,9 +114,14 @@ function ModalProduct() {
 
                 {noteToComposition && <NoteToComposition data={noteToComposition} />}
 
+                <TableNutritionalValue data={nutritionalValue} />
+
+                <Company
+                  data={company}
+                />
+
               </Box>
 
-              <TableNutritionalValue data={nutritionalValue} />
             </Box>
 
           </Box>
@@ -130,7 +134,7 @@ function ModalProduct() {
           )}
 
         </Box>
-      </Modal >
+      </Modal>
     </>
   )
 }
@@ -138,8 +142,3 @@ function ModalProduct() {
 export default ModalProduct
 
 
-// {composition.map((item, id) => {
-//   return (
-//     <Ingredient key={id} item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
-//   )
-// })}

@@ -4,6 +4,7 @@ import { changeVisibleModal } from "../../redux/reducers/modalCardProductSlice"
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
 import { setSelectedCard } from "../../redux/reducers/selectedCardProductSlice"
 import styled from "styled-components"
+import NewReleasesRoundedIcon from '@mui/icons-material/NewReleasesRounded';
 
 const StyledTypography = styled(Typography)`
   display: -webkit-box;

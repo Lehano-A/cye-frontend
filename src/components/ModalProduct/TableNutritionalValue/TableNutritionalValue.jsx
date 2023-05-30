@@ -1,5 +1,5 @@
 import React from "react"
-import { Typography, Table, TableRow, TableCell, TableHead, TableBody } from '@mui/material'
+import { Box, Typography, Table, TableRow, TableCell, TableHead, TableBody } from '@mui/material'
 import styled from "styled-components"
 
 const StyledTableCell = styled(TableCell)(() => {
@@ -14,7 +14,7 @@ function TableNutritionalValue({ data }) {
   const { protein, fats, carbs, calories } = data
 
   return (
-    <>
+    <Box>
       <Typography variant="h6" fontSize="16px" fontWeight={700}>Пищевая ценность на 100 г</Typography>
       <Table>
         <TableHead>
@@ -35,7 +35,7 @@ function TableNutritionalValue({ data }) {
           </TableRow>
         </TableBody>
       </Table>
-    </>
+    </Box>
   )
 }
 
