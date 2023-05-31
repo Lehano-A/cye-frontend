@@ -2,6 +2,11 @@ import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material"
 import styled from "styled-components";
 
+const styleList = {
+  display: 'flex',
+  justifyContent: 'space-between'
+}
+
 const StyledListItem = styled(ListItem)(() => {
   return {
     display: 'flex',
@@ -13,6 +18,18 @@ const StyledListItem = styled(ListItem)(() => {
   }
 })
 
+const StyledTitle = styled(Typography)(() => {
+  return {
+    fontSize: "16px",
+    fontWeight: 700,
+  }
+})
+
+const StyledValue = styled(Typography)(() => {
+  return {
+    paddingTop: '8px'
+  }
+})
 
 
 function Company({ data }) {
@@ -21,60 +38,25 @@ function Company({ data }) {
 
   return (
     <Box>
-      <List sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <List sx={styleList}>
+
         <StyledListItem>
-
-          <Typography
-            variant="h6"
-            fontSize="16px"
-            fontWeight={700}
-          >
-            Бренд
-          </Typography>
-
-          <Typography
-            variant="body2"
-            pt={'8px'}
-          >
-            {brand}
-          </Typography>
+          <StyledTitle variant="h6" >Бренд</StyledTitle>
+          <StyledValue variant="body2" >{brand}</StyledValue>
         </StyledListItem>
 
 
         <StyledListItem>
-          <Typography
-            variant="h6"
-            fontSize="16px"
-            fontWeight={700}
-          >
-            Производитель
-          </Typography>
-
-          <Typography
-            variant="body2"
-            pt={'8px'}
-          >
-            {manufacture}
-          </Typography>
+          <StyledTitle variant="h6" >Производитель</StyledTitle>
+          <StyledValue variant="body2" >{manufacture}</StyledValue>
         </StyledListItem>
 
 
         <StyledListItem>
-          <Typography
-            variant="h6"
-            fontSize="16px"
-            fontWeight={700}
-          >
-            Страна производства
-          </Typography>
-
-          <Typography
-            variant="body2"
-            pt={'8px'}
-          >
-            {countryManufacture}
-          </Typography>
+          <StyledTitle variant="h6" >Страна производства</StyledTitle>
+          <StyledValue variant="body2">{countryManufacture}</StyledValue>
         </StyledListItem>
+
       </List>
     </Box>
   )

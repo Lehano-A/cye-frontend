@@ -18,8 +18,8 @@ function Composition({ data, setRefSelectedIngredient }) {
         {data.map((item, id) => {
 
           return (
-            <ListItem sx={{ padding: 0 }}>
-              <Ingredient key={id} item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
+            <ListItem sx={{ padding: 0 }} key={id}>
+              <Ingredient item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
             </ListItem>
           )
         })}

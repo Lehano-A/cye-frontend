@@ -98,11 +98,11 @@ class Api {
           countryManufacture: 'Россия',
         },
 
-        typePacking: 'Пластиковое ведерко',
-
-        weight: '298 г',
-
-        shelfLife: '18 месяцев',
+        otherInfo: {
+          typePackage: 'Пластиковое ведерко',
+          weight: '298 г',
+          shelfLife: '18 месяцев',
+        }
       },
     ]
   }

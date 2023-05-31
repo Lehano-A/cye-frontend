@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Modal, Box, IconButton, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,10 +8,19 @@ import { setSelectedCard } from "../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
 import { setValueInterpretation } from "../../redux/reducers/popperInterpretationSlice";
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
-import Ingredient from "./Ingredient/Ingredient";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import Company from "./Company/Company";
+import OtherInfo from "./OtherInfo/OtherInfo";
+
+/*
+  Особенности, которые нужно учитывать:
+    Для backdrop установлено правило pointer-events: none, чтобы была возможность
+    прокручивать страницу, если курсор находится вне модального окна, т.е. на backdrop.
+    Но при этом ещё и отключилась возможность закрывать модальное окно при нажатии на backdrop.
+    Поэтому было произведено делегирование события клика на родительский общий контейнер,
+    с последующим сравнением элементов, где произошёл клик: на кнопке закрытия или на backdrop.
+*/
 
 const StyledImage = styled.img`
   width: 400px;
@@ -21,22 +30,19 @@ const StyledImage = styled.img`
 `
 const styleCommonBox = {
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
 }
 
 const styleMainBox = {
+  position: 'relative',
   display: 'flex',
+  flexDirection: 'column',
   justifyContent: 'center',
-  maxWidth: 900,
-  width: '100%',
-  height: 700,
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  maxWidth: '900px',
   bgcolor: 'background.paper',
   borderRadius: 3,
-  padding: '80px 60px 0 30px'
+  padding: '80px 60px 40px 30px',
+  margin: '40px auto',
 }
 
 const styleButtonClose = {
@@ -49,20 +55,22 @@ const styleButtonClose = {
 const styleIcon = (theme) => {
   return {
     color: theme.palette.primary.light,
+    pointerEvents: 'none'
   }
 }
 
 const styleSlotProps = {
-  backdrop: { style: { backgroundColor: 'rgba(0, 0, 0, 0.1)' } }
+  backdrop: { style: { backgroundColor: 'rgba(0, 0, 0, 0.1)', pointerEvents: 'none' } }
 }
-
 
 const titleProps = {
   variant: 'h4',
-  mb: '50px',
+  marginBottom: '50px',
   fontSize: '16px',
   fontWeight: 700,
 }
+
+
 
 function ModalProduct() {
 
@@ -72,8 +80,10 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, image, composition, noteToComposition, nutritionalValue, company } = product
+  const { title, image, composition, noteToComposition, nutritionalValue, company, otherInfo } = product
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
+  const refBackdrop = useRef(null)
+  const refButtonCloseModal = useRef(null)
 
 
   useEffect(() => {
@@ -83,59 +93,58 @@ function ModalProduct() {
   }, [dispatch, isVisiblePopper, refSelectedIngredient])
 
 
-  const handleCloseModal = () => {
-    dispatch(setSelectedCard(null))     // сбрасываем стэйт выбранной карточки
-    dispatch(changeVisibleModal(false)) // закрывает модальное окно продукта
+  const handleCloseModal = (e) => {
+    if (e.target === refBackdrop.current || e.target === refButtonCloseModal.current) {
+
+      dispatch(setSelectedCard(null))     // сбрасываем стэйт выбранной карточки
+      dispatch(changeVisibleModal(false)) // закрывает модальное окно продукта
+    }
   }
 
 
   return (
-    <>
-      <Modal disableEnforceFocus={true} open={isVisibleModal} onClose={handleCloseModal} slotProps={styleSlotProps}>
-        <Box sx={styleMainBox}>
+    <Modal ref={refBackdrop} onClick={handleCloseModal} aria-labelledby="modal-title" sx={{ overflowY: 'scroll' }} disableEnforceFocus={true} open={isVisibleModal} slotProps={styleSlotProps}>
 
-          <IconButton onClick={handleCloseModal} sx={styleButtonClose}>
-            <CloseIcon sx={styleIcon} />
-          </IconButton>
+      <Box sx={styleMainBox}>
 
-          <Box sx={styleCommonBox}>
-            <StyledImage src={image} />
+        <IconButton ref={refButtonCloseModal} sx={styleButtonClose}>
+          <CloseIcon sx={styleIcon} />
+        </IconButton>
 
-            <Box>
-              <Typography {...titleProps}>
-                {title}
-              </Typography>
+        <Box sx={styleCommonBox}>
+          <StyledImage src={image} />
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <Composition
-                  data={composition}
-                  setRefSelectedIngredient={setRefSelectedIngredient}
-                />
+          <Box sx={{ maxWidth: '600px' }}>
+            <Typography id="modal-title" {...titleProps}>
+              {title}
+            </Typography>
 
-                {noteToComposition && <NoteToComposition data={noteToComposition} />}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 
-                <TableNutritionalValue data={nutritionalValue} />
+              <Composition
+                data={composition}
+                setRefSelectedIngredient={setRefSelectedIngredient}
+              />
 
-                <Company
-                  data={company}
-                />
+              {noteToComposition && <NoteToComposition data={noteToComposition} />}
 
-              </Box>
+              <TableNutritionalValue data={nutritionalValue} />
+              <Company data={company} />
+              <OtherInfo data={otherInfo} />
 
             </Box>
-
           </Box>
-
-          {refSelectedIngredient && (
-            <PopperInterpretation
-              refIngredient={refSelectedIngredient}
-              interpretationValue={interpretationValue}
-            />
-          )}
-
         </Box>
-      </Modal>
-    </>
+
+        {refSelectedIngredient && (
+          <PopperInterpretation
+            refIngredient={refSelectedIngredient}
+            interpretationValue={interpretationValue}
+          />
+        )}
+      </Box>
+
+    </Modal>
   )
 }
 
