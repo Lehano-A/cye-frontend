@@ -1,6 +1,6 @@
 import React from "react"
 import { Box, Typography, Table, TableRow, TableCell, TableHead, TableBody } from '@mui/material'
-import styled from "styled-components"
+import { styled } from "@mui/material/styles";
 
 const StyledTableCell = styled(TableCell)(() => {
   return {

@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { toggleVisiblePopper, setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
-import styled from 'styled-components';
+import { toggleVisiblePopper, setValueInterpretation } from "../../../../redux/reducers/popperInterpretationSlice";
+import { styled } from "@mui/material/styles";
 
 const StyledTypography = styled(Typography)`
 display: 'inline-block';

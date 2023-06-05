@@ -1,9 +1,9 @@
 import React from "react"
 import { useDispatch } from "react-redux"
-import { changeVisibleModal } from "../../redux/reducers/modalCardProductSlice"
+import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlice"
 import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
-import { setSelectedCard } from "../../redux/reducers/selectedCardProductSlice"
-import styled from "styled-components"
+import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice"
+import { styled } from "@mui/material/styles";
 
 const StyledTypography = styled(Typography)`
   display: -webkit-box;
@@ -20,7 +20,6 @@ const styleCardMedia = {
 }
 
 
-
 function CardProduct(props) {
 
   const { title, image, product } = props;
@@ -35,6 +34,7 @@ function CardProduct(props) {
 
   return (
     <Card
+      variant="searchResult"
       onClick={handleCardClick}
     >
       <CardActionArea>

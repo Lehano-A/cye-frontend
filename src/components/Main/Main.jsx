@@ -1,32 +1,30 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Box } from "@mui/material";
-import FormSearch from "../FormSearch/FormSearch";
-import BoxSearchResult from "../BoxSearchResult/BoxSearchResult";
-import ModalProduct from "../ModalProduct/ModalProduct";
+import BoxSearchResult from "./BoxSearchResult/BoxSearchResult";
+import ModalProduct from "./ModalProduct/ModalProduct";
+import Welcome from "./Welcome/Welcome";
 
-const styleBox = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: '120px',
+const styleMainBox = {
+  maxWidth: '1280px',
+  margin: '0 auto'
 }
 
 
 function Main() {
 
   const isVisible = useSelector(state => state.modalCardProduct.visible)
+  const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
 
   return (
-    <>
-      <Box sx={styleBox}>
-        <FormSearch />
-      </Box>
 
-      <BoxSearchResult />
+    <main style={styleMainBox}>
+
+      {isSubmitting ? <BoxSearchResult /> : <Welcome />}
 
       {isVisible && <ModalProduct />}
-    </>
+
+    </main>
+
   )
 }
 

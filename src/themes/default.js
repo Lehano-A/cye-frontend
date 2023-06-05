@@ -1,28 +1,14 @@
 import { createTheme } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 
+const defaultTheme = createTheme()
+
 const theme = createTheme({
-  shadows: {
-    none: 'none',
-    1: 'none',
-    8: 'none'
-  },
+
   typography: {
     fontFamily: 'Roboto'
   },
-  MuiTypography: {
-    defaultProps: {
-      variantMapping: {
-        h1: 'h1',
-        h2: 'h2',
-        h3: 'h3',
-        h4: 'h4',
-        h5: 'h5',
-        h6: 'h6',
-        p: 'p',
-      },
-    },
-  },
+
   palette: {
     primary: {
       main: '#5c70c8',
@@ -37,12 +23,60 @@ const theme = createTheme({
   },
 
   components: {
+
+    MuiTypography: {
+      defaultProps: {
+        variantMapping: {
+          h1: 'h1',
+          h2: 'h2',
+          h3: 'h3',
+          h4: 'h4',
+          h5: 'h5',
+          h6: 'h6',
+          p: 'p',
+        },
+      },
+    },
+
+    MuiPaper: {
+      variants: [{
+        props: { variant: 'header' },
+        style: {
+          boxShadow: `0px 2px 1px -1px rgba(160 171 223 / 30%), 0px 1px 1px 0px rgba(160 171 223 / 14%), 0px 1px 3px 0px rgba(160 171 223 / 12%)`,
+          borderRadius: 0,
+        },
+      }]
+    },
+
+    MuiCard: {
+      variants: [{
+        props: { variant: 'searchResult' },
+        style: {
+          boxShadow: 'none'
+        }
+      }]
+    },
+
     MuiTextField: {
       styleOverrides: {
         root: {
+          '.MuiInputBase-root:hover': {
+            borderColor: grey[400],
+            transition: '0.2s ease'
+          },
+
+          '.MuiInputBase-root': {
+            border: '5px #a0abdf solid',
+            height: '55px'
+          },
+
+          '.MuiOutlinedInput-notchedOutline': {
+            border: 'none'
+          },
+
           '.MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: grey[400]
-          }
+            border: 'none',
+          },
         }
       },
     },

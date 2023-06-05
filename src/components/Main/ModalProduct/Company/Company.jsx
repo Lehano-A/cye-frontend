@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material"
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
 
 const styleList = {
   display: 'flex',

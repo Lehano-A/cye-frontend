@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Modal, Box, IconButton, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
-import { changeVisibleModal } from "../../redux/reducers/modalCardProductSlice";
-import styled from "styled-components";
-import { setSelectedCard } from "../../redux/reducers/selectedCardProductSlice";
+import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlice";
+import { styled } from "@mui/material/styles";
+import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
-import { setValueInterpretation } from "../../redux/reducers/popperInterpretationSlice";
+import { setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
@@ -22,7 +22,7 @@ import OtherInfo from "./OtherInfo/OtherInfo";
     с последующим сравнением элементов, где произошёл клик: на кнопке закрытия или на backdrop.
 */
 
-const StyledImage = styled.img`
+const StyledImage = styled('img')`
   width: 400px;
   height: 400px;
   object-fit: contain;

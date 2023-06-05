@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Popper, Typography, Fade } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleVisiblePopper, setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
-import { styled } from "@mui/material";
+import { toggleVisiblePopper, setValueInterpretation } from "../../../../redux/reducers/popperInterpretationSlice";
+import { styled } from "@mui/material/styles";
 
 const StyledArrow = styled('div')(() => {
   return {
