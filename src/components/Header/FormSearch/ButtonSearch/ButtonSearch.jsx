@@ -9,14 +9,17 @@ const StyledButton = styled(Button)(({ theme }) => {
   return {
     width: '64px',
     height: '64px',
+    boxShadow: 'none',
     backgroundColor: primaryLight,
     transition: 'all 0.2s',
     '&:hover': {
-      backgroundColor: primaryLight
+      backgroundColor: primaryLight,
+      boxShadow: 'none',
     },
 
     '&:active': {
-      transform: 'scale(0.88)'
+      transform: 'scale(0.88)',
+      boxShadow: 'none',
     },
   }
 });
@@ -30,10 +33,8 @@ const styleIcon = {
 function ButtonSearch() {
 
   return (
-    <StyledButton
-      type='submit'
-      variant="contained"
-    >
+
+    <StyledButton type="submit" variant="contained">
       <SearchIcon sx={styleIcon} fontSize="large" />
     </StyledButton>
 
