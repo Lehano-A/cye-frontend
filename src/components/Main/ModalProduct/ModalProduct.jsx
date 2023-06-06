@@ -53,7 +53,7 @@ const StyledButtonClose = styled(IconButton)(() => {
     position: 'absolute',
     top: 15,
     right: 15,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   }
 })
 
@@ -107,7 +107,7 @@ function ModalProduct() {
 
       <DialogActions>
         <StyledButtonClose color="primary" onClick={handleCloseModal}>
-          <CloseIcon sx={styleIcon} />
+          <CloseIcon  sx={styleIcon} />
         </StyledButtonClose>
       </DialogActions>
 

@@ -1,9 +1,11 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlice"
-import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
+import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, SvgIcon } from "@mui/material"
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip"
 import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice"
 import { styled } from "@mui/material/styles";
+import { ReactComponent as IconNatural } from "../../../images/icons/cardProduct/natural.svg"
 
 const StyledTypography = styled(Typography)`
   display: -webkit-box;
@@ -19,31 +21,63 @@ const styleCardMedia = {
   objectFit: 'contain',
 }
 
+const styleBoxIconCard = {
+  display: 'flex',
+  justifyContent: 'flex-end',
+  margin: '5px 5px 0 0',
+}
+
+const StyledTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.primary.light,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.primary.main,
+  },
+}));
+
+
 
 function CardProduct(props) {
 
-  const { title, image, product } = props;
+  const { title, image, dataProduct } = props
+  const { isFullNatural } = dataProduct
 
   const dispatch = useDispatch()
 
-
   const handleCardClick = () => {
-    dispatch(setSelectedCard(product)) // сохраняем данные выбранной карточки
+    dispatch(setSelectedCard(dataProduct)) // сохраняем данные выбранной карточки
     dispatch(changeVisibleModal(true)) // открывается модальное окно продукта
   }
 
-  
+
   return (
-    <Card
-      variant="searchResult"
-      onClick={handleCardClick}
-    >
+    <Card variant="searchResult" onClick={handleCardClick}>
+
       <CardActionArea>
-        <CardMedia
-          component="img"
-          image={image}
-          sx={styleCardMedia}
-        />
+
+        {isFullNatural
+          &&
+          <Box sx={styleBoxIconCard}>
+            <StyledTooltip
+              describeChild title="Полностью натуральный продукт"
+              placement="right"
+              arrow
+              transition={false}
+              disableTouchListener
+              disableInteractive
+            >
+              <SvgIcon color="success" component={IconNatural} inheritViewBox />
+            </StyledTooltip>
+          </Box>
+        }
+
+        <CardMedia component="img" image={image} sx={styleCardMedia} />
 
         <CardContent>
           <StyledTypography variant="h2">

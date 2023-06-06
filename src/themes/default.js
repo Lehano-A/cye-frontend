@@ -31,6 +31,7 @@ const theme = createTheme({
       light: '#db8ece',
       dark: '#82008c',
     },
+    
   },
 
   components: {

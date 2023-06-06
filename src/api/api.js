@@ -20,7 +20,8 @@ class Api {
         noteToComposition: ['Может содержать молоко.'],
         nutritionalValue: {
           protein: 24, fats: 12, carbs: 78, calories: 241
-        }
+        },
+        isFullNatural: true,
       },
       {
         title: 'Сухой завтрак Хрутка ванильные, банановые и шоколадные шарики',
@@ -30,7 +31,8 @@ class Api {
         noteToComposition: ['Может содержать молоко.'],
         nutritionalValue: {
           protein: 23, fats: 13, carbs: 75, calories: 238
-        }
+        },
+        isFullNatural: true,
       },
       {
         title: 'Сухой завтрак Хрутка ванильные шарики',
@@ -40,7 +42,8 @@ class Api {
         noteToComposition: ['Может содержать молоко.'],
         nutritionalValue: {
           protein: 23, fats: 15, carbs: 80, calories: 243
-        }
+        },
+        isFullNatural: true,
       },
       {
         title: 'Молоко 3,5% ультрапастеризованное 925 мл Домик в Деревне БЗМЖ',
@@ -54,7 +57,8 @@ class Api {
         Нормализованное молоко имеет более стабильную жирность и не разделяется на слой жира и сыворотки, как обычное молоко. Это позволяет использовать его в качестве ингредиента в продуктах питания без необходимости предварительного перемешивания.` }],
         nutritionalValue: {
           protein: 2.9, fats: 3.5, carbs: 4.7, calories: 62
-        }
+        },
+        isFullNatural: true,
       },
       {
         title: 'Хлопья Русский Продукт Геркулес Детский',
@@ -63,7 +67,8 @@ class Api {
         composition: ['Овсяные хлопья.'],
         nutritionalValue: {
           protein: 12, fats: 6, carbs: 51, calories: 310
-        }
+        },
+        isFullNatural: true,
       },
       {
         title: 'Творожок Простоквашино клубника-земляника 3,6% БЗМЖ',
@@ -72,7 +77,8 @@ class Api {
         composition: ['Творог обезжиренный, нормализованные сливки, наполнитель (клубника; сахарный сироп; вода; сахар; крахмал кукурузный; пюре земляники; натуральный ароматизатор; стабилизатор - пектины; концентрированные соки красной свеклы и лимона; краситель - кармины), сахар.'],
         nutritionalValue: {
           protein: 6.1, fats: 3.6, carbs: 12.9, calories: 108
-        }
+        },
+        isFullNatural: true,
       },
       {
         title: 'Мороженое пломбир Monterra ваниль БЗМЖ',
