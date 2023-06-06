@@ -12,6 +12,7 @@ import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import Company from "./Company/Company";
 import OtherInfo from "./OtherInfo/OtherInfo";
+import Imprecision from "../Imprecision/Imprecision";
 
 /*
   Особенности, которые нужно учитывать:
@@ -26,7 +27,7 @@ const StyledImage = styled('img')`
   width: 400px;
   height: 400px;
   object-fit: contain;
-  margin-right: 30px;
+  margin-bottom: 25px;
 `
 const styleCommonBox = {
   display: 'flex',
@@ -45,12 +46,16 @@ const styleMainBox = {
   margin: '40px auto',
 }
 
-const styleButtonClose = {
-  position: 'absolute',
-  top: 15,
-  right: 15,
-  backgroundColor: 'transparent'
-}
+
+
+const StyledButtonClose = styled(IconButton)(() => {
+  return {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    backgroundColor: 'transparent'
+  }
+})
 
 const styleIcon = (theme) => {
   return {
@@ -101,16 +106,19 @@ function ModalProduct() {
     <Dialog disableAutoFocus disableRestoreFocus maxWidth={'xl'} scroll="body" onClose={handleCloseModal} aria-labelledby="modal-title" open={isVisibleModal} slotProps={styleSlotProps}>
 
       <DialogActions>
-        <IconButton onClick={handleCloseModal} sx={styleButtonClose}>
+        <StyledButtonClose color="primary" onClick={handleCloseModal}>
           <CloseIcon sx={styleIcon} />
-        </IconButton>
+        </StyledButtonClose>
       </DialogActions>
 
       <Box sx={styleMainBox}>
 
         <Box sx={styleCommonBox}>
-          <StyledImage src={image} />
 
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '30px' }}>
+            <StyledImage src={image} />
+            <Imprecision />
+          </Box>
           <Box>
 
             <Typography id="modal-title" {...titleProps}>
