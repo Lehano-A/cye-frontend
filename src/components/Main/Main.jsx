@@ -14,12 +14,12 @@ function Main() {
 
   const isVisible = useSelector(state => state.modalCardProduct.visible)
   const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
-
+ 
   return (
 
     <main style={styleMainBox}>
 
-      {isSubmitting ? <BoxSearchResult /> : <Welcome />}
+      {!isSubmitting ? <BoxSearchResult /> : <Welcome />}
 
       {isVisible && <ModalProduct />}
 

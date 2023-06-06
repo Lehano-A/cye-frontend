@@ -5,6 +5,17 @@ const defaultTheme = createTheme()
 
 const theme = createTheme({
 
+  MuiDialog: {
+    styleOverrides: {
+      root: {
+        '& .MuiDialog-paper': {
+          backgroundColor: '#000',
+          maxWidth: '1800px', // здесь можно указать необходимую максимальную ширину
+        },
+      }
+    },
+  },
+
   typography: {
     fontFamily: 'Roboto'
   },
@@ -45,7 +56,7 @@ const theme = createTheme({
           boxShadow: `0px 2px 1px -1px rgba(160 171 223 / 30%), 0px 1px 1px 0px rgba(160 171 223 / 14%), 0px 1px 3px 0px rgba(160 171 223 / 12%)`,
           borderRadius: 0,
         },
-      }]
+      }],
     },
 
     MuiCard: {
@@ -80,6 +91,9 @@ const theme = createTheme({
         }
       },
     },
+
+
+
 
   },
 })

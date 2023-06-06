@@ -39,7 +39,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
   const popperRef = useRef(null);
   const [arrowRef, setArrowRef] = useState(null)
 
-
+ 
   // клик вне Popper (закрытие Popper)
   useEffect(() => {
     const handleClickOutside = (event) => {

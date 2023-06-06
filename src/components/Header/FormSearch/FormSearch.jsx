@@ -12,7 +12,7 @@ const Form = styled('form')`
   max-width: 600px;
   width: 100%;
   margin: 0 25px;
-   > :first-child {
+   & > :first-of-type {
     margin-right: 25px;
   }
 `
@@ -21,7 +21,7 @@ function FormSearch() {
   const inputValue = useSelector(state => state.inputSearch.inputValue)
   const dispatch = useDispatch()
 
-  
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (inputValue) {

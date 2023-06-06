@@ -32,6 +32,7 @@ function CardProduct(props) {
     dispatch(changeVisibleModal(true)) // открывается модальное окно продукта
   }
 
+  
   return (
     <Card
       variant="searchResult"

@@ -11,6 +11,7 @@ class Api {
   constructor() {
     this.baseUrl = 'http://localhost:3000'
     this.foundProducts = [
+
       {
         title: 'Сухой завтрак Хрутка шоколадные шарики',
         id: 'zds42fdsfs42',

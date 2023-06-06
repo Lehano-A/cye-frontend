@@ -33,15 +33,14 @@ function BoxSearchResult() {
         {foundProducts && foundProducts.map((product) => {
 
           return (
-
             <Grid xs={8} sm={6} md={4} lg={3} key={product.id}>
               <CardProduct title={product.title} image={product.image} product={product} />
             </Grid>
-
           )
         })}
 
       </Grid>
+
     </Container>
   )
 }
