@@ -84,7 +84,7 @@ class Api {
         nutritionalValue: {
           protein: 6.1, fats: 3.6, carbs: 12.9, calories: 108
         },
-        isFullNatural: true,
+
       },
       {
         title: 'Мороженое пломбир Monterra ваниль БЗМЖ',
@@ -115,7 +115,8 @@ class Api {
           typePackage: 'Пластиковое ведерко',
           weight: '298 г',
           shelfLife: '18 месяцев',
-        }
+        },
+        hasPreservingAgent: true,
       },
     ]
   }

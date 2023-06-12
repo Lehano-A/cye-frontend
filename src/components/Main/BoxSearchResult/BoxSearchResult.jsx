@@ -40,7 +40,6 @@ function BoxSearchResult() {
         })}
 
       </Grid>
-
     </Container>
   )
 }
