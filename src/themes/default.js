@@ -31,7 +31,7 @@ const theme = createTheme({
       light: '#db8ece',
       dark: '#82008c',
     },
-    
+
   },
 
   components: {
@@ -79,7 +79,8 @@ const theme = createTheme({
 
           '.MuiInputBase-root': {
             border: '5px #a0abdf solid',
-            height: '55px'
+            height: '55px',
+            padding: '0 0 0 9px',
           },
 
           '.MuiOutlinedInput-notchedOutline': {

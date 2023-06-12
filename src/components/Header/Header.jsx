@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Paper } from "@mui/material";
-import FormSearch from "./FormSearch/FormSearch";
+import InputSearch from "./InputSearch/InputSearch";
 
 const styleHeader = {
   backgroundColor: 'rgba(92, 112, 200, 0.1)',
@@ -21,7 +21,7 @@ function Header() {
       <header style={styleHeader}>
 
         <Box sx={styleBoxForm}>
-          <FormSearch />
+          <InputSearch />
         </Box>
 
       </header>

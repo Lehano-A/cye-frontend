@@ -65,10 +65,10 @@ function CardProduct(props) {
           &&
           <Box sx={styleBoxIconCard}>
             <StyledTooltip
-              describeChild title="Полностью натуральный продукт"
+              describeChild
+              title="Полностью натуральный продукт"
               placement="right"
               arrow
-              transition={false}
               disableTouchListener
               disableInteractive
             >

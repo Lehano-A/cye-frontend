@@ -29,7 +29,7 @@ const StyledListItem = styled(ListItem)`
     z-index: -1;
   }
 
-  &:not(:nth-last-child(-n+3)) {
+  &:not(:nth-last-of-type(-n+3)) {
     margin-bottom: 80px;
   }
 `
