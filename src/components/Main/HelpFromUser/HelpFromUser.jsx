@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Box } from "@mui/material";
 
 
-function Imprecision() {
+function HelpFromUser() {
   return (
     <Box>
       <Button sx={{ textTransform: 'none', }} variant="text">Заметили неточность?</Button>
@@ -10,4 +10,4 @@ function Imprecision() {
   )
 }
 
-export default Imprecision
+export default HelpFromUser

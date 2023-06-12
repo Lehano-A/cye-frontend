@@ -7,12 +7,14 @@ import { styled } from "@mui/material/styles";
 import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
 import { setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
+import { ReactComponent as IconNatural } from "../../../images/icons/cardProduct/natural.svg"
+import { ReactComponent as IconWarning } from "../../../images/icons/cardProduct/warning.svg"
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import Company from "./Company/Company";
 import OtherInfo from "./OtherInfo/OtherInfo";
-import Imprecision from "../Imprecision/Imprecision";
+import HelpFromUser from "../HelpFromUser/HelpFromUser";
 
 /*
   Особенности, которые нужно учитывать:
@@ -85,7 +87,7 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, image, composition, noteToComposition, nutritionalValue, company, otherInfo } = product
+  const { title, image, composition, noteToComposition, nutritionalValue, company, otherInfo, isFullNatural, hasPreservingAgent } = product
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 
@@ -107,7 +109,7 @@ function ModalProduct() {
 
       <DialogActions>
         <StyledButtonClose color="primary" onClick={handleCloseModal}>
-          <CloseIcon  sx={styleIcon} />
+          <CloseIcon sx={styleIcon} />
         </StyledButtonClose>
       </DialogActions>
 
@@ -117,7 +119,7 @@ function ModalProduct() {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '30px' }}>
             <StyledImage src={image} />
-            <Imprecision />
+            <HelpFromUser />
           </Box>
           <Box>
 
