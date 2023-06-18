@@ -26,12 +26,18 @@ const theme = createTheme({
       light: '#a0abdf',
       dark: '#263a9c',
     },
+
     secondary: {
       main: '#bf38ac',
       light: '#db8ece',
       dark: '#82008c',
     },
-    
+
+    warning: {
+      light: '#ffb74d',
+      main: '#FFA500',
+      dark: '#f57c00',
+    },
   },
 
   components: {

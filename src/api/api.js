@@ -22,7 +22,9 @@ class Api {
         nutritionalValue: {
           protein: 24, fats: 12, carbs: 78, calories: 241
         },
-        isFullNatural: true,
+        featuresComposition: [{
+          isFullNatural: true, description: 'Полностью натуральный продукт'
+        }]
       },
       {
         title: 'Сухой завтрак Хрутка ванильные, банановые и шоколадные шарики',
@@ -34,7 +36,9 @@ class Api {
         nutritionalValue: {
           protein: 23, fats: 13, carbs: 75, calories: 238
         },
-        isFullNatural: true,
+        featuresComposition: [{
+          isFullNatural: true, description: 'Полностью натуральный продукт'
+        }]
       },
       {
         title: 'Сухой завтрак Хрутка ванильные шарики',
@@ -46,7 +50,9 @@ class Api {
         nutritionalValue: {
           protein: 23, fats: 15, carbs: 80, calories: 243
         },
-        isFullNatural: true,
+        featuresComposition: [{
+          isFullNatural: true, description: 'Полностью натуральный продукт'
+        }],
       },
       {
         title: 'Молоко 3,5% ультрапастеризованное 925 мл Домик в Деревне БЗМЖ',
@@ -62,7 +68,9 @@ class Api {
         nutritionalValue: {
           protein: 2.9, fats: 3.5, carbs: 4.7, calories: 62
         },
-        isFullNatural: true,
+        featuresComposition: [{
+          isFullNatural: true, description: 'Полностью натуральный продукт'
+        }]
       },
       {
         title: 'Хлопья Русский Продукт Геркулес Детский',
@@ -73,7 +81,9 @@ class Api {
         nutritionalValue: {
           protein: 12, fats: 6, carbs: 51, calories: 310
         },
-        isFullNatural: true,
+        featuresComposition: [{
+          isFullNatural: true, description: 'Полностью натуральный продукт'
+        }]
       },
       {
         title: 'Творожок Простоквашино клубника-земляника 3,6% БЗМЖ',
@@ -84,7 +94,7 @@ class Api {
         nutritionalValue: {
           protein: 6.1, fats: 3.6, carbs: 12.9, calories: 108
         },
-
+        featuresComposition: []
       },
       {
         title: 'Мороженое пломбир Monterra ваниль БЗМЖ',
@@ -116,7 +126,14 @@ class Api {
           weight: '298 г',
           shelfLife: '18 месяцев',
         },
-        hasPreservingAgent: true,
+
+        featuresComposition: [
+          { preservingAgent: 1, description: 'Содержит консервант' },
+          { undesirableIngredients: 2, description: 'Содержит нежелательные компоненты' },
+          { forbiddenForChildren: true, description: 'Запрещено для употребления детям' },
+          { forbiddenForPregnancy: true, description: 'Запрещено для употребления кормящим и беременным' },
+        ],
+
       },
     ]
   }

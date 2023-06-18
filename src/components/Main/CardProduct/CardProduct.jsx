@@ -1,7 +1,7 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlice"
-import { Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
+import { Box, Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
 import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice"
 import { styled } from "@mui/material/styles";
 import IconsInforming from "./IconsInforming/IconsInforming"
@@ -21,10 +21,9 @@ const styleCardMedia = {
 }
 
 
-function CardProduct(props) {
+function CardProduct({ dataProduct }) {
 
-  const { title, image, dataProduct } = props
-  const { isFullNatural, hasPreservingAgent } = dataProduct
+  const { title, image, featuresComposition } = dataProduct
 
   const dispatch = useDispatch()
 
@@ -38,8 +37,17 @@ function CardProduct(props) {
     <Card variant="searchResult" onClick={handleCardClick}>
       <CardActionArea>
 
-        {(isFullNatural || hasPreservingAgent) &&
-          <IconsInforming dataProduct={dataProduct} />
+        {featuresComposition.length > 0 &&
+          <Box sx={{ display: 'flex', margin: '3px 0 0 4px'  }}>{
+            featuresComposition.map((feature, id) => {
+              return (
+                <IconsInforming
+                  feature={feature}
+                  key={id}
+                />
+              )
+            })}
+          </Box>
         }
 
         <CardMedia component="img" image={image} sx={styleCardMedia} />
@@ -56,3 +64,4 @@ function CardProduct(props) {
 }
 
 export default CardProduct
+

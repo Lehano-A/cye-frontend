@@ -7,8 +7,8 @@ import { styled } from "@mui/material/styles";
 import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
 import { setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
-import { ReactComponent as IconNatural } from "../../../images/icons/cardProduct/natural.svg"
-import { ReactComponent as IconWarning } from "../../../images/icons/cardProduct/warning.svg"
+import FeaturesComposition from "./FeaturesComposition/FeaturesComposition";
+
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
@@ -31,6 +31,8 @@ const StyledImage = styled('img')`
   object-fit: contain;
   margin-bottom: 25px;
 `
+
+
 const styleCommonBox = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -48,7 +50,22 @@ const styleMainBox = {
   margin: '40px auto',
 }
 
+const styleIcon = (theme) => {
+  return {
+    color: theme.palette.primary.light,
+  }
+}
 
+const styleSlotProps = {
+  backdrop: { style: { backgroundColor: 'rgba(0, 0, 0, 0.1)', pointerEvents: 'none' } }
+}
+
+const titleProps = {
+  variant: 'h4',
+  marginBottom: '10px',
+  fontSize: '16px',
+  fontWeight: 700,
+}
 
 const StyledButtonClose = styled(IconButton)(() => {
   return {
@@ -59,26 +76,6 @@ const StyledButtonClose = styled(IconButton)(() => {
   }
 })
 
-const styleIcon = (theme) => {
-  return {
-    color: theme.palette.primary.light,
-    pointerEvents: 'none'
-  }
-}
-
-const styleSlotProps = {
-  backdrop: { style: { backgroundColor: 'rgba(0, 0, 0, 0.1)', pointerEvents: 'none' } }
-}
-
-const titleProps = {
-  variant: 'h4',
-  marginBottom: '50px',
-  fontSize: '16px',
-  fontWeight: 700,
-}
-
-
-
 function ModalProduct() {
 
   const dispatch = useDispatch()
@@ -87,7 +84,8 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, image, composition, noteToComposition, nutritionalValue, company, otherInfo, isFullNatural, hasPreservingAgent } = product
+  const { title, image, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
+
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 
@@ -114,22 +112,30 @@ function ModalProduct() {
       </DialogActions>
 
       <Box sx={styleMainBox}>
-
         <Box sx={styleCommonBox}>
+
 
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '30px' }}>
             <StyledImage src={image} />
             <HelpFromUser />
           </Box>
+
+
+
           <Box>
 
-            <Typography id="modal-title" {...titleProps}>
-              {title}
-            </Typography>
+
+            <Box sx={{ marginBottom: '35px' }}>
+              <Typography id="modal-title" {...titleProps}>
+                {title}
+              </Typography>
+
+              <FeaturesComposition data={featuresComposition} />
+            </Box>
+
 
 
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-
               <Composition
                 data={composition}
                 setRefSelectedIngredient={setRefSelectedIngredient}
@@ -142,6 +148,8 @@ function ModalProduct() {
               <OtherInfo data={otherInfo} />
               <OtherInfo data={otherInfo} />
             </Box>
+
+
           </Box>
         </Box>
 
@@ -151,6 +159,7 @@ function ModalProduct() {
             interpretationValue={interpretationValue}
           />
         )}
+
       </Box>
 
     </Dialog>
