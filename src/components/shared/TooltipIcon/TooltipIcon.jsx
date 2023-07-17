@@ -8,7 +8,7 @@ const StyledTooltip = styled(({ className, color, ...props }) => (
 
   return {
     [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: theme.palette[`${color}`].light,
+      backgroundColor: theme.palette[`${color}`].main,
       color: '#fff',
       boxShadow: theme.shadows[1],
       fontSize: 11,

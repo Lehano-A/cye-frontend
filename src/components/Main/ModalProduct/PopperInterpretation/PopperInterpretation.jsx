@@ -39,7 +39,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
   const popperRef = useRef(null);
   const [arrowRef, setArrowRef] = useState(null)
 
- 
+
   // клик вне Popper (закрытие Popper)
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -77,7 +77,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
           {
             name: "offset",
             options: {
-              offset: [0, -1], // смещение вверх, чтобы не создавалось пустого пространства между целевым элементом и Popper
+              offset: [0, 3], 
             }
           },
           {

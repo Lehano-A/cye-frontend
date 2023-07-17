@@ -4,23 +4,50 @@ import { handleDataIcon } from "../../../../utils/IconsInforming/handleDataIcon"
 import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
 import { styled } from "@mui/material/styles";
 
-const styleBox = {
-  display: 'flex',
-  alignItems: 'center',
-}
-
-const styleIconInforming = {
-  width: '22px',
-  height: '22px',
-  marginRight: '5px'
-}
-
-const StyledDescriptionIcon = styled(Typography)(({ theme, color }) => {
+const StyledMainBox = styled(Box)(({ theme, color }) => {
   return {
-    color: theme.palette[`${color}`].dark
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '355px',
+    minHeight: '70px',
+    backgroundColor: theme.palette[`${color}`].light,
+    borderRadius: '15px',
+    marginBottom: '20px',
   }
 })
 
+const styleIconInforming = {
+  width: '35px',
+  height: '35px',
+  marginRight: '15px',
+}
+
+const StyledTilteIcon = styled(Typography)(({ theme, color }) => {
+  return {
+    color: theme.palette[`${color}`].main,
+    fontWeight: 600,
+  }
+})
+
+const StyledBoxTitleIngredients = styled(Box)(() => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    maxWidth: '290px',
+    marginLeft: '15px',
+    padding: '10px 0',
+  }
+})
+
+const StyledIngredient = styled(Typography)(() => {
+  return {
+    fontSize: "14px",
+    '&:nth-of-type(2)': { marginTop: '15px' },
+    '&:last-of-type': { marginBottom: '5px' }
+  }
+})
 
 
 function FeaturesComposition({ data }) {
@@ -28,21 +55,30 @@ function FeaturesComposition({ data }) {
     <>
       {
         data.map((feature, id) => {
+
           const dataIcon = handleDataIcon(feature)
 
+
           return (
-            <Box key={id} sx={styleBox}>
+            <StyledMainBox key={id} color={dataIcon.color}>
+
+              <StyledBoxTitleIngredients>
+                <StyledTilteIcon color={dataIcon.color}>
+                  {dataIcon.title}
+                </StyledTilteIcon>
+
+                {feature.ingredients.map((ingredient, id) => {
+                  return <StyledIngredient key={id}>
+                    {ingredient}
+                  </StyledIngredient>
+                })}
+
+              </StyledBoxTitleIngredients>
+
 
               <StyledIconInforming color={dataIcon.color} sx={styleIconInforming} inheritViewBox component={dataIcon.icon} />
 
-              <StyledDescriptionIcon
-                color={dataIcon.color}
-                fontSize="13px"
-              >
-                {feature.description}
-              </StyledDescriptionIcon>
-
-            </Box>)
+            </StyledMainBox>)
         })
       }
     </>

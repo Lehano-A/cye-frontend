@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Box, TextField, Autocomplete } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFilterProducts } from "../../../redux/reducers/inputSearchSlice";
+import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFilterProducts } from "../../../../redux/reducers/inputSearchSlice";
 import { styled } from "@mui/material/styles";
-import api from "../../../api/api";
+import api from "../../../../api/api";
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
 
@@ -92,23 +92,24 @@ function InputSearch() {
     dispatch(setApiFilterProducts([]))
   }
 
-  // вызывается при выборе опции из выпадающего списка
-  const handleOnChange = () => {
+  // вызывается при сабмите введённой строки или при выборе опции из выпадающего списка
+  const handleOnChange = (e, selectedValue) => {
     dispatch(setSubmitting(true))
+    dispatch(setInputValue(selectedValue.title ? selectedValue.title : selectedValue))
   }
 
-  
+
   return (
     <Box sx={styleMainBox}>
       <Autocomplete
+        freeSolo
         options={apiFilterProducts}
         groupBy={((option) => { return option.category })}
         getOptionLabel={(option) => {
-          return option.title
+          return option.title ? option.title : option // если объект, тогда будут показаны совпадения, иначе просто строка
         }}
         disableClearable
         sx={{ width: 3500, }}
-        autoHighlight
         clearOnEscape
         noOptionsText="Такой продукт не найден :("
         forcePopupIcon={false}
@@ -125,8 +126,7 @@ function InputSearch() {
             </>
           ),
         }} />}
-        clearOnBlur={false}
-        selectOnFocus
+        blurOnSelect // сброс фокуса, после сабмита или выбора варианта
         value={value} // текущее значение выбранной опции
         onChange={handleOnChange} // вызывается при выборе опции из выпадающего списка
         inputValue={inputValue} // текущее значение поля ввода

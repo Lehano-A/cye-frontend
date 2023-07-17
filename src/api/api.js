@@ -22,9 +22,7 @@ class Api {
         nutritionalValue: {
           protein: 24, fats: 12, carbs: 78, calories: 241
         },
-        featuresComposition: [{
-          isFullNatural: true, description: 'Полностью натуральный продукт'
-        }]
+        featuresComposition: [{ fullNatural: true, }]
       },
       {
         title: 'Сухой завтрак Хрутка ванильные, банановые и шоколадные шарики',
@@ -36,9 +34,7 @@ class Api {
         nutritionalValue: {
           protein: 23, fats: 13, carbs: 75, calories: 238
         },
-        featuresComposition: [{
-          isFullNatural: true, description: 'Полностью натуральный продукт'
-        }]
+        featuresComposition: [{ fullNatural: true, }]
       },
       {
         title: 'Сухой завтрак Хрутка ванильные шарики',
@@ -50,9 +46,7 @@ class Api {
         nutritionalValue: {
           protein: 23, fats: 15, carbs: 80, calories: 243
         },
-        featuresComposition: [{
-          isFullNatural: true, description: 'Полностью натуральный продукт'
-        }],
+        featuresComposition: [{ fullNatural: true, }],
       },
       {
         title: 'Молоко 3,5% ультрапастеризованное 925 мл Домик в Деревне БЗМЖ',
@@ -68,9 +62,7 @@ class Api {
         nutritionalValue: {
           protein: 2.9, fats: 3.5, carbs: 4.7, calories: 62
         },
-        featuresComposition: [{
-          isFullNatural: true, description: 'Полностью натуральный продукт'
-        }]
+        featuresComposition: [{ fullNatural: true, }]
       },
       {
         title: 'Хлопья Русский Продукт Геркулес Детский',
@@ -81,9 +73,7 @@ class Api {
         nutritionalValue: {
           protein: 12, fats: 6, carbs: 51, calories: 310
         },
-        featuresComposition: [{
-          isFullNatural: true, description: 'Полностью натуральный продукт'
-        }]
+        featuresComposition: [{ fullNatural: true }]
       },
       {
         title: 'Творожок Простоквашино клубника-земляника 3,6% БЗМЖ',
@@ -128,10 +118,11 @@ class Api {
         },
 
         featuresComposition: [
-          { preservingAgent: 1, description: 'Содержит консервант' },
-          { undesirableIngredients: 2, description: 'Содержит нежелательные компоненты' },
-          { forbiddenForChildren: true, description: 'Запрещено для употребления детям' },
-          { forbiddenForPregnancy: true, description: 'Запрещено для употребления кормящим и беременным' },
+          { fullNatural: true, ingredients: [] },
+          { preservingAgent: 1, ingredients: ['глюкоза', 'камедь рожкового дерева'] },
+          { undesirableIngredients: 2, ingredients: ['ароматизатор']  },
+          { forbiddenForChildren: true, ingredients: ['сахар жженный карамелизованный']  },
+          { forbiddenForPregnancy: true, ingredients: ['эмульгатор моно- и диглицериды жирных кислот']  },
         ],
 
       },

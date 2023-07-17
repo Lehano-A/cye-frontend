@@ -5,26 +5,46 @@ import { ReactComponent as IconChildren } from "../../images/icons/cardProduct/c
 import { ReactComponent as IconPregnancy } from "../../images/icons/cardProduct/pregnancy.svg"
 
 
-function handleDataIcon({ isFullNatural, preservingAgent, undesirableIngredients, forbiddenForChildren, forbiddenForPregnancy }) {
+function handleDataIcon({ fullNatural, preservingAgent, undesirableIngredients, forbiddenForChildren, forbiddenForPregnancy }) {
 
-  if (isFullNatural) {
-    return { icon: IconNatural, color: 'success' }
+  if (fullNatural) {
+    return {
+      icon: IconNatural,
+      color: 'fullNatural',
+      title: 'Полностью натуральный продукт',
+    }
   }
 
   if (preservingAgent) {
-    return { icon: IconPreservingAgent, color: 'error' }
+    return {
+      icon: IconPreservingAgent,
+      color: 'preservingAgent',
+      title: 'Консерванты',
+    }
   }
 
   if (undesirableIngredients) {
-    return { icon: IconUndesirableIngredients, color: 'warning' }
+    return {
+      icon: IconUndesirableIngredients,
+      color: 'undesirableIngredient',
+      title: 'Нежелательные компоненты',
+    }
   }
 
   if (forbiddenForChildren) {
-    return { icon: IconChildren, color: 'primary' }
+    return {
+      icon: IconChildren,
+      color: 'forbiddenForChildren',
+      title: 'Запрещено детям',
+    }
   }
 
   if (forbiddenForPregnancy) {
-    return { icon: IconPregnancy, color: 'secondary' }
+    return {
+      icon: IconPregnancy,
+      color: 'forbiddenForPregnancy',
+      title: 'Запрещено кормящим и беременным'
+    }
   }
 }
 

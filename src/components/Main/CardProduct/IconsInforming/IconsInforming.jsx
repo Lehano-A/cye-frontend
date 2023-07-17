@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import { Box} from "@mui/material"
+import { Box } from "@mui/material"
 import { handleDataIcon } from "../../../../utils/IconsInforming/handleDataIcon";
 import TooltipIcon from "../../../shared/TooltipIcon/TooltipIcon";
 import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
@@ -15,9 +15,7 @@ const StyledBoxIconCard = styled(Box)`
 
 function IconsInforming({ feature }) {
 
-  const { description } = feature
   const [dataIcon, setDataIcon] = useState(null)
-
 
   useEffect(() => {
     const dataIcon = handleDataIcon(feature)
@@ -33,7 +31,7 @@ function IconsInforming({ feature }) {
         >
 
           <TooltipIcon
-            value={description}
+            value={dataIcon.title}
             placement='right'
             color={dataIcon.color}
           >

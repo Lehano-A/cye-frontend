@@ -25,12 +25,14 @@ import HelpFromUser from "../HelpFromUser/HelpFromUser";
     с последующим сравнением элементов, где произошёл клик: на кнопке закрытия или на backdrop.
 */
 
-const StyledImage = styled('img')`
-  width: 400px;
-  height: 400px;
-  object-fit: contain;
-  margin-bottom: 25px;
-`
+const StyledImage = styled('img')(() => {
+  return {
+    width: '400px',
+    height: '400px',
+    objectFit: 'contain',
+    marginBottom: '25px',
+  }
+})
 
 
 const styleCommonBox = {
@@ -75,6 +77,7 @@ const StyledButtonClose = styled(IconButton)(() => {
     backgroundColor: 'transparent',
   }
 })
+
 
 function ModalProduct() {
 
@@ -121,12 +124,10 @@ function ModalProduct() {
           </Box>
 
 
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 
-          <Box>
-
-
-            <Box sx={{ marginBottom: '35px' }}>
-              <Typography id="modal-title" {...titleProps}>
+            <Box>
+              <Typography id="modal-title" sx={{ marginBottom: '35px' }} {...titleProps}>
                 {title}
               </Typography>
 
@@ -134,21 +135,23 @@ function ModalProduct() {
             </Box>
 
 
+            <Composition
+              data={composition}
+              setRefSelectedIngredient={setRefSelectedIngredient}
+            />
 
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <Composition
-                data={composition}
-                setRefSelectedIngredient={setRefSelectedIngredient}
-              />
 
-              {noteToComposition && <NoteToComposition data={noteToComposition} />}
+            {noteToComposition && <NoteToComposition data={noteToComposition} />}
 
-              <TableNutritionalValue data={nutritionalValue} />
+
+            <TableNutritionalValue data={nutritionalValue} />
+
+
+            <Box>
               <Company data={company} />
               <OtherInfo data={otherInfo} />
               <OtherInfo data={otherInfo} />
             </Box>
-
 
           </Box>
         </Box>

@@ -22,14 +22,14 @@ const theme = createTheme({
 
   palette: {
     primary: {
-      main: '#5c70c8',
       light: '#a0abdf',
+      main: '#5c70c8',
       dark: '#263a9c',
     },
 
     secondary: {
-      main: '#bf38ac',
       light: '#db8ece',
+      main: '#bf38ac',
       dark: '#82008c',
     },
 
@@ -38,6 +38,33 @@ const theme = createTheme({
       main: '#FFA500',
       dark: '#f57c00',
     },
+
+    fullNatural: {
+      light: 'rgba(32, 163, 95, 0.33)',
+      main: '#20a35f',
+    },
+
+    preservingAgent: {
+      light: 'rgba(255, 173, 173, 0.5)',
+      main: '#D74141',
+    },
+
+    undesirableIngredient: {
+      light: 'rgba(255, 188, 64, 0.5)',
+      main: '#F69027',
+    },
+
+    forbiddenForChildren: {
+      light: 'rgba(133, 148, 214, 0.5)',
+      main: '#5c70c8',
+      dark: '#3F51A8',
+
+    },
+
+    forbiddenForPregnancy: {
+      light: 'rgba(195, 132, 199, 0.5)',
+      main: '#82008C',
+    }
   },
 
   components: {
