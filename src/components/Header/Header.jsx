@@ -3,7 +3,7 @@ import { Box, Paper } from "@mui/material";
 import FormSearch from "./FormSearch/FormSearch";
 
 const styleHeader = {
-  backgroundColor: 'rgba(92, 112, 200, 0.1)',
+  backgroundColor: '#eef0f9',
   padding: '120px 0',
   marginBottom: '80px',
 }

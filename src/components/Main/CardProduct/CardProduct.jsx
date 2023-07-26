@@ -6,6 +6,7 @@ import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlic
 import { styled } from "@mui/material/styles";
 import IconsInforming from "./IconsInforming/IconsInforming"
 
+
 const StyledTypography = styled(Typography)`
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -32,13 +33,12 @@ function CardProduct({ dataProduct }) {
     dispatch(changeVisibleModal(true)) // открывается модальное окно продукта
   }
 
-
   return (
     <Card variant="searchResult" onClick={handleCardClick}>
       <CardActionArea>
 
         {featuresComposition.length > 0 &&
-          <Box sx={{ display: 'flex', margin: '3px 0 0 4px'  }}>{
+          <Box sx={{ display: 'flex', margin: '3px 0 0 4px' }}>{
             featuresComposition.map((feature, id) => {
               return (
                 <IconsInforming

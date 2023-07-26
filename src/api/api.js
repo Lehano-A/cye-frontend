@@ -1,143 +1,39 @@
-import img1 from './../images/hrutka.png'
-import img2 from './../images/hrutka.png'
-import img3 from './../images/hrutka-vanil.png'
-import img4 from './../images/moloko.png'
-import img5 from './../images/gerkules.png'
-import img6 from './../images/tvorojok.png'
-import img7 from './../images/icecream.png'
-
 class Api {
 
   constructor() {
-    this.baseUrl = 'http://localhost:3000'
-    this.foundProducts = [
-
-      {
-        title: 'Сухой завтрак Хрутка шоколадные шарики',
-        id: 'zds42fdsfs42',
-        category: 'Сухие завтраки',
-        image: img1,
-        composition: ['пшеница (содержит глютен)', 'сахар', 'крупа кукурузная', 'какао-порошок алкализованный', 'карбонат кальция', 'масло подсолнечное', 'соль', 'ароматизатор натуральный (ваниль)', 'карамельный сироп'],
-        noteToComposition: ['Может содержать молоко.'],
-        nutritionalValue: {
-          protein: 24, fats: 12, carbs: 78, calories: 241
-        },
-        featuresComposition: [{ fullNatural: true, }]
-      },
-      {
-        title: 'Сухой завтрак Хрутка ванильные, банановые и шоколадные шарики',
-        id: 'fsxjsd25fdsgh',
-        category: 'Сухие завтраки',
-        image: img2,
-        composition: ['Пшеница (содержит глютен), сахар, крупа кукурузная, какао-порошок алкализованный, карбонат кальция, масло подсолнечное, соль, ароматизатор натуральный (ваниль), карамельный сироп.'],
-        noteToComposition: ['Может содержать молоко.'],
-        nutritionalValue: {
-          protein: 23, fats: 13, carbs: 75, calories: 238
-        },
-        featuresComposition: [{ fullNatural: true, }]
-      },
-      {
-        title: 'Сухой завтрак Хрутка ванильные шарики',
-        id: 'ywetj432er96gd',
-        category: 'Сухие завтраки',
-        image: img3,
-        composition: ['Пшеница (содержит глютен), сахар, крупа кукурузная, пшеничная мука (содержит глютен), рисовая крупа, патока, масло подсолнечное, какао-порошок алкализованный, карбонат кальция, молоко сухое обезжиренное, соль, эмульгатор (лецитины), ароматизаторы натуральные, карамельный сироп.'],
-        noteToComposition: ['Может содержать молоко.'],
-        nutritionalValue: {
-          protein: 23, fats: 15, carbs: 80, calories: 243
-        },
-        featuresComposition: [{ fullNatural: true, }],
-      },
-      {
-        title: 'Молоко 3,5% ультрапастеризованное 925 мл Домик в Деревне БЗМЖ',
-        id: 'ytjfdsfdsds43d',
-        category: 'Молочная продукция',
-        image: img4,
-        composition: [{
-          ingredient: 'Молоко нормализованное.', interpretation: `Молоко нормализованное - это молоко, которое было стандартизировано путем удаления части жира из него. Это делается для того, чтобы унифицировать процент жирности молока и сделать его более пригодным для использования в пищевых продуктах.
-
-        Стандартная жирность молока составляет около 3,5%, но может варьироваться в зависимости от породы коровы, ее кормления и других факторов. При нормализации молока часть жира удаляется при помощи центрифугирования или других методов, чтобы достичь определенного процента жирности, например 1,5% или 2,5%.
-
-        Нормализованное молоко имеет более стабильную жирность и не разделяется на слой жира и сыворотки, как обычное молоко. Это позволяет использовать его в качестве ингредиента в продуктах питания без необходимости предварительного перемешивания.` }],
-        nutritionalValue: {
-          protein: 2.9, fats: 3.5, carbs: 4.7, calories: 62
-        },
-        featuresComposition: [{ fullNatural: true, }]
-      },
-      {
-        title: 'Хлопья Русский Продукт Геркулес Детский',
-        id: 'ytj432qwxw32er96gd',
-        category: 'Крупы',
-        image: img5,
-        composition: ['Овсяные хлопья.'],
-        nutritionalValue: {
-          protein: 12, fats: 6, carbs: 51, calories: 310
-        },
-        featuresComposition: [{ fullNatural: true }]
-      },
-      {
-        title: 'Творожок Простоквашино клубника-земляника 3,6% БЗМЖ',
-        id: 'ytj432er96gsdfd',
-        category: 'Молочные продукты',
-        image: img6,
-        composition: ['Творог обезжиренный, нормализованные сливки, наполнитель (клубника; сахарный сироп; вода; сахар; крахмал кукурузный; пюре земляники; натуральный ароматизатор; стабилизатор - пектины; концентрированные соки красной свеклы и лимона; краситель - кармины), сахар.'],
-        nutritionalValue: {
-          protein: 6.1, fats: 3.6, carbs: 12.9, calories: 108
-        },
-        featuresComposition: []
-      },
-      {
-        title: 'Мороженое пломбир Monterra ваниль БЗМЖ',
-        id: 'ytj432322478fger96gd',
-        category: 'Мороженое',
-        image: img7,
-        composition: ['cливки натуральные', 'молоко коровье цельное', 'глюкозный сироп', 'сахар', 'молоко сухое обезжиренное', 'глюкоза', {
-          ingredient: 'эмульгатор моно- и диглицериды жирных кислот', interpretation: `Моно- и диглицериды жирных кислот (E471) являются эмульгаторами, которые используются в пищевой промышленности для улучшения текстуры и структуры многих продуктов, таких как хлеб, кондитерские изделия, мороженое и т.д.
-
-        Эти эмульгаторы представляют собой смесь глицерина и жирных кислот, которые получают из растительных или животных масел. Они помогают смешивать несмешиваемые жидкости, такие как вода и масло, образуя стабильную эмульсию. Это особенно полезно в производстве продуктов, которые содержат большое количество воды и масла, таких как майонез, соусы и салатные заправки.
-
-        E471 считается безопасным для употребления в пищу, и он одобрен Европейскими и Американскими организациями по контролю за продуктами питания. Тем не менее, некоторые люди могут быть чувствительны к этому ингредиенту,`}, 'стабилизаторы:', {
-            ingredient: 'гуаровая камедь', interpretation: `Гуаровая камедь" - это продукт, получаемый из семян растения гуар (Cyamopsis tetragonoloba), который выращивается в основном в Индии и Пакистане.
-
-        Эта добавка используется в пищевой промышленности как стабилизатор, загуститель и эмульгатор. Она часто используется для придания консистенции разным продуктам, таким как соусы, мороженое, йогурт, сыры и другие продукты.`}, 'камедь рожкового дерева', 'ароматизатор', 'сахар жженный карамелизованный', 'семена ванили'],
-
-        nutritionalValue: {
-          protein: 3.4, fats: 14.4, carbs: 27, calories: 251
-        },
-
-        company: {
-          brand: 'Monterra',
-          manufacture: 'Фронери Рус ООО',
-          countryManufacture: 'Россия',
-        },
-
-        otherInfo: {
-          typePackage: 'Пластиковое ведерко',
-          weight: '298 г',
-          shelfLife: '18 месяцев',
-        },
-
-        featuresComposition: [
-          { fullNatural: true, ingredients: [] },
-          { preservingAgent: 1, ingredients: ['глюкоза', 'камедь рожкового дерева'] },
-          { undesirableIngredients: 2, ingredients: ['ароматизатор']  },
-          { forbiddenForChildren: true, ingredients: ['сахар жженный карамелизованный']  },
-          { forbiddenForPregnancy: true, ingredients: ['эмульгатор моно- и диглицериды жирных кислот']  },
-        ],
-
-      },
-    ]
+    this.baseUrl = 'http://localhost:4000/'
   }
 
-  getProducts() {
+  getAllProducts() {
     return fetch(this.baseUrl)
-      .then((res) => { return this._getResponse(this.foundProducts) })
-      .then((res) => { return res })
+      .then((res) => {
+        return this._getResponse(res)
+      })
   }
+
+
+  findProductById(id) {
+    return fetch(`${this.baseUrl}products/${id}`)
+      .then((res) => { return this._getResponse(res) })
+  }
+
+
+  findProductBySubstr(substr) {
+    return fetch(`${this.baseUrl}products`, {
+      method: 'POST',
+      body: JSON.stringify({ substr }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((res) => { return this._getResponse(res) })
+  }
+
 
   _getResponse(res) {
-    if (res.ok === undefined) {
-      return res
+
+    if (!res.ok) {
+      throw (new Error('res.ok <== undefined'))
     }
     return res.json()
   }

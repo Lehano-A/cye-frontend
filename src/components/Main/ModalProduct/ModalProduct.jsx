@@ -38,17 +38,20 @@ const StyledImage = styled('img')(() => {
 const styleCommonBox = {
   display: 'flex',
   justifyContent: 'space-between',
+  flexDirection: 'column',
+  gap: 5,
+
 }
 
 const styleMainBox = {
   position: 'relative',
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
+  // flexDirection: 'column',
+  // justifyContent: 'center',
 
   bgcolor: 'background.paper',
   borderRadius: 3,
-  padding: '20px 60px 40px 30px',
+  padding: '20px 0px 40px 0px',
   margin: '40px auto',
 }
 
@@ -77,6 +80,19 @@ const StyledButtonClose = styled(IconButton)(() => {
     backgroundColor: 'transparent',
   }
 })
+
+const StyledBoxComposition = styled(Box)(() => {
+  return {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: '#eef0f9',
+    padding: '35px 0',
+    alignItems: 'center',
+  }
+})
+
 
 
 function ModalProduct() {
@@ -117,43 +133,59 @@ function ModalProduct() {
       <Box sx={styleMainBox}>
         <Box sx={styleCommonBox}>
 
+          <Box sx={{
+            display: 'flex',
+            padding: '0 100px 0 60px',
+          }}>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '30px' }}>
-            <StyledImage src={image} />
-            <HelpFromUser />
-          </Box>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginRight: '30px',
+            }}>
+              <StyledImage src={image} />
+              <HelpFromUser />
+            </Box>
 
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-
-            <Box>
+            <Box sx={{ marginLeft: '50px' }}>
               <Typography id="modal-title" sx={{ marginBottom: '35px' }} {...titleProps}>
                 {title}
               </Typography>
 
               <FeaturesComposition data={featuresComposition} />
             </Box>
+          </Box>
 
 
-            <Composition
-              data={composition}
-              setRefSelectedIngredient={setRefSelectedIngredient}
-            />
+
+          <StyledBoxComposition>
+            <Box sx={{ maxWidth: '500px' }}>
+              <Box sx={{ marginBottom: '35px' }}>
+                <Composition
+                  data={composition}
+                  setRefSelectedIngredient={setRefSelectedIngredient}
+                />
+              </Box>
+
+              <Box>
+                {noteToComposition && <NoteToComposition data={noteToComposition} />}
+              </Box>
+            </Box>
+          </StyledBoxComposition>
 
 
-            {noteToComposition && <NoteToComposition data={noteToComposition} />}
-
+          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 5, maxWidth: '500px', margin: '0 auto' }}>
 
             <TableNutritionalValue data={nutritionalValue} />
 
-
-            <Box>
-              <Company data={company} />
-              <OtherInfo data={otherInfo} />
-              <OtherInfo data={otherInfo} />
-            </Box>
+            <Company data={company} />
+            <OtherInfo data={otherInfo} />
 
           </Box>
+
+
         </Box>
 
         {refSelectedIngredient && (

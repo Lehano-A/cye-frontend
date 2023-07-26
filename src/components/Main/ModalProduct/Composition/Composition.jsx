@@ -1,12 +1,13 @@
 import React from "react"
-import Ingredient from "../Ingredient/Ingredient"
-import { Typography, List, ListItem, Box } from "@mui/material"
+import Ingredients from "../Ingredients/Ingredients"
+import { Typography, List, Box } from "@mui/material"
 
 
 function Composition({ data, setRefSelectedIngredient }) {
 
   return (
     <Box>
+
       <Typography
         variant="h6"
         fontSize="16px"
@@ -14,15 +15,14 @@ function Composition({ data, setRefSelectedIngredient }) {
       >
         Состав
       </Typography>
-      <List>
-        {data.map((item, id) => {
 
-          return (
-            <ListItem sx={{ padding: 0 }} key={id}>
-              <Ingredient item={item} setRefSelectedIngredient={setRefSelectedIngredient} />
-            </ListItem>
-          )
-        })}
+      <List>
+
+        <Ingredients
+          data={data}
+          setRefSelectedIngredient={setRefSelectedIngredient}
+        />
+
       </List>
     </Box>
   )

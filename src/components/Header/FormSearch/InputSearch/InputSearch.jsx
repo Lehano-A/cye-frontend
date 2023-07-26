@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, TextField, Autocomplete } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFilterProducts } from "../../../../redux/reducers/inputSearchSlice";
+import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
+import { setApiFoundProductsAfterSubmit } from "../../../../redux/reducers/searchRequestProductSlice"
 import { styled } from "@mui/material/styles";
 import api from "../../../../api/api";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -29,45 +30,21 @@ const styleMainBox = {
 function InputSearch() {
 
   const inputValue = useSelector(state => state.inputSearch.inputValue)
-  const isOpenedDropdownWindow = useSelector(state => state.inputSearch.isOpenedDropdownWindow)
-  const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
-  const [apiData, setApiData] = useState([])
-  const apiFilterProducts = useSelector(state => state.inputSearch.apiFilterProducts)
   const [value, setValue] = useState(null);
   const dispatch = useDispatch();
-
-
-  // при изменении значения в поле ввода и после получения новых данных
-  // проводится фильтрация по подстроке
-  // фильтрация здесь временно, потом уйдёт в бэкенд
-  useEffect(() => {
-    const filter = apiData.filter((product) => {
-      return product.title.toLowerCase().includes(inputValue.toLowerCase())
-    })
-    dispatch(setApiFilterProducts(filter))
-  }, [apiData, inputValue])
-
-
-  // срабатывает, после выбора пользоваталем элемента в выпадающем окне и
-  // изменения состояния isSubmitting на true
-  useEffect(() => {
-    if (isSubmitting) {
-      console.log('Выполняется загрузка данных выбранного продукта')
-      dispatch(setSubmitting(false))
-    }
-  }, [isSubmitting, dispatch])
+  const isOpenedDropdownWindow = useSelector(state => state.inputSearch.isOpenedDropdownWindow)
+  const apiFoundProductsForDroplist = useSelector(state => state.inputSearch.apiFoundProductsForDroplist)
 
 
   // вызывается при каждом изменении значения
   const handleInputChange = (e, newValue) => {
 
     if (e.target.value !== '') {
-      console.log('Выполняется поиск совпадения подстроки')
-      const products = api.getProducts()
-
-      products.then((list) => {
-        setApiData(list)
-      })
+      api.findProductBySubstr(newValue)
+        .then((list) => {
+          dispatch(setApiFoundProductsForDroplist(list))
+        })
+        .catch(() => { new Error('Возникла ошибка во время поиска продукта') })
 
       dispatch(setShowDropdownWindow(true))
     } else {
@@ -77,9 +54,10 @@ function InputSearch() {
     dispatch(setInputValue(newValue))
   }
 
-
-  const handleClose = () => {
-    resetStates()
+  const handleClose = (e) => {
+    if (e.target.value.length >= 2) {
+      resetStates()
+    }
   }
 
   const handleClearButtonClick = () => {
@@ -89,21 +67,36 @@ function InputSearch() {
 
   const resetStates = () => {
     dispatch(setShowDropdownWindow(false))
-    dispatch(setApiFilterProducts([]))
+    dispatch(setApiFoundProductsBySubstr([]))
   }
 
+
   // вызывается при сабмите введённой строки или при выборе опции из выпадающего списка
-  const handleOnChange = (e, selectedValue) => {
-    dispatch(setSubmitting(true))
-    dispatch(setInputValue(selectedValue.title ? selectedValue.title : selectedValue))
+  const handleOnChange = (e, targetValue) => {
+
+    // если подстрока или выбран на вариант из выпадающего списка
+    if (targetValue.length >= 2 || targetValue.title) {
+      dispatch(setSubmitting(true))
+
+      api.findProductBySubstr(targetValue.title ? targetValue.title : targetValue)
+        .then((res) => {
+          dispatch(setShowDropdownWindow(false))
+          dispatch(setApiFoundProductsForDroplist([]))
+          dispatch(setApiFoundProductsAfterSubmit(res))
+        })
+        .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
+    }
+    dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
   }
 
 
   return (
     <Box sx={styleMainBox}>
       <Autocomplete
+
+        filterOptions={(x) => x}
+        options={apiFoundProductsForDroplist}
         freeSolo
-        options={apiFilterProducts}
         groupBy={((option) => { return option.category })}
         getOptionLabel={(option) => {
           return option.title ? option.title : option // если объект, тогда будут показаны совпадения, иначе просто строка

@@ -44,12 +44,12 @@ const theme = createTheme({
       main: '#20a35f',
     },
 
-    preservingAgent: {
+    preservingAgents: {
       light: 'rgba(255, 173, 173, 0.5)',
       main: '#D74141',
     },
 
-    undesirableIngredient: {
+    undesirableIngredients: {
       light: 'rgba(255, 188, 64, 0.5)',
       main: '#F69027',
     },

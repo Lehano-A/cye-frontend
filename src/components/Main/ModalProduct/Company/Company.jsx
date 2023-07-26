@@ -13,8 +13,11 @@ const StyledListItem = styled(ListItem)(() => {
     flexDirection: 'column',
     alignItems: 'flex-start',
     padding: 0,
-    marginRight: '50px',
     whiteSpace: 'nowrap',
+
+    '&:not(:last-of-type)': {
+      marginRight: '50px',
+    }
   }
 })
 

@@ -2,7 +2,7 @@ import React from "react"
 import { styled } from "@mui/material/styles"
 import InputSearch from "./InputSearch/InputSearch"
 import ButtonSearch from "./ButtonSearch/ButtonSearch"
-import { useSelector} from "react-redux";
+
 
 const Form = styled('form')`
   display: flex;
@@ -18,14 +18,9 @@ const Form = styled('form')`
 
 function FormSearch() {
 
-  const inputValue = useSelector(state => state.inputSearch.inputValue)
-
-
   const handleSubmit = (e) => {
-    console.log('FormSearch', inputValue);
     e.preventDefault()
   }
-
 
   return (
 

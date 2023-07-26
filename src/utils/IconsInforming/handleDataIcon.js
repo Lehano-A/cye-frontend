@@ -1,11 +1,11 @@
 import { ReactComponent as IconNatural } from "../../images/icons/cardProduct/natural.svg"
-import { ReactComponent as IconPreservingAgent } from "../../images/icons/cardProduct/preserving-agent.svg"
+import { ReactComponent as IconPreservingAgents } from "../../images/icons/cardProduct/preserving-agent.svg"
 import { ReactComponent as IconUndesirableIngredients } from "../../images/icons/cardProduct/undesirable-ingredients.svg"
 import { ReactComponent as IconChildren } from "../../images/icons/cardProduct/children.svg"
 import { ReactComponent as IconPregnancy } from "../../images/icons/cardProduct/pregnancy.svg"
 
 
-function handleDataIcon({ fullNatural, preservingAgent, undesirableIngredients, forbiddenForChildren, forbiddenForPregnancy }) {
+function handleDataIcon({ fullNatural, preservingAgents, undesirableIngredients, forbiddenForChildren, forbiddenForPregnancy }) {
 
   if (fullNatural) {
     return {
@@ -15,10 +15,10 @@ function handleDataIcon({ fullNatural, preservingAgent, undesirableIngredients, 
     }
   }
 
-  if (preservingAgent) {
+  if (preservingAgents) {
     return {
-      icon: IconPreservingAgent,
-      color: 'preservingAgent',
+      icon: IconPreservingAgents,
+      color: 'preservingAgents',
       title: 'Консерванты',
     }
   }
@@ -26,7 +26,7 @@ function handleDataIcon({ fullNatural, preservingAgent, undesirableIngredients, 
   if (undesirableIngredients) {
     return {
       icon: IconUndesirableIngredients,
-      color: 'undesirableIngredient',
+      color: 'undesirableIngredients',
       title: 'Нежелательные компоненты',
     }
   }

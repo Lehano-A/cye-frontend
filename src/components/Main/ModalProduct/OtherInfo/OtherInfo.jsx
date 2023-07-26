@@ -29,7 +29,7 @@ const StyledTitle = styled(Typography)(() => {
 
 const StyledValue = styled(Typography)(() => {
   return {
-    pt: '8px',
+    paddingTop: '8px',
   }
 })
 

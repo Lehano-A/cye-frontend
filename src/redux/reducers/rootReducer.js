@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import inputSearchSlice from "./inputSearchSlice";
-import searchQueryProductSlice from "./searchQueryProductSlice";
+import searchRequestProductSlice from "./searchRequestProductSlice";
 import modalCardProductSlice from "./modalCardProductSlice";
 import selectedCardProductSlice from "./selectedCardProductSlice";
 import popperInterpretationSlice from "./popperInterpretationSlice";
@@ -8,7 +8,7 @@ import popperInterpretationSlice from "./popperInterpretationSlice";
 
 const rootReducer = combineReducers({
   inputSearch: inputSearchSlice,
-  searchQueryProduct: searchQueryProductSlice,
+  searchRequestProduct: searchRequestProductSlice,
   modalCardProduct: modalCardProductSlice,
   selectedCardProduct: selectedCardProductSlice,
   popperInterpretation: popperInterpretationSlice,
