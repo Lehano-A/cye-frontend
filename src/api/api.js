@@ -1,7 +1,7 @@
 class Api {
 
   constructor() {
-    this.baseUrl = 'http://localhost:4000/'
+    this.baseUrl = 'http://чтояем.рф/api/'
   }
 
   getAllProducts() {
