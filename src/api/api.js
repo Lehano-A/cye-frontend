@@ -1,7 +1,8 @@
 class Api {
 
   constructor() {
-    this.baseUrl = 'http://чтояем.рф/api/'
+    this.baseUrl = 'http://localhost:3000/api/'
+    // this.baseUrl = 'https://чтояем.рф/api/'
   }
 
   getAllProducts() {
@@ -13,13 +14,13 @@ class Api {
 
 
   findProductById(id) {
-    return fetch(`${this.baseUrl}products/${id}`)
+    return fetch(`${this.baseUrl}search/products/${id}`)
       .then((res) => { return this._getResponse(res) })
   }
 
 
   findProductBySubstr(substr) {
-    return fetch(`${this.baseUrl}products`, {
+    return fetch(`${this.baseUrl}search/products`, {
       method: 'POST',
       body: JSON.stringify({ substr }),
       headers: {
@@ -29,6 +30,18 @@ class Api {
       .then((res) => { return this._getResponse(res) })
   }
 
+
+  findProductBySubmit(value) {
+    console.log('value', value)
+    return fetch(`${this.baseUrl}search/products`, {
+      method: 'POST',
+      body: JSON.stringify({ title: value.title }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((res) => { return this._getResponse(res) })
+  }
 
   _getResponse(res) {
 

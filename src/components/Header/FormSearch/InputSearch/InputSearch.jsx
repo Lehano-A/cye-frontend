@@ -33,14 +33,17 @@ function InputSearch() {
   const [value, setValue] = useState(null);
   const dispatch = useDispatch();
   const isOpenedDropdownWindow = useSelector(state => state.inputSearch.isOpenedDropdownWindow)
+  const isSubbmiting = useSelector(state => state.inputSearch.isSubbmiting)
+
   const apiFoundProductsForDroplist = useSelector(state => state.inputSearch.apiFoundProductsForDroplist)
 
 
   // вызывается при каждом изменении значения
   const handleInputChange = (e, newValue) => {
 
-    if (e.target.value !== '') {
-      api.findProductBySubstr(newValue)
+    if (e.target.value !== '' && e.type === 'change') {
+      
+      api.findProductBySubstr(newValue) // поиск по подстроке
         .then((list) => {
           dispatch(setApiFoundProductsForDroplist(list))
         })
@@ -74,17 +77,19 @@ function InputSearch() {
   // вызывается при сабмите введённой строки или при выборе опции из выпадающего списка
   const handleOnChange = (e, targetValue) => {
 
-    // если подстрока или выбран на вариант из выпадающего списка
-    if (targetValue.length >= 2 || targetValue.title) {
-      dispatch(setSubmitting(true))
+    // если подстрока или выбран вариант из выпадающего списка
+    if (e.type === 'keydown' || e.type === 'click') {
+      if (targetValue.length >= 2 || targetValue.title) {
+        dispatch(setSubmitting(true))
 
-      api.findProductBySubstr(targetValue.title ? targetValue.title : targetValue)
-        .then((res) => {
-          dispatch(setShowDropdownWindow(false))
-          dispatch(setApiFoundProductsForDroplist([]))
-          dispatch(setApiFoundProductsAfterSubmit(res))
-        })
-        .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
+        api.findProductBySubmit(targetValue)
+          .then((res) => {
+            dispatch(setShowDropdownWindow(false))
+            dispatch(setApiFoundProductsForDroplist([]))
+            dispatch(setApiFoundProductsAfterSubmit(res))
+          })
+          .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
+      }
     }
     dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
   }

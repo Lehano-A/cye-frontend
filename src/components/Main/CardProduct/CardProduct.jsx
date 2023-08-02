@@ -23,7 +23,7 @@ const styleCardMedia = {
 
 
 function CardProduct({ dataProduct }) {
-
+  
   const { title, image, featuresComposition } = dataProduct
 
   const dispatch = useDispatch()
@@ -37,12 +37,12 @@ function CardProduct({ dataProduct }) {
     <Card variant="searchResult" onClick={handleCardClick}>
       <CardActionArea>
 
-        {featuresComposition.length > 0 &&
+        {featuresComposition && featuresComposition.length > 0 &&
           <Box sx={{ display: 'flex', margin: '3px 0 0 4px' }}>{
-            featuresComposition.map((feature, id) => {
+            featuresComposition.map((item, id) => {
               return (
                 <IconsInforming
-                  feature={feature}
+                  feature={item.feature}
                   key={id}
                 />
               )

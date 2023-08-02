@@ -31,6 +31,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "npm run build && scp -r ./build/* lehano@158.160.17.120:/home/cye-frontend",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

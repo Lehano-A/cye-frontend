@@ -8,13 +8,12 @@ import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconI
 
 const StyledBoxIconCard = styled(Box)`
   &:not(:last-child) {
-    margin-right: ${props => (props.typeicon.forbiddenForChildren || props.typeicon.forbiddenForPregnancy) ? '1px' : '5px'}
+    margin-right: ${props => (props.typeicon === 'forbiddenForChildren' || props.typeicon === 'forbiddenForPregnancy') ? '1px' : '5px'}
   }
 `
 
 
 function IconsInforming({ feature }) {
-
   const [dataIcon, setDataIcon] = useState(null)
 
   useEffect(() => {

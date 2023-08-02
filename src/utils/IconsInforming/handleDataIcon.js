@@ -5,9 +5,9 @@ import { ReactComponent as IconChildren } from "../../images/icons/cardProduct/c
 import { ReactComponent as IconPregnancy } from "../../images/icons/cardProduct/pregnancy.svg"
 
 
-function handleDataIcon({ fullNatural, preservingAgents, undesirableIngredients, forbiddenForChildren, forbiddenForPregnancy }) {
+function handleDataIcon(feature) {
 
-  if (fullNatural) {
+  if (feature === 'fullNatural') {
     return {
       icon: IconNatural,
       color: 'fullNatural',
@@ -15,7 +15,7 @@ function handleDataIcon({ fullNatural, preservingAgents, undesirableIngredients,
     }
   }
 
-  if (preservingAgents) {
+  if (feature === 'preservingAgents') {
     return {
       icon: IconPreservingAgents,
       color: 'preservingAgents',
@@ -23,7 +23,7 @@ function handleDataIcon({ fullNatural, preservingAgents, undesirableIngredients,
     }
   }
 
-  if (undesirableIngredients) {
+  if (feature === 'undesirableIngredients') {
     return {
       icon: IconUndesirableIngredients,
       color: 'undesirableIngredients',
@@ -31,7 +31,7 @@ function handleDataIcon({ fullNatural, preservingAgents, undesirableIngredients,
     }
   }
 
-  if (forbiddenForChildren) {
+  if (feature === 'forbiddenForChildren') {
     return {
       icon: IconChildren,
       color: 'forbiddenForChildren',
@@ -39,7 +39,7 @@ function handleDataIcon({ fullNatural, preservingAgents, undesirableIngredients,
     }
   }
 
-  if (forbiddenForPregnancy) {
+  if (feature === 'forbiddenForPregnancy') {
     return {
       icon: IconPregnancy,
       color: 'forbiddenForPregnancy',
