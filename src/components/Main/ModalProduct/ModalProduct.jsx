@@ -178,7 +178,7 @@ function ModalProduct() {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 5, maxWidth: '500px', margin: '0 auto' }}>
 
-            <TableNutritionalValue data={nutritionalValue} />
+            {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
 
             <Company data={company} />
             <OtherInfo data={otherInfo} />

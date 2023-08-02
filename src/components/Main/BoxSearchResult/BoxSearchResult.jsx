@@ -22,7 +22,7 @@ function BoxSearchResult() {
         {apiFoundProductsAfterSubmit && apiFoundProductsAfterSubmit.map((product) => {
 
           return (
-            <Grid xs={8} sm={6} md={4} lg={3} key={product.id}>
+            <Grid xs={8} sm={6} md={4} lg={3} key={product._id}>
               <CardProduct dataProduct={product} />
             </Grid>
           )

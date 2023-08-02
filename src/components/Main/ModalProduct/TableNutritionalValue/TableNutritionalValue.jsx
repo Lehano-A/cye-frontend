@@ -14,7 +14,7 @@ function TableNutritionalValue({ data }) {
   const { protein, fats, carbs, calories } = data
 
   return (
-    <Box sx={{padding: '8px 0'}}>
+    <Box sx={{ padding: '8px 0' }}>
       <Typography variant="h6" fontSize="16px" fontWeight={700}>Пищевая ценность на 100 г</Typography>
       <Table>
         <TableHead>

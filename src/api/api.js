@@ -19,6 +19,7 @@ class Api {
   }
 
 
+  // "живой" поиск по подстроке
   findProductBySubstr(substr) {
     return fetch(`${this.baseUrl}search/products`, {
       method: 'POST',
@@ -30,9 +31,8 @@ class Api {
       .then((res) => { return this._getResponse(res) })
   }
 
-
+  // поиск по сабмиту или выбору варианта из списка
   findProductBySubmit(value) {
-    console.log('value', value)
     return fetch(`${this.baseUrl}search/products`, {
       method: 'POST',
       body: JSON.stringify({ title: value.title }),

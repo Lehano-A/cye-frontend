@@ -55,9 +55,8 @@ function FeaturesComposition({ data }) {
     <>
       {
         data.map((feature, id) => {
-
-          const dataIcon = handleDataIcon(feature)
-
+          
+          const dataIcon = handleDataIcon(feature.feature)
 
           return (
             <StyledMainBox key={id} color={dataIcon.color}>

@@ -15,6 +15,7 @@ const StyledListItem = styled(ListItem)`
   min-height: 150px;
   width: 350px;
   padding-top: 0;
+  margin-bottom: 80px;
 
   &::before {
     content: "";
@@ -27,10 +28,6 @@ const StyledListItem = styled(ListItem)`
     border-radius: 50%;
     background-color: ${(props) => props.bgcolor} ;
     z-index: -1;
-  }
-
-  &:not(:nth-last-of-type(-n+3)) {
-    margin-bottom: 80px;
   }
 `
 
