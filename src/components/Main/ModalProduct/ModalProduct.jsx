@@ -103,7 +103,7 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, image, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
+  const { title, imageUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
 
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
@@ -144,7 +144,7 @@ function ModalProduct() {
               alignItems: 'center',
               marginRight: '30px',
             }}>
-              <StyledImage src={image} />
+              <StyledImage src={imageUrl} />
               <HelpFromUser />
             </Box>
 

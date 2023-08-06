@@ -9,7 +9,10 @@ import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconI
 const StyledBoxIconCard = styled(Box)`
   &:not(:last-child) {
     margin-right: ${props => (props.typeicon === 'forbiddenForChildren' || props.typeicon === 'forbiddenForPregnancy') ? '1px' : '5px'}
-  }
+  };
+  &:hover {
+    cursor: pointer;
+  };
 `
 
 

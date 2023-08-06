@@ -23,8 +23,8 @@ const styleCardMedia = {
 
 
 function CardProduct({ dataProduct }) {
-  
-  const { title, image, featuresComposition } = dataProduct
+
+  const { title, imageUrl, featuresComposition } = dataProduct
 
   const dispatch = useDispatch()
 
@@ -34,32 +34,35 @@ function CardProduct({ dataProduct }) {
   }
 
   return (
-    <Card variant="searchResult" onClick={handleCardClick}>
-      <CardActionArea>
+    <Box>
+      {featuresComposition && featuresComposition.length > 0 &&
+        <Box sx={{ display: 'flex', margin: '3px 0 0 4px' }}>{
+          featuresComposition.map((item, id) => {
+            return (
+              <IconsInforming
+                feature={item.feature}
+                key={id}
+              />
+            )
+          })}
+        </Box>
+      }
+      <Card variant="searchResult" onClick={handleCardClick}>
+        <CardActionArea>
 
-        {featuresComposition && featuresComposition.length > 0 &&
-          <Box sx={{ display: 'flex', margin: '3px 0 0 4px' }}>{
-            featuresComposition.map((item, id) => {
-              return (
-                <IconsInforming
-                  feature={item.feature}
-                  key={id}
-                />
-              )
-            })}
-          </Box>
-        }
 
-        <CardMedia component="img" image={image} sx={styleCardMedia} />
 
-        <CardContent>
-          <StyledTypography variant="h2">
-            {title}
-          </StyledTypography>
-        </CardContent>
+          <CardMedia component="img" image={imageUrl} sx={styleCardMedia} />
 
-      </CardActionArea>
-    </Card>
+          <CardContent>
+            <StyledTypography variant="h2">
+              {title}
+            </StyledTypography>
+          </CardContent>
+
+        </CardActionArea>
+      </Card>
+    </Box>
   )
 }
 
