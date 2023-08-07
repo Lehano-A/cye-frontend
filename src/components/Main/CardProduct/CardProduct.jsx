@@ -4,7 +4,7 @@ import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlic
 import { Box, Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
 import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice"
 import { styled } from "@mui/material/styles";
-import IconsInforming from "./IconsInforming/IconsInforming"
+import IconsInforming from "./IconInforming/IconInforming"
 
 
 const StyledTypography = styled(Typography)`
