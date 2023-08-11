@@ -6,7 +6,6 @@ import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlic
 import { styled } from "@mui/material/styles";
 import IconsInforming from "./IconInforming/IconInforming"
 
-
 const StyledTypography = styled(Typography)`
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -24,7 +23,8 @@ const styleCardMedia = {
 
 function CardProduct({ dataProduct }) {
 
-  const { title, imageUrl, featuresComposition } = dataProduct
+  const { title, imagesUrl, featuresComposition } = dataProduct
+  const mainImage = imagesUrl[0].mediumUrl
 
   const dispatch = useDispatch()
 
@@ -50,9 +50,7 @@ function CardProduct({ dataProduct }) {
       <Card variant="searchResult" onClick={handleCardClick}>
         <CardActionArea>
 
-
-
-          <CardMedia component="img" image={imageUrl} sx={styleCardMedia} />
+          <CardMedia component="img" image={mainImage} sx={styleCardMedia} />
 
           <CardContent>
             <StyledTypography variant="h2">

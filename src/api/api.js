@@ -5,6 +5,7 @@ class Api {
     this.baseUrl = 'https://чтояем.рф/api/'
   }
 
+
   getAllProducts() {
     return fetch(this.baseUrl)
       .then((res) => {
@@ -31,11 +32,12 @@ class Api {
       .then((res) => { return this._getResponse(res) })
   }
 
+
   // поиск по сабмиту или выбору варианта из списка
   findProductBySubmit(value) {
     return fetch(`${this.baseUrl}search/products`, {
       method: 'POST',
-      body: JSON.stringify({ title: value.title }),
+      body: JSON.stringify(value),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },

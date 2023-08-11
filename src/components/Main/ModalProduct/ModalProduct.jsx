@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
 import { setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
+import SwiperSlider from "./SwiperSlider/SwiperSlider";
 import FeaturesComposition from "./FeaturesComposition/FeaturesComposition";
 
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
@@ -103,7 +104,7 @@ function ModalProduct() {
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, imageUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
+  const { title, imagesUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
 
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
@@ -143,8 +144,13 @@ function ModalProduct() {
               flexDirection: 'column',
               alignItems: 'center',
               marginRight: '30px',
+              // height: '450px'
             }}>
-              <StyledImage src={imageUrl} />
+              {/* <StyledImage src={mainImage} /> */}
+              {/* <Box sx={{ width: '500px', height: '30px' }}> */}
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '500px', width: '100%' }}>
+                <SwiperSlider images={imagesUrl} />
+              </Box>
               <HelpFromUser />
             </Box>
 

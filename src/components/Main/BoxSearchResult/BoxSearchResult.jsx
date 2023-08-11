@@ -9,9 +9,9 @@ function BoxSearchResult() {
 
   const apiFoundProductsAfterSubmit = useSelector(state => state.searchRequestProduct.apiFoundProductsAfterSubmit)
 
-
   return (
     <Container>
+
       <Grid
         container
         columnSpacing={{ xs: 0, sm: 5 }}

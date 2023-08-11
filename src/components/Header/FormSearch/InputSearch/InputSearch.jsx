@@ -33,7 +33,6 @@ function InputSearch() {
   const [value, setValue] = useState(null);
   const dispatch = useDispatch();
   const isOpenedDropdownWindow = useSelector(state => state.inputSearch.isOpenedDropdownWindow)
-  const isSubbmiting = useSelector(state => state.inputSearch.isSubbmiting)
 
   const apiFoundProductsForDroplist = useSelector(state => state.inputSearch.apiFoundProductsForDroplist)
 
@@ -42,7 +41,7 @@ function InputSearch() {
   const handleInputChange = (e, newValue) => {
 
     if (e.target.value !== '' && e.type === 'change') {
-      
+
       api.findProductBySubstr(newValue) // поиск по подстроке
         .then((list) => {
           dispatch(setApiFoundProductsForDroplist(list))
