@@ -17,7 +17,6 @@ function Main() {
 
   const isVisible = useSelector(state => state.modalCardProduct.visible)
   const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
-  const userDevice = useSelector(state => state.checkUserDevice.userDevice)
 
   useEffect(() => {
 

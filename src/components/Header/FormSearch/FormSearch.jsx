@@ -3,7 +3,6 @@ import { styled } from "@mui/material/styles"
 import InputSearch from "./InputSearch/InputSearch"
 import ButtonSearch from "./ButtonSearch/ButtonSearch"
 
-
 const Form = styled('form')`
   display: flex;
   justify-content: center;
