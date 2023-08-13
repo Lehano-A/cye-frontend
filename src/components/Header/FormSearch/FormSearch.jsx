@@ -7,7 +7,7 @@ const Form = styled('form')`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 600px;
+  max-width: 700px;
   width: 100%;
   margin: 0 25px;
    & > :first-of-type {

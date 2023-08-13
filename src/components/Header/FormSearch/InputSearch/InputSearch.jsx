@@ -74,7 +74,7 @@ function InputSearch() {
 
 
   const handleClose = (e) => {
-    if (e.target.value.length >= 2) {
+    if (e.target.textContent.length >= 2) {
       resetStates()
     }
   }
@@ -122,12 +122,16 @@ function InputSearch() {
             <CircularProgress size={20} color='primary' />
           </Box>
         }
-        filterOptions={(x) => x}
         options={apiFoundProductsForDroplist}
         freeSolo
-        groupBy={((option) => { return option.category })}
-        getOptionLabel={(option) => {
-          return option.title ? option.title : option // если объект, тогда будут показаны совпадения, иначе просто строка
+        getOptionLabel={(option) => option.title}
+        renderOption={(props, option) => {
+          return (
+            <Box {...props}>
+              <img style={{ marginRight: '15px' }} src={option.imagesUrl} alt=""></img>
+              {option.title}
+            </Box>
+          )
         }}
         disableClearable
         sx={{ width: 3500, }}
