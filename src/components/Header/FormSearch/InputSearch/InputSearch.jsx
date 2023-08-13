@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Box, TextField, Autocomplete, CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import api from "../../../../api/api";
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
+
 
 const StyledTextField = styled(TextField)(() => {
   return {
@@ -26,21 +27,31 @@ const styleMainBox = {
   margin: '0 20px'
 }
 
+function debounceInputChange(callback, delay) {
+  let timeout
+
+  return function (e, newValue) {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => callback(e, newValue), delay)
+  }
+}
+
 
 function InputSearch() {
 
   const inputValue = useSelector(state => state.inputSearch.inputValue)
   const [value, setValue] = useState(null);
+
   const dispatch = useDispatch();
   const isOpenedDropdownWindow = useSelector(state => state.inputSearch.isOpenedDropdownWindow)
 
   const apiFoundProductsForDroplist = useSelector(state => state.inputSearch.apiFoundProductsForDroplist)
+  const timeoutInputChange = useCallback(debounceInputChange(reqApiInputChange, 100), [])
 
 
-  // вызывается при каждом изменении значения
-  const handleInputChange = (e, newValue) => {
-
-    if (e.target.value !== '' && e.type === 'change') {
+  // запрос к api, после изменения значения в строке поиска
+  function reqApiInputChange(event, newValue) {
+    if (event.target.value !== '' && event.type === 'change') {
 
       api.findProductBySubstr(newValue) // поиск по подстроке
         .then((list) => {
@@ -52,9 +63,15 @@ function InputSearch() {
     } else {
       dispatch(setShowDropdownWindow(false))
     }
-
-    dispatch(setInputValue(newValue))
   }
+
+
+  // вызывается при каждом изменении значения (с учётом debounce)
+  function handleInputChange(e, newValue) {
+    dispatch(setInputValue(newValue))
+    timeoutInputChange(e, newValue)
+  }
+
 
   const handleClose = (e) => {
     if (e.target.value.length >= 2) {
@@ -92,6 +109,8 @@ function InputSearch() {
     }
     dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
   }
+
+
 
 
   return (
@@ -132,7 +151,7 @@ function InputSearch() {
         value={value} // текущее значение выбранной опции
         onChange={handleOnChange} // вызывается при выборе опции из выпадающего списка
         inputValue={inputValue} // текущее значение поля ввода
-        onInputChange={handleInputChange} // вызывается при каждом изменении значения в поле ввода
+        onInputChange={handleInputChange} // вызывается при каждом изменении значения в поле ввода (с учётом debounce)
         open={isOpenedDropdownWindow}
         onClose={handleClose}
       />
