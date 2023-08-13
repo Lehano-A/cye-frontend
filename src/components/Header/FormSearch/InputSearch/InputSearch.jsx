@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Autocomplete } from "@mui/material";
+import { Box, TextField, Autocomplete, CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
 import { setApiFoundProductsAfterSubmit } from "../../../../redux/reducers/searchRequestProductSlice"
@@ -97,7 +97,12 @@ function InputSearch() {
   return (
     <Box sx={styleMainBox}>
       <Autocomplete
-
+        loading
+        loadingText={
+          <Box sx={{ display: 'flex', 'justifyContent': 'center' }}>
+            <CircularProgress size={20} color='primary' />
+          </Box>
+        }
         filterOptions={(x) => x}
         options={apiFoundProductsForDroplist}
         freeSolo
