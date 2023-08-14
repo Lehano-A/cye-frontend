@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Box, TextField, Autocomplete, CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
-import { setApiFoundProductsAfterSubmit } from "../../../../redux/reducers/searchRequestProductSlice"
+import { setInputValue, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
 import { styled } from "@mui/material/styles";
 import api from "../../../../api/api";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -37,7 +36,7 @@ function debounceInputChange(callback, delay) {
 }
 
 
-function InputSearch() {
+function InputSearch({ handleOnChange }) {
 
   const inputValue = useSelector(state => state.inputSearch.inputValue)
   const [value, setValue] = useState(null);
@@ -53,7 +52,7 @@ function InputSearch() {
   function reqApiInputChange(event, newValue) {
     if (event.target.value !== '' && event.type === 'change') {
 
-      api.findProductBySubstr(newValue) // поиск по подстроке
+      api.findProductBySubstr({ substr: newValue }) // поиск по подстроке
         .then((list) => {
           dispatch(setApiFoundProductsForDroplist(list))
         })
@@ -90,28 +89,6 @@ function InputSearch() {
   }
 
 
-  // вызывается при сабмите введённой строки или при выборе опции из выпадающего списка
-  const handleOnChange = (e, targetValue) => {
-
-    // если подстрока или выбран вариант из выпадающего списка
-    if (e.type === 'keydown' || e.type === 'click') {
-      if (targetValue.length >= 2 || targetValue.title) {
-        dispatch(setSubmitting(true))
-
-        api.findProductBySubmit(targetValue)
-          .then((res) => {
-            dispatch(setShowDropdownWindow(false))
-            dispatch(setApiFoundProductsForDroplist([]))
-            dispatch(setApiFoundProductsAfterSubmit(res))
-          })
-          .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
-      }
-    }
-    dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
-  }
-
-
-
 
   return (
     <Box sx={styleMainBox}>
@@ -124,7 +101,7 @@ function InputSearch() {
         }
         options={apiFoundProductsForDroplist}
         freeSolo
-        getOptionLabel={(option) => option.title}
+        getOptionLabel={(option) => option.title ? option.title : option}
         renderOption={(props, option) => {
           return (
             <Box {...props}>

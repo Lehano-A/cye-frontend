@@ -16,10 +16,9 @@ function Main() {
   const dispatch = useDispatch()
 
   const isVisible = useSelector(state => state.modalCardProduct.visible)
-  const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
+  const wasFirstSubmit = useSelector(state => state.inputSearch.wasFirstSubmit)
 
   useEffect(() => {
-
     const device = checkerUserDevice()
     dispatch(setUserDevice(device))
 
@@ -30,7 +29,7 @@ function Main() {
 
     <main style={styleMainBox}>
 
-      {isSubmitting ? <BoxSearchResult /> : <Welcome />}
+      {wasFirstSubmit ? <BoxSearchResult /> : <Welcome />}
 
       {isVisible && <ModalProduct />}
 

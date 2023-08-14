@@ -24,7 +24,7 @@ class Api {
   findProductBySubstr(substr) {
     return fetch(`${this.baseUrl}search/products`, {
       method: 'POST',
-      body: JSON.stringify({ substr }),
+      body: JSON.stringify(substr),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
