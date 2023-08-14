@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Box, TextField, Autocomplete, CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
+import { setInputValue, setSubmitting, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } from "../../../../redux/reducers/inputSearchSlice";
 import { styled } from "@mui/material/styles";
 import api from "../../../../api/api";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -39,6 +39,7 @@ function debounceInputChange(callback, delay) {
 function InputSearch({ handleOnChange }) {
 
   const inputValue = useSelector(state => state.inputSearch.inputValue)
+  const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
   const [value, setValue] = useState(null);
 
   const dispatch = useDispatch();
@@ -69,6 +70,9 @@ function InputSearch({ handleOnChange }) {
   function handleInputChange(e, newValue) {
     dispatch(setInputValue(newValue))
     timeoutInputChange(e, newValue)
+
+    // если был сабмит (отправка запроса на поиск продукта), то при изменении значения в строке поиска, состояние сабмита сбрасывается
+    isSubmitting && dispatch(setSubmitting(false))
   }
 
 

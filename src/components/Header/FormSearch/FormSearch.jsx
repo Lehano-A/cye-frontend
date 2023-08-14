@@ -30,9 +30,13 @@ function FormSearch() {
 
   // вызывается при сабмите введённой строки или при выборе опции (стрелкой или курсором) из выпадающего списка
   const handleOnChange = (e, targetValue) => {
-
     // если значение не изменилось, после сабмита, тогда новый не отправляем
     if (inputValue === inputValueAfterSubmit) {
+      return
+    }
+
+    // если длина значения в строке поиска < 2, тогда запрос не отправляется
+    if (targetValue.length < 2) {
       return
     }
 
@@ -48,13 +52,12 @@ function FormSearch() {
 
       api.findProductBySubmit(searchValue)
         .then((res) => {
-          dispatch(setInputValueAfterSubmit(inputValue))
+          dispatch(setInputValueAfterSubmit(searchValue.title))
           dispatch(setShowDropdownWindow(false))
           dispatch(setApiFoundProductsForDroplist([]))
           dispatch(setApiFoundProductsAfterSubmit(res))
         })
         .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
-        .finally(() => dispatch(setSubmitting(false)))
     }
 
     dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
