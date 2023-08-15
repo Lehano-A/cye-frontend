@@ -27,11 +27,11 @@ function FormSearch() {
   const inputValueAfterSubmit = useSelector(state => state.inputSearch.inputValueAfterSubmit)
   const wasFirstSubmit = useSelector(state => state.inputSearch.wasFirstSubmit)
 
-
   // вызывается при сабмите введённой строки или при выборе опции (стрелкой или курсором) из выпадающего списка
   const handleOnChange = (e, targetValue) => {
     // если значение не изменилось, после сабмита, тогда новый не отправляем
-    if (inputValue === inputValueAfterSubmit) {
+    // (в том числе, когда сначала выбрали вариант из списка, стёрли символ и опять нажали на этот же вариант в списке)
+    if (inputValue === inputValueAfterSubmit || targetValue.title === inputValueAfterSubmit) {
       return
     }
 
@@ -40,6 +40,9 @@ function FormSearch() {
       return
     }
 
+    if (e.type === 'keydown' || e.type === 'submit') {
+      dispatch(setShowDropdownWindow(false))
+    }
     // "keydown" - поиск через ENTER, по введённой подстроке или выбранному варианту стрелками на клавиатуре + ENTER
     // "submit" - поиск по клику на кнопке поиска (только подстрока)
     // "click" - поиск по клику на вариант из выпадающего списка

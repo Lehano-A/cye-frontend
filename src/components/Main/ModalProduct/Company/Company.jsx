@@ -37,15 +37,16 @@ const StyledValue = styled(Typography)(() => {
 
 function Company({ data }) {
 
-  const { brand, manufacture, countryManufacture } = data;
+  const { brand, manufacture, countryManufacture } = data
+  const { title } = brand
 
   return (
     <Box>
       <List sx={styleList}>
 
         <StyledListItem>
-          <StyledTitle variant="h6" >Бренд</StyledTitle>
-          <StyledValue variant="body2" >{brand}</StyledValue>
+          <StyledTitle variant="h6">Бренд</StyledTitle>
+          <StyledValue variant="body2" >{title}</StyledValue>
         </StyledListItem>
 
 

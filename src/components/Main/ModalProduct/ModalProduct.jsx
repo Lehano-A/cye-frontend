@@ -105,7 +105,7 @@ function ModalProduct() {
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
   const { title, imagesUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
-
+  
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 

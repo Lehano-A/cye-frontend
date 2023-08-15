@@ -1,12 +1,7 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Box, Paper } from "@mui/material";
 import FormSearch from "./FormSearch/FormSearch";
-
-const styleHeader = {
-  backgroundColor: '#eef0f9',
-  padding: '120px 0',
-  marginBottom: '80px',
-}
 
 const styleBoxForm = {
   display: 'flex',
@@ -16,15 +11,26 @@ const styleBoxForm = {
 
 
 function Header() {
+  const isVisibleFilterCategories = useSelector((state) => state.filterCategories.isVisible)
+
+
   return (
     <Paper variant='header'>
-      <header style={styleHeader}>
+
+      <Box
+        component="header"
+        sx={{
+          'backgroundColor': '#eef0f9',
+          padding: '120px 0',
+          margin: !isVisibleFilterCategories ? `0 0 80px 0` : `0 0 31px 0`,
+        }}
+      >
 
         <Box sx={styleBoxForm}>
           <FormSearch />
         </Box>
 
-      </header>
+      </Box>
     </Paper>
   )
 }

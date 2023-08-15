@@ -5,6 +5,7 @@ import modalCardProductSlice from "./modalCardProductSlice";
 import selectedCardProductSlice from "./selectedCardProductSlice";
 import popperInterpretationSlice from "./popperInterpretationSlice";
 import checkUserDeviceSlice from "./checkUserDeviceSlice";
+import filterCategoriesSlice from "./filterCategoriesSlice";
 
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   selectedCardProduct: selectedCardProductSlice,
   popperInterpretation: popperInterpretationSlice,
   checkUserDevice: checkUserDeviceSlice,
+  filterCategories: filterCategoriesSlice,
 })
 
 export default rootReducer;
