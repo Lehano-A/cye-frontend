@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsVisible, setUniqueCategories } from "../../../../redux/reducers/filterCategoriesSlice";
+import { setIsVisible, setUniqueCategories, setActiveButtonInGroup, setIsActiveButtonShowAllProducts } from "../../../../redux/reducers/filterCategoriesSlice";
 import { Box, ToggleButton, ToggleButtonGroup, } from "@mui/material";
 
 
@@ -32,9 +32,9 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
   const dispatch = useDispatch()
   const uniqueCategories = useSelector((state) => state.filterCategories.uniqueCategories)
+  const activeButtonInGroup = useSelector((state) => state.filterCategories.activeButtonInGroup)
+  const isActiveButtonShowAllProducts = useSelector((state) => state.filterCategories.isActiveButtonShowAllProducts)
 
-  const [activeButtonInGroup, setActiveButtonInGroup] = useState(true)
-  const [isActiveAllProductsButton, setIsActiveAllProductsButton] = useState(true)
 
   useEffect(() => {
     const collectionCategories = createCollectionCategories(apiFoundProductsAfterSubmit)
@@ -50,16 +50,16 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
     if (nameButton === null) {
       return
     }
-    if (nameButton === 'allProducts') {
-      setIsActiveAllProductsButton(true)
+    if (nameButton === 'showAllProducts') {
+      dispatch(setIsActiveButtonShowAllProducts(true))
     } else {
-      setIsActiveAllProductsButton(false)
+      dispatch(setIsActiveButtonShowAllProducts(false))
     }
 
-    setActiveButtonInGroup(nameButton)
+    dispatch(setActiveButtonInGroup(nameButton))
   }
 
-  
+
   return (
     <Box>
       <ToggleButtonGroup
@@ -68,9 +68,9 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
         value={activeButtonInGroup}
       >
         <ToggleButton
-          value="allProducts"
+          value="showAllProducts"
           sx={{ marginRight: '40px' }}
-          selected={isActiveAllProductsButton}
+          selected={isActiveButtonShowAllProducts}
         >
           Всё подряд
         </ToggleButton>
