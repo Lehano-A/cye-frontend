@@ -1,4 +1,5 @@
 import React from "react"
+import log from 'loglevel'
 import { styled } from "@mui/material/styles"
 import InputSearch from "./InputSearch/InputSearch"
 import ButtonSearch from "./ButtonSearch/ButtonSearch"
@@ -22,6 +23,58 @@ const Form = styled('form')`
   }
 `
 
+function checkValidInputValue(eventType, targetValue, inputValue, inputValueAfterSubmit) {
+  // если значение не изменилось, после сабмита, тогда новый не отправляем
+  // (в том числе, когда сначала выбрали вариант из списка, стёрли символ и опять нажали на этот же вариант в списке)
+  // "keydown":
+  // 1) поиск через ENTER, по введённой подстроке
+  // 2) или по выбранному варианту стрелками на клавиатуре + ENTER (в этом случае -  targetValue имеет объект {title: ..., imagesUrl: ...})
+  if (eventType === 'keydown') {
+    log.warn('Тип события: keydown');
+    // убеждаемся, что выбран вариант из выпадающего списка
+    // и что этот вариант совпадает с предыдущим значением сабмита
+    if (targetValue.title && targetValue.title === inputValueAfterSubmit) {
+      log.warn('Выбран вариант из выпадающего списка и этот вариант совпадает с предыдущим значением сабмита');
+      return false
+    }
+
+    // если значение в строке совпадает со значением, после сабмита
+    if (inputValue === inputValueAfterSubmit && (inputValue === targetValue.title || inputValueAfterSubmit === targetValue.title)) {
+      log.warn('Значение в строке совпадает со значением, после сабмита, а также с выбранным вариантом из выпадающего списка');
+      return false
+    }
+
+    if (inputValue === inputValueAfterSubmit && targetValue.title === undefined) {
+      log.warn('Значение в строке совпадает со значением, после сабмита, а варианты из выпадающего списка не задействовали');
+      return false
+    }
+  }
+
+  // "submit" - поиск по клику на кнопке поиска (только подстрока)
+  if (eventType === 'submit') {
+    log.warn('Тип события: submit');
+    if (inputValue === inputValueAfterSubmit) {
+      log.warn('Значение в строке совпадает со значением, после сабмита');
+      return false
+    }
+  }
+
+  // "click" - поиск по клику на вариант из выпадающего списка
+  if (eventType === 'click') {
+    log.warn('Тип события: click');
+    if (targetValue.title && targetValue.title === inputValueAfterSubmit) {
+      log.warn('Выбран вариант из выпадающего списка и этот вариант совпадает с предыдущим значением сабмита');
+      return false
+    }
+  }
+
+  return true
+}
+
+
+
+
+
 function FormSearch() {
 
   const dispatch = useDispatch();
@@ -30,20 +83,19 @@ function FormSearch() {
   const wasFirstSubmit = useSelector(state => state.inputSearch.wasFirstSubmit)
 
 
-
   // вызывается при сабмите введённой строки или при выборе опции (стрелкой или курсором) из выпадающего списка
   const handleOnChange = (e, targetValue) => {
-
-    // если значение не изменилось, после сабмита, тогда новый не отправляем
-    // (в том числе, когда сначала выбрали вариант из списка, стёрли символ и опять нажали на этот же вариант в списке)
-    if (inputValue === inputValueAfterSubmit || targetValue.title === inputValueAfterSubmit) {
-      return
-    }
 
     // если длина значения в строке поиска < 2, тогда запрос не отправляется
     if (targetValue.length < 2) {
       return
     }
+
+    // проверка валидности данных в строке поиска
+    if (!checkValidInputValue(e.type, targetValue, inputValue, inputValueAfterSubmit)) {
+      return
+    }
+
 
     if (e.type === 'keydown' || e.type === 'submit') {
       dispatch(setShowDropdownWindow(false))
@@ -52,7 +104,9 @@ function FormSearch() {
     dispatch(setArrForShowSearchResultProducts([]))
     dispatch(clearCountLoadedImagesCards())
     dispatch(clearCountFilterCards())
-    // "keydown" - поиск через ENTER, по введённой подстроке или выбранному варианту стрелками на клавиатуре + ENTER
+    // "keydown":
+    // 1) поиск через ENTER, по введённой подстроке
+    // 2) или по выбранному варианту стрелками на клавиатуре + ENTER
     // "submit" - поиск по клику на кнопке поиска (только подстрока)
     // "click" - поиск по клику на вариант из выпадающего списка
     if (e.type === 'keydown' || e.type === 'submit' || e.type === 'click') {
@@ -86,7 +140,7 @@ function FormSearch() {
 
     <Form onSubmit={handleSubmit} >
       <InputSearch handleOnChange={handleOnChange} />
-      <ButtonSearch />
+      <ButtonSearch lengthValue={inputValue.length} />
     </Form>
 
   )

@@ -52,7 +52,7 @@ function InputSearch({ handleOnChange }) {
   // запрос к api, после изменения значения в строке поиска
   function reqApiInputChange(event, newValue) {
     if (event.target.value !== '' && event.type === 'change') {
-   
+
       api.findProductBySubstr({ substr: newValue }) // поиск по подстроке
         .then((list) => {
           dispatch(setApiFoundProductsForDroplist(list))

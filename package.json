@@ -28,7 +28,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "loglevel": "^1.8.1"
   },
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",
