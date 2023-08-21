@@ -131,11 +131,11 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiToggleButtonGroup-grouped:not(:first-of-type)': {
-            borderLeft: '1px solid rgba(0, 0, 0, 0.12)',
-            'border-radius': '5px'
+            'borderLeft': '1px solid rgba(0, 0, 0, 0.12)',
+            'borderRadius': '5px'
           },
           '.MuiToggleButtonGroup-grouped:first-of-type': {
-            'border-radius': '5px'
+            'borderRadius': '5px'
           },
         }
       }

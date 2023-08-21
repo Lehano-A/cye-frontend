@@ -1,79 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { Box, Container, CircularProgress } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
-import CardProduct from "../CardProduct/CardProduct";
+import { Box, Container, Fade } from "@mui/material";
 import FilterCategories from "./FilterCategories/FilterCategories";
+import GridCardsProduct from "./GridCardsProduct/GridCardsProduct";
 
-const styleBoxLoader = {
+const styleBoxFilterCategories = {
   display: 'flex',
   justifyContent: 'center',
-  width: '100%'
+  margin: '0 0 80px 0'
 }
 
 function BoxSearchResult() {
 
   const apiFoundProductsAfterSubmit = useSelector(state => state.searchRequestProduct.apiFoundProductsAfterSubmit)
-  const isSubmitting = useSelector(state => state.inputSearch.isSubmitting)
-  const [timer, setTimer] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const arrForShowSearchResultProducts = useSelector(state => state.boxSearchResult.arrForShowSearchResultProducts)
+  const countLoadedImagesCards = useSelector(state => state.cardProduct.countLoadedImagesCards)
+  const countFilterCards = useSelector(state => state.filterCategories.countFilterCards)
 
-  useEffect(() => {
-    if (isSubmitting) {
-      setTimer(setTimeout(() => { setLoading(true) }, 300))
-    }
-  }, [isSubmitting])
 
-  useEffect(() => {
-    if (!loading && timer) {
-      clearTimeout(timer)
-    }
-  }, [loading])
+  // готовы ли карточки для отображения? (ожидаем загрузки изображений карточек)
+  const isCardsComletedForDisplay = ((arrForShowSearchResultProducts.length === countFilterCards && countLoadedImagesCards === countFilterCards) || (countLoadedImagesCards === arrForShowSearchResultProducts.length))
+
 
   return (
-    <Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', margin: '0 0 15px 0'}}>
+    <Container>
+
+      <Box sx={styleBoxFilterCategories}>
         {apiFoundProductsAfterSubmit.length > 1 &&
-
           <FilterCategories apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit} />
-
         }
       </Box>
 
-      <Container>
-        <Grid
-          container
-          columnSpacing={{ xs: 0, sm: 5 }}
-          rowSpacing={5}
-          justifyContent={{ xs: 'center', sm: 'flex-start' }}
-          maxWidth='lg'
-        >
-          {apiFoundProductsAfterSubmit.length > 0 ?
-            (
-              apiFoundProductsAfterSubmit.map((product) => {
+      <Fade in={isCardsComletedForDisplay}>
+        <Container sx={{ display: isCardsComletedForDisplay ? 'block' : 'none' }}>
+          <GridCardsProduct
+            arrForShowSearchResultProducts={arrForShowSearchResultProducts}
+          />
+        </Container>
+      </Fade>
+      
+    </Container>
 
-                return (
-                  <Grid xs={8} sm={6} md={4} lg={3} key={product._id}>
-                    <CardProduct dataProduct={product} />
-                  </Grid>
-                )
-              })
-            )
-
-            :
-
-            (
-              loading &&
-              <Box sx={styleBoxLoader}>
-                <CircularProgress />
-              </Box>
-            )
-
-          }
-        </Grid>
-      </Container>
-    </Box>
   )
 }
 

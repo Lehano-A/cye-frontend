@@ -1,31 +1,24 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsVisible, setUniqueCategories, setActiveButtonInGroup, setIsActiveButtonShowAllProducts } from "../../../../redux/reducers/filterCategoriesSlice";
+import {
+  setUniqueCategories,
+  setActiveButtonInGroup,
+  setIsActiveButtonShowAllProducts,
+  incrementCountFilterCards,
+  clearCountFilterCards
+} from "../../../../redux/reducers/filterCategoriesSlice";
+import { setArrForShowSearchResultProducts } from "../../../../redux/reducers/boxSearchResultSlice";
 import { Box, ToggleButton, ToggleButtonGroup, } from "@mui/material";
+import { clearCountLoadedImagesCards } from "../../../../redux/reducers/cardProduct";
 
 
-function createCollectionCategories(apiFoundProductsAfterSubmit) {
-  const box = []
-  apiFoundProductsAfterSubmit.forEach((product) => box.push(...product.category));
-
-  return box
+//  Поиск уникальных категорий из входящиего массива продуктов
+function searchUniqueCategories(apiFoundProductsAfterSubmit) {
+  const box = {}
+  apiFoundProductsAfterSubmit.forEach((product) => Object.assign(box, product.category));
+  return Object.keys(box)
 }
-
-
-function findUniqueCategories(arr) {
-  const boxObj = {}
-  const boxArr = []
-
-  arr.forEach((category) => {
-    if (!boxObj[category]) {
-      boxObj[category] = true
-      boxArr.push(category)
-    }
-  })
-  return boxArr
-}
-
 
 
 function FilterCategories({ apiFoundProductsAfterSubmit }) {
@@ -37,27 +30,57 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
 
   useEffect(() => {
-    const collectionCategories = createCollectionCategories(apiFoundProductsAfterSubmit)
-    const uniqueCategories = findUniqueCategories(collectionCategories)
+    // определение коллекции имён кнопок для фильтра
+    const collectionCategories = searchUniqueCategories(apiFoundProductsAfterSubmit)
 
-    dispatch(setUniqueCategories(uniqueCategories))
-    dispatch(setIsVisible(true))
+    dispatch(setUniqueCategories(collectionCategories))
   }, [])
 
 
-
-  const handleOnChange = (e, nameButton) => {
-    if (nameButton === null) {
+  useEffect(() => {
+    // если нажата кнопка "показать все продукты"
+    if (activeButtonInGroup === 'showAllProducts') {
+      dispatch(setIsActiveButtonShowAllProducts(true))
+      dispatch(setArrForShowSearchResultProducts(apiFoundProductsAfterSubmit))
       return
     }
-    if (nameButton === 'showAllProducts') {
-      dispatch(setIsActiveButtonShowAllProducts(true))
-    } else {
+
+    // если нажата "любая другая кнопка категории"
+    if (activeButtonInGroup !== null) {
+      const productsTargetCategory = getProductsTargetCategory(activeButtonInGroup)
+      dispatch(setArrForShowSearchResultProducts(productsTargetCategory))
       dispatch(setIsActiveButtonShowAllProducts(false))
     }
+  }, [activeButtonInGroup])
 
+
+
+
+  // обработка данных при изменении активной кнопки в фильтре
+  function handleOnChange(e, nameButton) {
+
+    // это правило, чтобы кнопка не отжималась
+    // а всегда, было одна из всех активная
+    if (nameButton === activeButtonInGroup || nameButton === null) {
+      return
+    }
+
+    dispatch(setArrForShowSearchResultProducts([]))
+    dispatch(clearCountLoadedImagesCards())
+    dispatch(clearCountFilterCards())
     dispatch(setActiveButtonInGroup(nameButton))
   }
+
+
+  function getProductsTargetCategory(nameButton) {
+    const filterProduct = apiFoundProductsAfterSubmit.filter((product) => {
+      return product.category[nameButton]
+    })
+
+    dispatch(incrementCountFilterCards(filterProduct.length))
+    return filterProduct
+  }
+
 
 
   return (

@@ -6,6 +6,8 @@ import selectedCardProductSlice from "./selectedCardProductSlice";
 import popperInterpretationSlice from "./popperInterpretationSlice";
 import checkUserDeviceSlice from "./checkUserDeviceSlice";
 import filterCategoriesSlice from "./filterCategoriesSlice";
+import boxSearchResultSlice from "./boxSearchResultSlice";
+import cardProductSlice from "./cardProduct"
 
 
 const rootReducer = combineReducers({
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
   popperInterpretation: popperInterpretationSlice,
   checkUserDevice: checkUserDeviceSlice,
   filterCategories: filterCategoriesSlice,
+  boxSearchResult: boxSearchResultSlice,
+  cardProduct: cardProductSlice,
 })
 
 export default rootReducer;
