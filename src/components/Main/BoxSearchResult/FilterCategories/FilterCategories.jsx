@@ -6,10 +6,11 @@ import {
   setActiveButtonInGroup,
   setIsActiveButtonShowAllProducts,
   incrementCountFilterCards,
-  clearCountFilterCards
+  clearCountFilterCards,
+  clearUniqueCategories,
 } from "../../../../redux/reducers/filterCategoriesSlice";
 import { setArrForShowSearchResultProducts } from "../../../../redux/reducers/boxSearchResultSlice";
-import { Box, ToggleButton, ToggleButtonGroup, } from "@mui/material";
+import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { clearCountLoadedImagesCards } from "../../../../redux/reducers/cardProduct";
 
 
@@ -21,6 +22,7 @@ function searchUniqueCategories(apiFoundProductsAfterSubmit) {
 }
 
 
+
 function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
   const dispatch = useDispatch()
@@ -29,12 +31,15 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
   const isActiveButtonShowAllProducts = useSelector((state) => state.filterCategories.isActiveButtonShowAllProducts)
 
 
+
   useEffect(() => {
     // определение коллекции имён кнопок для фильтра
     const collectionCategories = searchUniqueCategories(apiFoundProductsAfterSubmit)
-
     dispatch(setUniqueCategories(collectionCategories))
-  }, [])
+
+    return () => { dispatch(clearUniqueCategories()) }
+  }, [apiFoundProductsAfterSubmit])
+
 
 
   useEffect(() => {
@@ -58,10 +63,9 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
   // обработка данных при изменении активной кнопки в фильтре
   function handleOnChange(e, nameButton) {
-
-    // это правило, чтобы кнопка не отжималась
-    // а всегда, было одна из всех активная
-    if (nameButton === activeButtonInGroup || nameButton === null) {
+    // эти правила, чтобы кнопка не отжималась
+    // а всегда, было одна из всех активная и повторные нажатия на активную кнопку игнорировались
+    if (nameButton === activeButtonInGroup || nameButton === null || (nameButton === 'showAllProducts' && activeButtonInGroup === null)) {
       return
     }
 
@@ -82,7 +86,6 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
   }
 
 
-
   return (
     <Box>
       <ToggleButtonGroup
@@ -90,6 +93,7 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
         onChange={handleOnChange}
         value={activeButtonInGroup}
       >
+
         <ToggleButton
           value="showAllProducts"
           sx={{ marginRight: '40px' }}

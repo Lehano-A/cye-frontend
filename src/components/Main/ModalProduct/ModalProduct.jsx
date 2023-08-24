@@ -26,15 +26,6 @@ import HelpFromUser from "../HelpFromUser/HelpFromUser";
     с последующим сравнением элементов, где произошёл клик: на кнопке закрытия или на backdrop.
 */
 
-const StyledImage = styled('img')(() => {
-  return {
-    width: '400px',
-    height: '400px',
-    objectFit: 'contain',
-    marginBottom: '25px',
-  }
-})
-
 
 const styleCommonBox = {
   display: 'flex',
@@ -47,9 +38,6 @@ const styleCommonBox = {
 const styleMainBox = {
   position: 'relative',
   display: 'flex',
-  // flexDirection: 'column',
-  // justifyContent: 'center',
-
   bgcolor: 'background.paper',
   borderRadius: 3,
   padding: '20px 0px 40px 0px',
@@ -105,7 +93,7 @@ function ModalProduct() {
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
   const { title, imagesUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
-  
+
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
 
@@ -144,13 +132,12 @@ function ModalProduct() {
               flexDirection: 'column',
               alignItems: 'center',
               marginRight: '30px',
-              // height: '450px'
             }}>
-              {/* <StyledImage src={mainImage} /> */}
-              {/* <Box sx={{ width: '500px', height: '30px' }}> */}
+
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '500px', width: '100%' }}>
                 <SwiperSlider images={imagesUrl} />
               </Box>
+              
               <HelpFromUser />
             </Box>
 

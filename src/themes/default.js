@@ -1,10 +1,64 @@
 import { createTheme } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
+import { regexAlphaNum } from "../utils/constants";
 
-const defaultTheme = createTheme()
+const palette = {
+  primary: {
+    light: 'rgba(160, 171, 223, 1)',
+    main: '#5c70c8',
+    dark: '#263a9c',
+  },
+
+  secondary: {
+    light: '#db8ece',
+    main: '#bf38ac',
+    dark: '#82008c',
+  },
+
+  warning: {
+    light: '#ffb74d',
+    main: '#FFA500',
+    dark: '#f57c00',
+  },
+
+  fullNatural: {
+    light: 'rgba(32, 163, 95, 0.33)',
+    main: '#20a35f',
+  },
+
+  preservingAgents: {
+    light: 'rgba(255, 173, 173, 0.5)',
+    main: '#D74141',
+  },
+
+  undesirableIngredients: {
+    light: 'rgba(255, 188, 64, 0.5)',
+    main: '#F69027',
+  },
+
+  forbiddenForChildren: {
+    light: 'rgba(133, 148, 214, 0.5)',
+    main: '#5c70c8',
+    dark: '#3F51A8',
+
+  },
+
+  forbiddenForPregnancy: {
+    light: 'rgba(195, 132, 199, 0.5)',
+    main: '#82008C',
+  },
+
+  getAlphaColor: function (name, contrast, value) {
+    return this[name][contrast].replace(regexAlphaNum, value)
+  }
+}
+
+
+
+
+
 
 const theme = createTheme({
-
   MuiDialog: {
     styleOverrides: {
       root: {
@@ -20,54 +74,24 @@ const theme = createTheme({
     fontFamily: 'Roboto'
   },
 
-  palette: {
-    primary: {
-      light: '#a0abdf',
-      main: '#5c70c8',
-      dark: '#263a9c',
-    },
-
-    secondary: {
-      light: '#db8ece',
-      main: '#bf38ac',
-      dark: '#82008c',
-    },
-
-    warning: {
-      light: '#ffb74d',
-      main: '#FFA500',
-      dark: '#f57c00',
-    },
-
-    fullNatural: {
-      light: 'rgba(32, 163, 95, 0.33)',
-      main: '#20a35f',
-    },
-
-    preservingAgents: {
-      light: 'rgba(255, 173, 173, 0.5)',
-      main: '#D74141',
-    },
-
-    undesirableIngredients: {
-      light: 'rgba(255, 188, 64, 0.5)',
-      main: '#F69027',
-    },
-
-    forbiddenForChildren: {
-      light: 'rgba(133, 148, 214, 0.5)',
-      main: '#5c70c8',
-      dark: '#3F51A8',
-
-    },
-
-    forbiddenForPregnancy: {
-      light: 'rgba(195, 132, 199, 0.5)',
-      main: '#82008C',
-    }
-  },
+  palette: palette,
 
   components: {
+    MuiAutocomplete: {
+      styleOverrides: {
+        option: {
+          '&.MuiAutocomplete-option.Mui-focused': {
+            backgroundColor: palette.getAlphaColor("primary", "light", 0.1) // цвет фона элемента опции при наведении
+          },
+        },
+        paper: {
+          padding: '10px 0',
+        },
+        listbox: {
+          padding: 0
+        },
+      },
+    },
 
     MuiTypography: {
       defaultProps: {
@@ -140,11 +164,8 @@ const theme = createTheme({
         }
       }
     }
-
-
-
-
-  },
-})
+  }
+},
+)
 
 export default theme;

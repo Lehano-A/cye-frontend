@@ -19,12 +19,6 @@ const StyledTypography = styled(Typography)`
   font-size: 15px;
 `
 
-const styleCardMedia = {
-  maxHeight: '220px',
-  height: '100%',
-  objectFit: 'contain',
-}
-
 
 function CardProduct({ dataProduct }) {
   const dispatch = useDispatch()
@@ -48,7 +42,7 @@ function CardProduct({ dataProduct }) {
   return (
     <>
 
-      <Box sx={{ display: isLoadedImage ? 'block' : 'none' }}>
+      <Box sx={{ display: isLoadedImage ? 'block' : 'none'}}>
         {
           featuresComposition && featuresComposition.length > 0 &&
           <Box sx={{ display: 'flex', margin: '3px 0 0 4px' }}>{

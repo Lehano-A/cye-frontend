@@ -4,12 +4,13 @@ import { styled } from "@mui/material/styles"
 import InputSearch from "./InputSearch/InputSearch"
 import ButtonSearch from "./ButtonSearch/ButtonSearch"
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setInputValueAfterSubmit, setSubmitting, setWasFirstSubmit, setShowDropdownWindow, setApiFoundProductsForDroplist } from "../../../redux/reducers/inputSearchSlice";
+import { setInputValue, setInputValueAfterSubmit, setSubmitting, setWasFirstSubmit, setIsOpenedDropList, setApiFoundProductsForDropList } from "../../../redux/reducers/inputSearchSlice";
 import { setApiFoundProductsAfterSubmit } from "../../../redux/reducers/searchRequestProductSlice"
 import { setArrForShowSearchResultProducts } from "../../../redux/reducers/boxSearchResultSlice"
 import api from "../../../api/api";
 import { clearCountLoadedImagesCards } from "../../../redux/reducers/cardProduct";
-import { clearCountFilterCards } from "../../../redux/reducers/filterCategoriesSlice";
+import { clearCountFilterCards, clearUniqueCategories, resetDefaultButtonsFilter } from "../../../redux/reducers/filterCategoriesSlice";
+
 
 const Form = styled('form')`
   display: flex;
@@ -23,54 +24,68 @@ const Form = styled('form')`
   }
 `
 
-function checkValidInputValue(eventType, targetValue, inputValue, inputValueAfterSubmit) {
+
+function checkValidInputValue(params) {
+  const { eventType, targetValue, inputValue, inputValueAfterSubmit, apiFoundProductsForDroplist } = params
+
+  // если длина значения в строке поиска < 2, тогда запрос не отправляется
+  if (targetValue?.length < 2) {
+    return
+  }
+
+  // если ответ от сервера для выпадающего окна получен, но "ничего не было найдено", тогда
+  // блокируем возможность повторного запроса сабмитом или кликом на кнопку поиска
+  if (apiFoundProductsForDroplist?.length === 0) {
+    return
+  }
+
   // если значение не изменилось, после сабмита, тогда новый не отправляем
   // (в том числе, когда сначала выбрали вариант из списка, стёрли символ и опять нажали на этот же вариант в списке)
   // "keydown":
   // 1) поиск через ENTER, по введённой подстроке
   // 2) или по выбранному варианту стрелками на клавиатуре + ENTER (в этом случае -  targetValue имеет объект {title: ..., imagesUrl: ...})
   if (eventType === 'keydown') {
-    log.warn('Тип события: keydown');
+    log.debug('********** Тип события: keydown **********');
     // убеждаемся, что выбран вариант из выпадающего списка
     // и что этот вариант совпадает с предыдущим значением сабмита
     if (targetValue.title && targetValue.title === inputValueAfterSubmit) {
-      log.warn('Выбран вариант из выпадающего списка и этот вариант совпадает с предыдущим значением сабмита');
+      log.debug('Выбран вариант из выпадающего списка и этот вариант совпадает с предыдущим значением сабмита. Новый запрос к серверу не производим.');
       return false
     }
 
     // если значение в строке совпадает со значением, после сабмита
     if (inputValue === inputValueAfterSubmit && (inputValue === targetValue.title || inputValueAfterSubmit === targetValue.title)) {
-      log.warn('Значение в строке совпадает со значением, после сабмита, а также с выбранным вариантом из выпадающего списка');
+      log.debug('Значение в строке совпадает со значением, после сабмита, а также с выбранным вариантом из выпадающего списка. Новый запрос к серверу не производим.');
       return false
     }
 
     if (inputValue === inputValueAfterSubmit && targetValue.title === undefined) {
-      log.warn('Значение в строке совпадает со значением, после сабмита, а варианты из выпадающего списка не задействовали');
+      log.debug('Значение в строке совпадает со значением, после сабмита, а варианты из выпадающего списка не задействовали. Новый запрос к серверу не производим.');
       return false
     }
   }
 
   // "submit" - поиск по клику на кнопке поиска (только подстрока)
   if (eventType === 'submit') {
-    log.warn('Тип события: submit');
+    log.debug('********** Тип события: submit **********');
     if (inputValue === inputValueAfterSubmit) {
-      log.warn('Значение в строке совпадает со значением, после сабмита');
+      log.debug('Значение в строке совпадает со значением, после сабмита. Новый запрос к серверу не производим.');
       return false
     }
   }
 
   // "click" - поиск по клику на вариант из выпадающего списка
   if (eventType === 'click') {
-    log.warn('Тип события: click');
+    log.debug('********** Тип события: click **********');
     if (targetValue.title && targetValue.title === inputValueAfterSubmit) {
-      log.warn('Выбран вариант из выпадающего списка и этот вариант совпадает с предыдущим значением сабмита');
+      log.debug('Выбран вариант из выпадающего списка и этот вариант совпадает с предыдущим значением сабмита. Новый запрос к серверу не производим.');
       return false
     }
   }
 
+  log.debug('Значение и событие - валидны. Всё хорошо');
   return true
 }
-
 
 
 
@@ -81,29 +96,24 @@ function FormSearch() {
   const inputValue = useSelector(state => state.inputSearch.inputValue)
   const inputValueAfterSubmit = useSelector(state => state.inputSearch.inputValueAfterSubmit)
   const wasFirstSubmit = useSelector(state => state.inputSearch.wasFirstSubmit)
+  const apiFoundProductsForDroplist = useSelector(state => state.inputSearch.apiFoundProductsForDroplist)
 
 
   // вызывается при сабмите введённой строки или при выборе опции (стрелкой или курсором) из выпадающего списка
   const handleOnChange = (e, targetValue) => {
 
-    // если длина значения в строке поиска < 2, тогда запрос не отправляется
-    if (targetValue.length < 2) {
+    // проверка валидности данных и событий в строке поиска
+    if (!checkValidInputValue({ eventType: e.type, targetValue, inputValue, inputValueAfterSubmit, apiFoundProductsForDroplist })) {
       return
     }
 
-    // проверка валидности данных в строке поиска
-    if (!checkValidInputValue(e.type, targetValue, inputValue, inputValueAfterSubmit)) {
-      return
-    }
-
-
-    if (e.type === 'keydown' || e.type === 'submit') {
-      dispatch(setShowDropdownWindow(false))
-    }
 
     dispatch(setArrForShowSearchResultProducts([]))
     dispatch(clearCountLoadedImagesCards())
     dispatch(clearCountFilterCards())
+    dispatch(clearUniqueCategories())
+    dispatch(resetDefaultButtonsFilter())
+
     // "keydown":
     // 1) поиск через ENTER, по введённой подстроке
     // 2) или по выбранному варианту стрелками на клавиатуре + ENTER
@@ -111,6 +121,8 @@ function FormSearch() {
     // "click" - поиск по клику на вариант из выпадающего списка
     if (e.type === 'keydown' || e.type === 'submit' || e.type === 'click') {
       dispatch(setSubmitting(true))
+      dispatch(setIsOpenedDropList(false))
+
 
       !wasFirstSubmit && dispatch(setWasFirstSubmit(true))
 
@@ -119,14 +131,14 @@ function FormSearch() {
       api.findProductBySubmit(searchValue)
         .then((res) => {
           dispatch(setInputValueAfterSubmit(searchValue.title))
-          dispatch(setShowDropdownWindow(false))
-          dispatch(setApiFoundProductsForDroplist([]))
+          dispatch(setApiFoundProductsForDropList(null))
           dispatch(setApiFoundProductsAfterSubmit(res))
           dispatch(setArrForShowSearchResultProducts(res))
         })
         .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
     }
 
+    // если выбирается вариант из выпадающего окна, то ".title", иначе - "подстрока"
     dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
   }
 
@@ -140,7 +152,7 @@ function FormSearch() {
 
     <Form onSubmit={handleSubmit} >
       <InputSearch handleOnChange={handleOnChange} />
-      <ButtonSearch lengthValue={inputValue.length} />
+      <ButtonSearch />
     </Form>
 
   )

@@ -8,21 +8,25 @@ const inputSearchSlice = createSlice({
     inputValueAfterSubmit: '',
     isSubmitting: false,
     wasFirstSubmit: false,
-    isOpenedDropdownWindow: false,
-    apiFoundProductsBySubstr: [],
-    apiFoundProductsForDroplist: [],
+    isOpenedDropList: false,
+    isLoadingInDropList: false,
+    apiFoundProductsForDropList: null,
+    gotResFromServer: null,
   },
   reducers: {
     setInputValue: (state, action) => { state.inputValue = action.payload },
     setInputValueAfterSubmit: (state, action) => { state.inputValueAfterSubmit = action.payload },
     setSubmitting: (state, action) => { state.isSubmitting = action.payload },
     setWasFirstSubmit: (state, action) => { state.wasFirstSubmit = action.payload },
-    setShowDropdownWindow: (state, action) => { state.isOpenedDropdownWindow = action.payload },
-    setApiFoundProductsBySubstr: (state, action) => { state.apiFoundProductsBySubstr = action.payload },
-    setApiFoundProductsForDroplist: (state, action) => { state.apiFoundProductsForDroplist = action.payload }
+    setIsOpenedDropList: (state, action) => { state.isOpenedDropList= action.payload },
+    setIsLoadingInDropList: (state, action) => {
+      state.isLoadingInDropList = action.payload
+    },
+    setApiFoundProductsForDropList: (state, action) => { state.apiFoundProductsForDropList = action.payload },
+    setGotResFromServer: (state, action) => { state.gotResFromServer = action.payload }
   }
 })
 
-export const { setInputValue, setInputValueAfterSubmit, setSubmitting, setWasFirstSubmit, setShowDropdownWindow, setApiFoundProductsBySubstr, setApiFoundProductsForDroplist } = inputSearchSlice.actions
+export const { setInputValue, setInputValueAfterSubmit, setSubmitting, setWasFirstSubmit, setIsOpenedDropList, setApiFoundProductsForDropList, setIsLoadingInDropList, setGotResFromServer } = inputSearchSlice.actions
 
 export default inputSearchSlice.reducer

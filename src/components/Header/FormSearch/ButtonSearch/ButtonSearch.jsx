@@ -3,18 +3,20 @@ import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 import { grey } from '@mui/material/colors';
+import { useSelector } from "react-redux";
 
-const StyledButton = styled(Button)(({ theme, lengthvalue: lengthValue }) => {
+const StyledButton = styled(Button)(({ theme, param }) => {
   const primaryLight = theme.palette.primary.light;
+  const { inputValue } = param;
 
   return {
     width: '64px',
     height: '64px',
     boxShadow: 'none',
-    backgroundColor: lengthValue < 2 ? grey[400] : primaryLight,
+    backgroundColor: inputValue.length < 2 ? grey[400] : primaryLight,
     transition: 'all 0.2s',
     '&:hover': {
-      backgroundColor: lengthValue < 2 ? grey[400] : primaryLight,
+      backgroundColor: inputValue.length < 2 ? grey[400] : primaryLight,
       boxShadow: 'none',
     },
 
@@ -31,11 +33,16 @@ const styleIcon = {
 }
 
 
-function ButtonSearch({ lengthValue }) {
+function ButtonSearch() {
 
+  const inputValue = useSelector((state) => state.inputSearch.inputValue)
+
+  const param = {
+    inputValue,
+  }
 
   return (
-    <StyledButton type="submit" variant="contained" lengthvalue={lengthValue}>
+    <StyledButton type="submit" variant="contained" param={param}>
       <SearchIcon sx={styleIcon} fontSize="large" />
     </StyledButton>
   )

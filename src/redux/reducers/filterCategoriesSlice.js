@@ -16,8 +16,15 @@ const filterCategoriesSlice = createSlice({
     incrementCountFilterCards: (state, action) => {
       state.countFilterCards += action.payload
     },
-    clearCountFilterCards: (state, action) => {
+    clearCountFilterCards: (state) => {
       state.countFilterCards = 0
+    },
+    clearUniqueCategories: (state) => {
+      state.uniqueCategories = []
+    },
+    resetDefaultButtonsFilter: (state) => {
+      state.activeButtonInGroup = null
+      state.isActiveButtonShowAllProducts = true
     },
   }
 })
@@ -28,6 +35,8 @@ export const {
   setIsActiveButtonShowAllProducts,
   incrementCountFilterCards,
   clearCountFilterCards,
+  clearUniqueCategories,
+  resetDefaultButtonsFilter
 } = filterCategoriesSlice.actions
 
 export default filterCategoriesSlice.reducer
