@@ -17,6 +17,7 @@ import { clearCountLoadedImagesCards } from "../../../../redux/reducers/cardProd
 //  Поиск уникальных категорий из входящиего массива продуктов
 function searchUniqueCategories(apiFoundProductsAfterSubmit) {
   const box = {}
+
   apiFoundProductsAfterSubmit.forEach((product) => Object.assign(box, product.category));
   return Object.keys(box)
 }
@@ -43,6 +44,7 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
 
   useEffect(() => {
+
     // если нажата кнопка "показать все продукты"
     if (activeButtonInFilter === 'showAllProducts') {
       dispatch(setIsActiveButtonShowAllProducts(true))

@@ -156,7 +156,6 @@ function InputSearch({ handleOnChange }) {
     dispatch(setIsLoadingInDropList(state))
   }
 
-
   return (
     <Box sx={styleMainBox}>
       <Autocomplete

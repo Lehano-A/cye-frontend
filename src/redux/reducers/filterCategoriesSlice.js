@@ -8,6 +8,8 @@ const filterCategoriesSlice = createSlice({
     activeButtonInFilter: null,
     isActiveButtonShowAllProducts: true,
     countFilterCards: 0,
+    isFadeFirstDisplay: false,
+
   },
   reducers: {
     setUniqueCategories: (state, action) => { state.uniqueCategories = action.payload },
@@ -26,6 +28,9 @@ const filterCategoriesSlice = createSlice({
       state.activeButtonInFilter = null
       state.isActiveButtonShowAllProducts = true
     },
+    setIsFadeFirstDisplay: (state, action) => {
+      state.isFadeFirstDisplay = action.payload
+    },
   }
 })
 
@@ -36,7 +41,8 @@ export const {
   incrementCountFilterCards,
   clearCountFilterCards,
   clearUniqueCategories,
-  resetDefaultButtonsFilter
+  resetDefaultButtonsFilter,
+  setIsFadeFirstDisplay
 } = filterCategoriesSlice.actions
 
 export default filterCategoriesSlice.reducer

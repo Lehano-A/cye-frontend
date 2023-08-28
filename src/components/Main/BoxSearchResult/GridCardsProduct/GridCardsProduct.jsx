@@ -17,7 +17,7 @@ function GridCardsProduct({ arrForShowSearchResultProducts }) {
         arrForShowSearchResultProducts.map((product) => {
           return (
 
-            <Grid xs={8} sm={6} md={4} lg={3} key={product._id} item sx={{padding: 0}}>
+            <Grid xs={8} sm={6} md={4} lg={3} key={product.id} item sx={{padding: 0}}>
               <CardProduct dataProduct={product} />
             </Grid>
 
