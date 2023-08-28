@@ -18,12 +18,13 @@ const inputSearchSlice = createSlice({
     setInputValueAfterSubmit: (state, action) => { state.inputValueAfterSubmit = action.payload },
     setSubmitting: (state, action) => { state.isSubmitting = action.payload },
     setWasFirstSubmit: (state, action) => { state.wasFirstSubmit = action.payload },
-    setIsOpenedDropList: (state, action) => { state.isOpenedDropList= action.payload },
+    setIsOpenedDropList: (state, action) => { state.isOpenedDropList = action.payload },
     setIsLoadingInDropList: (state, action) => {
       state.isLoadingInDropList = action.payload
     },
     setApiFoundProductsForDropList: (state, action) => { state.apiFoundProductsForDropList = action.payload },
-    setGotResFromServer: (state, action) => { state.gotResFromServer = action.payload }
+    setGotResFromServer: (state, action) => { state.gotResFromServer = action.payload },
+
   }
 })
 

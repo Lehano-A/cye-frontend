@@ -5,13 +5,13 @@ const filterCategoriesSlice = createSlice({
   name: 'filterCategories',
   initialState: {
     uniqueCategories: [],
-    activeButtonInGroup: null,
+    activeButtonInFilter: null,
     isActiveButtonShowAllProducts: true,
     countFilterCards: 0,
   },
   reducers: {
     setUniqueCategories: (state, action) => { state.uniqueCategories = action.payload },
-    setActiveButtonInGroup: (state, action) => { state.activeButtonInGroup = action.payload },
+    setActiveButtonInFilter: (state, action) => { state.activeButtonInFilter = action.payload },
     setIsActiveButtonShowAllProducts: (state, action) => { state.isActiveButtonShowAllProducts = action.payload },
     incrementCountFilterCards: (state, action) => {
       state.countFilterCards += action.payload
@@ -23,7 +23,7 @@ const filterCategoriesSlice = createSlice({
       state.uniqueCategories = []
     },
     resetDefaultButtonsFilter: (state) => {
-      state.activeButtonInGroup = null
+      state.activeButtonInFilter = null
       state.isActiveButtonShowAllProducts = true
     },
   }
@@ -31,7 +31,7 @@ const filterCategoriesSlice = createSlice({
 
 export const {
   setUniqueCategories,
-  setActiveButtonInGroup,
+  setActiveButtonInFilter,
   setIsActiveButtonShowAllProducts,
   incrementCountFilterCards,
   clearCountFilterCards,

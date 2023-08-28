@@ -1,3 +1,6 @@
+// Supports weights 300-700
+import '@fontsource-variable/comfortaa';
+
 import { createTheme } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 import { regexAlphaNum } from "../utils/constants";
@@ -83,6 +86,7 @@ const theme = createTheme({
           '&.MuiAutocomplete-option.Mui-focused': {
             backgroundColor: palette.getAlphaColor("primary", "light", 0.1) // цвет фона элемента опции при наведении
           },
+
         },
         paper: {
           padding: '10px 0',

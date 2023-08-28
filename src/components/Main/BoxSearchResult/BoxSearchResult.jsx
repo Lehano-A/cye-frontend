@@ -3,12 +3,20 @@ import { useSelector } from "react-redux";
 import { Box, Container, Fade } from "@mui/material";
 import FilterCategories from "./FilterCategories/FilterCategories";
 import GridCardsProduct from "./GridCardsProduct/GridCardsProduct";
+import { styled } from "@mui/material/styles";
 
-const styleBoxFilterCategories = {
-  display: 'flex',
-  justifyContent: 'center',
-  margin: '0 0 80px 0'
-}
+const StyledBoxFilter = styled(Box)(({ datafordisplay }) => {
+
+  const { activeButtonInGroup, isCardsComletedForDisplay } = datafordisplay;
+
+  return {
+    display: isCardsComletedForDisplay || activeButtonInGroup ? 'flex' : 'none',
+    justifyContent: 'center',
+    margin: '0 0 80px 0',
+  }
+})
+
+
 
 function BoxSearchResult() {
 
@@ -16,6 +24,7 @@ function BoxSearchResult() {
   const arrForShowSearchResultProducts = useSelector(state => state.boxSearchResult.arrForShowSearchResultProducts)
   const countLoadedImagesCards = useSelector(state => state.cardProduct.countLoadedImagesCards)
   const countFilterCards = useSelector(state => state.filterCategories.countFilterCards)
+  const activeButtonInGroup = useSelector(state => state.filterCategories.activeButtonInGroup)
 
 
   // готовы ли карточки для отображения? (ожидаем загрузки изображений карточек)
@@ -23,25 +32,28 @@ function BoxSearchResult() {
 
 
   return (
+    <Fade in={isCardsComletedForDisplay || activeButtonInGroup}>
+      <Container>
 
-    <Container>
+        <StyledBoxFilter
+          datafordisplay={{ activeButtonInGroup, isCardsComletedForDisplay }}
+        >
+          {apiFoundProductsAfterSubmit.length > 1 &&
+            <FilterCategories apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit} />
+          }
+        </StyledBoxFilter>
 
-      <Box sx={styleBoxFilterCategories}>
-        {apiFoundProductsAfterSubmit.length > 1 &&
-          <FilterCategories apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit} />
-        }
-      </Box>
 
-      <Fade in={isCardsComletedForDisplay}>
+
         <Container sx={{ display: isCardsComletedForDisplay ? 'block' : 'none' }}>
           <GridCardsProduct
             arrForShowSearchResultProducts={arrForShowSearchResultProducts}
           />
         </Container>
-      </Fade>
-      
-    </Container>
 
+
+      </Container>
+    </Fade>
   )
 }
 

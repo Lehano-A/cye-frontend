@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setUniqueCategories,
-  setActiveButtonInGroup,
+  setActiveButtonInFilter,
   setIsActiveButtonShowAllProducts,
   incrementCountFilterCards,
   clearCountFilterCards,
@@ -27,7 +27,7 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
   const dispatch = useDispatch()
   const uniqueCategories = useSelector((state) => state.filterCategories.uniqueCategories)
-  const activeButtonInGroup = useSelector((state) => state.filterCategories.activeButtonInGroup)
+  const activeButtonInFilter = useSelector((state) => state.filterCategories.activeButtonInFilter)
   const isActiveButtonShowAllProducts = useSelector((state) => state.filterCategories.isActiveButtonShowAllProducts)
 
 
@@ -44,19 +44,19 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
   useEffect(() => {
     // если нажата кнопка "показать все продукты"
-    if (activeButtonInGroup === 'showAllProducts') {
+    if (activeButtonInFilter === 'showAllProducts') {
       dispatch(setIsActiveButtonShowAllProducts(true))
       dispatch(setArrForShowSearchResultProducts(apiFoundProductsAfterSubmit))
       return
     }
 
     // если нажата "любая другая кнопка категории"
-    if (activeButtonInGroup !== null) {
-      const productsTargetCategory = getProductsTargetCategory(activeButtonInGroup)
+    if (activeButtonInFilter !== null) {
+      const productsTargetCategory = getProductsTargetCategory(activeButtonInFilter)
       dispatch(setArrForShowSearchResultProducts(productsTargetCategory))
       dispatch(setIsActiveButtonShowAllProducts(false))
     }
-  }, [activeButtonInGroup])
+  }, [activeButtonInFilter])
 
 
 
@@ -65,14 +65,14 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
   function handleOnChange(e, nameButton) {
     // эти правила, чтобы кнопка не отжималась
     // а всегда, было одна из всех активная и повторные нажатия на активную кнопку игнорировались
-    if (nameButton === activeButtonInGroup || nameButton === null || (nameButton === 'showAllProducts' && activeButtonInGroup === null)) {
+    if (nameButton === activeButtonInFilter || nameButton === null || (nameButton === 'showAllProducts' && activeButtonInFilter === null)) {
       return
     }
 
     dispatch(setArrForShowSearchResultProducts([]))
     dispatch(clearCountLoadedImagesCards())
     dispatch(clearCountFilterCards())
-    dispatch(setActiveButtonInGroup(nameButton))
+    dispatch(setActiveButtonInFilter(nameButton))
   }
 
 
@@ -91,16 +91,18 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
       <ToggleButtonGroup
         exclusive
         onChange={handleOnChange}
-        value={activeButtonInGroup}
+        value={activeButtonInFilter}
       >
 
-        <ToggleButton
-          value="showAllProducts"
-          sx={{ marginRight: '40px' }}
-          selected={isActiveButtonShowAllProducts}
-        >
-          Всё подряд
-        </ToggleButton>
+        {uniqueCategories.length > 0 &&
+          <ToggleButton
+            value="showAllProducts"
+            sx={{ marginRight: '40px' }}
+            selected={isActiveButtonShowAllProducts}
+          >
+            Всё подряд
+          </ToggleButton>
+        }
 
         {uniqueCategories.length > 0 && uniqueCategories.map((category, id) => {
           return (

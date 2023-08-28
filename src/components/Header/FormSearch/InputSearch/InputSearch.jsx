@@ -27,6 +27,27 @@ const styleMainBox = {
   margin: '0 20px'
 }
 
+const styleImageBox = {
+  width: '64px',
+  marginRight: '5px',
+  display: 'flex',
+  alignItems: 'center'
+}
+
+const styleBrandAndCategoryBox = {
+  display: 'flex',
+  alignItems: 'center'
+}
+
+const styleBrandAndCategoryText = {
+  marginRight: '18px',
+  fontSize: '14px',
+  color: '#9c9c9c',
+  fontFamily: 'Comfortaa Variable',
+  lineHeight: '14px'
+}
+
+
 
 function debounceInputChange(callback, delay) {
   let timeout
@@ -130,11 +151,10 @@ function InputSearch({ handleOnChange }) {
   }
 
 
-  // обработчик стэйта индикатора загрузки в выпдающем окне
+  // обработчик стэйта индикатора загрузки в выпадающем окне
   function handleLoadingInDropList(state) {
     dispatch(setIsLoadingInDropList(state))
   }
-
 
 
   return (
@@ -161,31 +181,65 @@ function InputSearch({ handleOnChange }) {
               <Loading handleLoading={handleLoadingInDropList} size={20} color='primary' />
             </Box>
         }
-        options={apiFoundProductsForDropList === null ? [] : apiFoundProductsForDropList}
-        getOptionLabel={(option) => option.title ?? option}
+        options={apiFoundProductsForDropList === null ? [] : apiFoundProductsForDropList} // принимает только массив
+        getOptionLabel={(option) => {
+          return (
+            option.brandTitle ? option.brandTitle :
+              option.category ? option.category :
+                option.title ? option.title : option
+          )
+        }} // нужно вернуть только строку (вызывается для каждой опции выпадающего окна)
+        ListboxProps={{ height: '100%' }}
         renderOption={(props, option) => {
           return (
-            (<ListItem sx={{ height: '64px' }} {...props}>
-              <Box sx={{ width: '64px', marginRight: '5px' }}>
-                <img src={option.imagesUrl} alt="" />
-              </Box>
-              <Typography>{option.title}</Typography>
-            </ListItem>)
-          )
-        }}
-        renderInput={(params) => <StyledTextField placeholder="Например: Хрутка" {...params} InputProps={{
-          ...params.InputProps,
-          endAdornment: (
-            <>
-              {inputValue !== '' && (
-                <IconButton title="Очистить" sx={{ marginRight: '5px' }} onClick={handleClickClearButton}>
-                  <ClearIcon sx={{ fontSize: "18px" }} />
-                </IconButton>
+            <ListItem {...props} sx={{ height: '64px' }}>
+
+              {(option.brandTitle || option.category) && (
+                <Box sx={styleBrandAndCategoryBox}>
+
+                  <Typography sx={styleBrandAndCategoryText}>
+                    {option.brandTitle ? 'БРЕНД:' : 'КАТЕГОРИЯ:'}
+                  </Typography>
+
+                  <Typography sx={{ fontWeight: 700 }}>
+                    {option.brandTitle ? option.brandTitle : option.category}
+                  </Typography>
+
+                </Box>
               )}
-              {params.InputProps.endAdornment}
-            </>
-          ),
-        }} />}
+
+              {option.imagesUrl && (
+                <>
+                  <Box sx={styleImageBox}>
+                    <img src={option.imagesUrl} alt="" />
+                  </Box>
+                  <Typography>{option.title}</Typography>
+                </>
+
+              )}
+
+            </ListItem>
+          )
+        }} // вызывается для каждой опции выпадающего окна
+        renderInput={(params) => (
+          <StyledTextField
+            {...params}
+            placeholder="Например: Хрутка"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {inputValue !== '' && (
+                    <IconButton title="Очистить" sx={{ marginRight: '5px' }} onClick={handleClickClearButton}>
+                      <ClearIcon sx={{ fontSize: "18px" }} />
+                    </IconButton>
+                  )}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }}
+          />
+        )}
       />
     </Box>
   )
