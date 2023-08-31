@@ -1,16 +1,8 @@
 class Api {
 
   constructor() {
-    //  this.baseUrl = 'http://localhost:3000/api/'
+    // this.baseUrl = 'http://localhost:3000/api/'
     this.baseUrl = 'https://чтояем.рф/api/'
-  }
-
-
-  getAllProducts() {
-    return fetch(this.baseUrl)
-      .then((res) => {
-        return this._getResponse(res)
-      })
   }
 
 
@@ -20,11 +12,11 @@ class Api {
   }
 
 
-  // "живой" поиск по подстроке
-  findProductBySubstr(substr) {
-    return fetch(`${this.baseUrl}search/products`, {
+  // поиск по "бренду" или "категории"
+  findProductByBrandOrCategory(data, endpoint) {
+    return fetch(`${this.baseUrl}search/products/${endpoint}`, {
       method: 'POST',
-      body: JSON.stringify(substr),
+      body: JSON.stringify(data),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -33,11 +25,24 @@ class Api {
   }
 
 
-  // поиск по сабмиту или выбору варианта из списка
-  findProductBySubmit(value) {
+  // "живой" поиск по подстроке
+  findProductBySubstr(data) {
+    return fetch(`${this.baseUrl}search/live/products/`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((res) => { return this._getResponse(res) })
+  }
+
+
+  // поиск по нажатию "Enter" или выбору варианта из выпадающего окна
+  findProductBySubmit(data) {
     return fetch(`${this.baseUrl}search/products`, {
       method: 'POST',
-      body: JSON.stringify(value),
+      body: JSON.stringify(data),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },

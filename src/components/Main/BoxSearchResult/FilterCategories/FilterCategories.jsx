@@ -14,15 +14,6 @@ import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { clearCountLoadedImagesCards } from "../../../../redux/reducers/cardProduct";
 
 
-//  Поиск уникальных категорий из входящиего массива продуктов
-function searchUniqueCategories(apiFoundProductsAfterSubmit) {
-  const box = {}
-
-  apiFoundProductsAfterSubmit.forEach((product) => Object.assign(box, product.category));
-  return Object.keys(box)
-}
-
-
 
 function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
@@ -30,6 +21,7 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
   const uniqueCategories = useSelector((state) => state.filterCategories.uniqueCategories)
   const activeButtonInFilter = useSelector((state) => state.filterCategories.activeButtonInFilter)
   const isActiveButtonShowAllProducts = useSelector((state) => state.filterCategories.isActiveButtonShowAllProducts)
+  const isApiReqByCategory = useSelector(state => state.inputSearch.isApiReqByCategory)
 
 
 
@@ -54,12 +46,34 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
     // если нажата "любая другая кнопка категории"
     if (activeButtonInFilter !== null) {
-      const productsTargetCategory = getProductsTargetCategory(activeButtonInFilter)
-      dispatch(setArrForShowSearchResultProducts(productsTargetCategory))
+      const filterTargetCategory = filterProductsByTargetCategory(activeButtonInFilter)
+      dispatch(setArrForShowSearchResultProducts(filterTargetCategory))
       dispatch(setIsActiveButtonShowAllProducts(false))
     }
   }, [activeButtonInFilter])
 
+
+
+
+  //  Поиск уникальных категорий из входящего массива продуктов
+  function searchUniqueCategories(apiFoundProductsAfterSubmit) {
+    const box = {}
+
+    apiFoundProductsAfterSubmit.forEach((product) => {
+
+      if (!isApiReqByCategory) {
+        box[product.categories.main] = true
+      }
+
+      if (product.categories.sub) {
+        product.categories.sub.forEach((titleSub) => {
+          box[titleSub] = true
+        })
+      }
+    });
+
+    return Object.keys(box)
+  }
 
 
 
@@ -78,9 +92,22 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
   }
 
 
-  function getProductsTargetCategory(nameButton) {
+  // фильтрация продуктов по целевой категории (при нажатии на соответствующую кнопку фильтра)
+  function filterProductsByTargetCategory(nameButton) {
     const filterProduct = apiFoundProductsAfterSubmit.filter((product) => {
-      return product.category[nameButton]
+
+      // если ранее запрос на поиск продуктов НЕ был по "категории"
+      // тогда нужно отобразить дополнительную кнопку фильтра с "основной" категорией продукта
+      // (а если БЫЛ запрос по "категории" - тогда этой кнопки не будет)
+      if (!isApiReqByCategory) {
+        if (nameButton === product.categories.main) {
+          return true
+        }
+      }
+
+      return product.categories?.sub.some((titleSubCategory) => {
+        return nameButton === titleSubCategory
+      })
     })
 
     dispatch(incrementCountFilterCards(filterProduct.length))

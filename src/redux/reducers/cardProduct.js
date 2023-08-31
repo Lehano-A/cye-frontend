@@ -16,6 +16,9 @@ const cardProductSlice = createSlice({
   }
 })
 
-export const {incrementCountLoadedImagesCards, clearCountLoadedImagesCards } = cardProductSlice.actions
+export const {
+  incrementCountLoadedImagesCards,
+  clearCountLoadedImagesCards
+} = cardProductSlice.actions
 
 export default cardProductSlice.reducer

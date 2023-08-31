@@ -13,7 +13,10 @@ export const popperInterpretationSlice = createSlice({
   }
 })
 
-export const { toggleVisiblePopper, setValueInterpretation } = popperInterpretationSlice.actions
+export const {
+  toggleVisiblePopper,
+  setValueInterpretation
+} = popperInterpretationSlice.actions
 
 export default popperInterpretationSlice.reducer
 

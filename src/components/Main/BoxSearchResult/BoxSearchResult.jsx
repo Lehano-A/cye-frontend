@@ -29,6 +29,11 @@ function BoxSearchResult() {
   const activeButtonInFilter = useSelector(state => state.filterCategories.activeButtonInFilter)
   const isFadeFirstDisplay = useSelector(state => state.filterCategories.isFadeFirstDisplay)
 
+
+  // готовы ли карточки для отображения? (ожидаем загрузки изображений карточек)
+  const isCardsComletedForDisplay = ((arrForShowSearchResultProducts.length === countFilterCards && countLoadedImagesCards === countFilterCards) || (countLoadedImagesCards === arrForShowSearchResultProducts.length))
+
+
   useEffect(() => {
     if (!isFadeFirstDisplay) {
       dispatch(setIsFadeFirstDisplay(true))
@@ -37,8 +42,6 @@ function BoxSearchResult() {
     return () => { dispatch(setIsFadeFirstDisplay(false)) }
   }, [])
 
-  // готовы ли карточки для отображения? (ожидаем загрузки изображений карточек)
-  const isCardsComletedForDisplay = ((arrForShowSearchResultProducts.length === countFilterCards && countLoadedImagesCards === countFilterCards) || (countLoadedImagesCards === arrForShowSearchResultProducts.length))
 
 
   return (

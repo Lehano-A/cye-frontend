@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Typography, Box, TextField, Autocomplete, ListItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setSubmitting, setIsOpenedDropList, setApiFoundProductsForDropList, setGotResFromServer, setIsLoadingInDropList } from "../../../../redux/reducers/inputSearchSlice";
+import { setInputValue, setSubmitting, setIsOpenedDropList, setApiFoundProductsForDropList, setGotResFromServer, setIsLoadingInDropList, setIsApiReqByCategory, setIsCursorInsideDropList } from "../../../../redux/reducers/inputSearchSlice";
 import { styled } from "@mui/material/styles";
 import api from "../../../../api/api";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -67,10 +67,11 @@ function InputSearch({ handleOnChange }) {
   const isOpenedDropList = useSelector(state => state.inputSearch.isOpenedDropList)
   const apiFoundProductsForDropList = useSelector(state => state.inputSearch.apiFoundProductsForDropList)
   const isLoadingInDropList = useSelector(state => state.inputSearch.isLoadingInDropList)
+  const isCursorInsideDropList = useSelector(state => state.inputSearch.isCursorInsideDropList)
 
   const [value, setValue] = useState(null);
 
-  const timeoutInputChange = useCallback(debounceInputChange(reqApiInputChange, 300), [])
+  const timeoutReqApiAfterInputChange = useCallback(debounceInputChange(reqApiInputChange, 300), [])
 
 
   useEffect(() => {
@@ -106,17 +107,28 @@ function InputSearch({ handleOnChange }) {
 
   // вызывается при каждом изменении значения (с учётом debounce)
   function handleInputChange(e, newValue) {
-    dispatch(setInputValue(newValue))
-    timeoutInputChange(e, newValue)
+
+    // если курсор на опции в выпадающем окне и нажимается "Enter"
+    // тогда запоминаем введённое значение в поле ввода и прерываемся
+    // дальше обработка будет происходить в handleOnChange, поскольку произошло нажатие "Enter"
+    if (e.type === 'keydown' && isCursorInsideDropList) {
+      dispatch(setInputValue(inputValue))
+      return
+    }
+
+    timeoutReqApiAfterInputChange(e, newValue)
     handleLoadingInDropList(true)
+    dispatch(setInputValue(newValue))
     dispatch(setApiFoundProductsForDropList(null))
+    dispatch(setIsApiReqByCategory(false))
+
     // если был сабмит (отправка запроса на поиск продукта), то при изменении значения в строке поиска, состояние сабмита сбрасывается
     isSubmitting && dispatch(setSubmitting(false))
   }
 
 
   // обработчик закрытия выпадающего окна
-  const handleCloseDropList = (e) => {
+  function handleCloseDropList(e) {
     // Если работает индикатор загрузки данных
     if (isLoadingInDropList) {
       e.target.focus()
@@ -133,7 +145,7 @@ function InputSearch({ handleOnChange }) {
 
 
   // обработчик кнопки очищения поля ввода
-  const handleClickClearButton = () => {
+  function handleClickClearButton() {
     dispatch(setInputValue(''))
     dispatch(setIsOpenedDropList(false))
     dispatch(setApiFoundProductsForDropList(null))
@@ -142,7 +154,6 @@ function InputSearch({ handleOnChange }) {
 
   // если был ввод, появился предварительный результат в выпадающем окне, а потом произошёл клик вне выпадающего окна (оно закрылось), то при следующем клике в строку поиска, предыдущий результат вновь отобразится
   function handleOpenDropListWithData(e) {
-
     if (e.type === 'mousedown') {
       if (inputValue?.length > 0 && !isOpenedDropList && apiFoundProductsForDropList?.length > 0) {
         dispatch(setIsOpenedDropList(true))
@@ -155,6 +166,20 @@ function InputSearch({ handleOnChange }) {
   function handleLoadingInDropList(state) {
     dispatch(setIsLoadingInDropList(state))
   }
+
+
+  // обработчик слежения за курсором мыши относительно выпадающего окна
+  // (нужно для того, чтобы корректно обрабатывался сабмит, если курсор находится на опции из выпадающего списка - в этом случае (в корректном) произойдёт запрос с значением из поля ввода)
+  function handleMouseInsideListbox(e) {
+    if (e.type === 'mouseenter') {
+      dispatch(setIsCursorInsideDropList(true))
+    }
+
+    if (e.type === 'mouseleave') {
+      dispatch(setIsCursorInsideDropList(false))
+    }
+  }
+
 
   return (
     <Box sx={styleMainBox}>
@@ -183,25 +208,31 @@ function InputSearch({ handleOnChange }) {
         options={apiFoundProductsForDropList === null ? [] : apiFoundProductsForDropList} // принимает только массив
         getOptionLabel={(option) => {
           return (
-            option.brandTitle ? option.brandTitle :
-              option.category ? option.category :
+            option.brand ? option.brand :
+              option.categories ? option.categories :
                 option.title ? option.title : option
           )
         }} // нужно вернуть только строку (вызывается для каждой опции выпадающего окна)
-        ListboxProps={{ height: '100%' }}
+        ListboxProps={
+          {
+            sx: { maxHeight: '100%' },
+            onMouseEnter: (e) => { handleMouseInsideListbox(e) },
+            onMouseLeave: (e) => { handleMouseInsideListbox(e) }
+          }
+        } // сам элемент - "выпадающее окно"
         renderOption={(props, option) => {
           return (
             <ListItem {...props} sx={{ height: '64px' }}>
 
-              {(option.brandTitle || option.category) && (
+              {(option.brand || option.categories) && (
                 <Box sx={styleBrandAndCategoryBox}>
 
                   <Typography sx={styleBrandAndCategoryText}>
-                    {option.brandTitle ? 'БРЕНД:' : 'КАТЕГОРИЯ:'}
+                    {option.brand ? 'БРЕНД:' : 'КАТЕГОРИЯ:'}
                   </Typography>
 
                   <Typography sx={{ fontWeight: 700 }}>
-                    {option.brandTitle ? option.brandTitle : option.category}
+                    {option.brand ? option.brand : option.categories}
                   </Typography>
 
                 </Box>
