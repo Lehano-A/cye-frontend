@@ -18,11 +18,11 @@ const StyledBoxFilter = styled(Box)(({ datafordisplay }) => {
 })
 
 
-
 function BoxSearchResult() {
   const dispatch = useDispatch()
 
   const apiFoundProductsAfterSubmit = useSelector(state => state.searchRequestProduct.apiFoundProductsAfterSubmit)
+  const searchBy = useSelector(state => state.searchRequestProduct.searchBy)
   const arrForShowSearchResultProducts = useSelector(state => state.boxSearchResult.arrForShowSearchResultProducts)
   const countLoadedImagesCards = useSelector(state => state.cardProduct.countLoadedImagesCards)
   const countFilterCards = useSelector(state => state.filterCategories.countFilterCards)
@@ -31,7 +31,10 @@ function BoxSearchResult() {
 
 
   // готовы ли карточки для отображения? (ожидаем загрузки изображений карточек)
-  const isCardsComletedForDisplay = ((arrForShowSearchResultProducts.length === countFilterCards && countLoadedImagesCards === countFilterCards) || (countLoadedImagesCards === arrForShowSearchResultProducts.length))
+  const isCardsComletedForDisplay = (
+    (arrForShowSearchResultProducts.length === countFilterCards && countLoadedImagesCards === countFilterCards) ||
+    (countLoadedImagesCards === arrForShowSearchResultProducts.length)
+  )
 
 
   useEffect(() => {
@@ -43,17 +46,22 @@ function BoxSearchResult() {
   }, [])
 
 
-
   return (
 
     <Container>
 
       <Fade in={isFadeFirstDisplay}>
         <StyledBoxFilter
-          datafordisplay={{ activeButtonInFilter, isCardsComletedForDisplay }}
+          datafordisplay={{
+            activeButtonInFilter,
+            isCardsComletedForDisplay
+          }}
         >
           {apiFoundProductsAfterSubmit.length > 1 &&
-            <FilterCategories apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit} />
+            <FilterCategories
+              apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit}
+              searchBy={searchBy}
+            />
           }
         </StyledBoxFilter>
       </Fade>

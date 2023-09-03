@@ -15,14 +15,13 @@ import { clearCountLoadedImagesCards } from "../../../../redux/reducers/cardProd
 
 
 
-function FilterCategories({ apiFoundProductsAfterSubmit }) {
+function FilterCategories({ apiFoundProductsAfterSubmit, searchBy }) {
 
   const dispatch = useDispatch()
+
   const uniqueCategories = useSelector((state) => state.filterCategories.uniqueCategories)
   const activeButtonInFilter = useSelector((state) => state.filterCategories.activeButtonInFilter)
   const isActiveButtonShowAllProducts = useSelector((state) => state.filterCategories.isActiveButtonShowAllProducts)
-  const isApiReqByCategory = useSelector(state => state.inputSearch.isApiReqByCategory)
-
 
 
   useEffect(() => {
@@ -32,7 +31,6 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
 
     return () => { dispatch(clearUniqueCategories()) }
   }, [apiFoundProductsAfterSubmit])
-
 
 
   useEffect(() => {
@@ -60,8 +58,7 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
     const box = {}
 
     apiFoundProductsAfterSubmit.forEach((product) => {
-
-      if (!isApiReqByCategory) {
+      if (searchBy !== "categories") {
         box[product.categories.main] = true
       }
 
@@ -99,7 +96,7 @@ function FilterCategories({ apiFoundProductsAfterSubmit }) {
       // если ранее запрос на поиск продуктов НЕ был по "категории"
       // тогда нужно отобразить дополнительную кнопку фильтра с "основной" категорией продукта
       // (а если БЫЛ запрос по "категории" - тогда этой кнопки не будет)
-      if (!isApiReqByCategory) {
+      if (searchBy !== "categories") {
         if (nameButton === product.categories.main) {
           return true
         }

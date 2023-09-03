@@ -4,13 +4,13 @@ import { styled } from "@mui/material/styles"
 import InputSearch from "./InputSearch/InputSearch"
 import ButtonSearch from "./ButtonSearch/ButtonSearch"
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setInputValueAfterSendReq, setSubmitting, setWasFirstSubmit, setIsOpenedDropList, setApiFoundProductsForDropList } from "../../../redux/reducers/inputSearchSlice";
-import { setApiFoundProductsAfterSubmit } from "../../../redux/reducers/searchRequestProductSlice"
+import { setInputValue, setInputValueAfterSendReq, setIsSubmitting, setWasFirstSubmit, setIsOpenedDropList, setApiFoundProductsForDropList } from "../../../redux/reducers/inputSearchSlice";
+import { setApiFoundProductsAfterSubmit, setSearchBy } from "../../../redux/reducers/searchRequestProductSlice"
 import { setArrForShowSearchResultProducts } from "../../../redux/reducers/boxSearchResultSlice"
 import api from "../../../api/api";
 import { clearCountLoadedImagesCards } from "../../../redux/reducers/cardProduct";
 import { clearCountFilterCards, clearUniqueCategories, resetDefaultButtonsFilter } from "../../../redux/reducers/filterCategoriesSlice";
-import { setIsApiReqByCategory, setIsCursorInsideDropList } from "../../../redux/reducers/inputSearchSlice"
+import { setIsCursorInsideDropList } from "../../../redux/reducers/inputSearchSlice"
 
 const Form = styled('form')`
   display: flex;
@@ -83,7 +83,7 @@ function checkValidInputValue(params) {
     }
   }
 
-  log.debug('Значение и событие - валидны. Всё хорошо, производится отправка запроса на сервер');
+  log.debug('Значение и событие - валидны. Всё хорошо, производится отправка запроса на сервер.');
   return true
 }
 
@@ -105,11 +105,11 @@ function FormSearch() {
     const endpointBrand = endpoint === 'brands'
     const endpointCategory = endpoint === 'categories'
 
-
     if (endpointSubmit) {
       api.findProductBySubmit(searchValue)
         .then((res) => {
-          saveServerDataAndUpdateState(res, searchValue.title)
+          const { searchBy, result } = res
+          saveServerDataAndUpdateState(searchBy, result, searchValue.title)
         })
         .catch(() => { new Error('Возникла ошибка во время сабмита поиска продукта') })
       return
@@ -118,23 +118,25 @@ function FormSearch() {
     if (endpointBrand || endpointCategory) {
       api.findProductByBrandOrCategory(searchValue, endpoint)
         .then((res) => {
-          endpointCategory && dispatch(setIsApiReqByCategory(true))
+          const { searchBy, result } = res
 
-          saveServerDataAndUpdateState(res, endpointBrand ? searchValue.brands : searchValue.categories)
+          saveServerDataAndUpdateState(searchBy, result, endpointBrand ? searchValue.brands : searchValue.categories)
         })
         .catch(() => { console.log('Возникла ошибка во время запроса поиска продукта по названию категории') })
       return
     }
-
   }
+
 
   // обработка ответа от сервера и обновление стэйтов
-  function saveServerDataAndUpdateState(res, searchValue) {
+  function saveServerDataAndUpdateState(searchBy, result, searchValue) {
     dispatch(setApiFoundProductsForDropList(null))
-    dispatch(setApiFoundProductsAfterSubmit(res))
-    dispatch(setArrForShowSearchResultProducts(res))
+    dispatch(setApiFoundProductsAfterSubmit(result))
+    dispatch(setArrForShowSearchResultProducts(result))
+    dispatch(setSearchBy(searchBy))
     dispatch(setInputValueAfterSendReq(searchValue))
   }
+
 
   // изменение стэйтов перед запросом на сервер
   function changeStatesBeforeReqApi() {
@@ -143,42 +145,41 @@ function FormSearch() {
     dispatch(clearCountFilterCards())
     dispatch(clearUniqueCategories())
     dispatch(resetDefaultButtonsFilter())
-    dispatch(setSubmitting(true))
+    dispatch(setIsSubmitting(true))
     dispatch(setIsOpenedDropList(false))
+    !wasFirstSubmit && dispatch(setWasFirstSubmit(true))
   }
 
-  const handleSubmit = (e) => {
+
+  function handleSubmit(e) {
     e.preventDefault()
     handleOnChange(e, inputValue)
   }
 
-  // вызывается при сабмите введённой строки или при выборе опции (стрелкой или курсором) из выпадающего списка
+
   // "keydown":
   // 1) поиск через ENTER, по введённой подстроке
   // 2) или по выбранному варианту стрелками на клавиатуре + ENTER
   // "submit" - поиск по клику на кнопке поиска (только подстрока)
   // "click" - поиск по клику на вариант из выпадающего списка
-  const handleOnChange = (e, targetValue) => {
-
-    // проверка валидности данных и событий в строке поиска
-    // если "невалидно"
-    if (!checkValidInputValue({ eventType: e.type, targetValue, inputValue, inputValueAfterSendReq, apiFoundProductsForDroplist })) {
-      return
-    }
-
-    changeStatesBeforeReqApi()
-    !wasFirstSubmit && dispatch(setWasFirstSubmit(true))
+  function checkActionByValueAndSendReqApi({ eventType, targetValue, isCursorInsideDropList }) {
 
     // если курсор на опции в выпадающем окне и нажимается "Enter"
     // в этом случае, операция обрабатывается как "submit"
-    if (e.type === 'keydown' && isCursorInsideDropList) {
+    if (eventType === 'keydown' && isCursorInsideDropList) {
+      log.debug("Курсор внутри выпадающего списка и нажат 'Enter'")
       dispatch(setIsCursorInsideDropList(false))
-      sendReqToServer({ title: inputValue }, 'submit')
+
+      const searchValue = { title: inputValue }
+      const endpoint = 'submit'
+
+      sendReqToServer(searchValue, endpoint)
       return
     }
 
     // если в выпадающем списке выбран вариант "бренд"
     if (targetValue.brand) {
+      log.debug("В выпадающем списке выбран вариант 'бренд'")
       const searchValue = { brand: targetValue.brand }
       const endpoint = 'brands'
 
@@ -188,6 +189,7 @@ function FormSearch() {
 
     // если в выпадающем списке выбран вариант "категория"
     if (targetValue.categories) {
+      log.debug("В выпадающем списке выбран вариант 'категория'")
       const searchValue = { categories: targetValue.categories }
       const endpoint = 'categories'
 
@@ -195,18 +197,59 @@ function FormSearch() {
       return
     }
 
-    // если есть вариант имеет .title, значит вариант выбран "стрелками" + "Enter"
+    log.debug(`Запрос через: \n 1) 'стрелки + Enter' (keydown) \n или \n 2) 'подстрока + Enter' (keydown) \n или \n 3) 'подстрока + клик по кнопке поиска' (submit)`)
+    // если есть вариант .title, значит вариант выбран "стрелками" + "Enter"
     // иначе, введена "подстрока" + "Enter"
     const searchValue = targetValue.title ? targetValue : { title: targetValue }
     const endpoint = 'submit'
 
     // Enter
     sendReqToServer(searchValue, endpoint)
-
-    // если выбирается вариант из выпадающего окна, то ".title", иначе - "подстрока"
-    dispatch(setInputValue(targetValue.title ? targetValue.title : targetValue))
   }
 
+
+  function getValueFromTargetValue(targetValue) {
+    if (targetValue.title) {
+      return targetValue.title
+    }
+
+    if (targetValue.brands || targetValue.categories) {
+      return Object.values(targetValue)[0]
+    }
+
+    return targetValue // если была введена "строка"
+  }
+
+
+  // вызывается при сабмите введённой строки или при выборе опции (стрелкой или курсором) из выпадающего списка
+  const handleOnChange = (e, targetValue) => {
+
+    const isValidInputValue = checkValidInputValue({
+      eventType: e.type,
+      targetValue,
+      inputValue,
+      inputValueAfterSendReq,
+      apiFoundProductsForDroplist
+    })
+
+    // проверка валидности данных и событий в строке поиска
+    if (!isValidInputValue) {
+      return
+    }
+
+    changeStatesBeforeReqApi()
+    checkActionByValueAndSendReqApi({
+      eventType: e.type,
+      targetValue,
+      isCursorInsideDropList
+    })
+
+    const value = getValueFromTargetValue(targetValue)
+
+    // если выбирается вариант из выпадающего окна, то ".title",
+    // иначе - "строка", ".brands" или ".categories"
+    dispatch(setInputValue(value))
+  }
 
 
 

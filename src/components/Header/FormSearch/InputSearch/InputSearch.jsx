@@ -1,22 +1,14 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Typography, Box, TextField, Autocomplete, ListItem } from "@mui/material";
+import { Box, Autocomplete } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setInputValue, setSubmitting, setIsOpenedDropList, setApiFoundProductsForDropList, setGotResFromServer, setIsLoadingInDropList, setIsApiReqByCategory, setIsCursorInsideDropList } from "../../../../redux/reducers/inputSearchSlice";
-import { styled } from "@mui/material/styles";
+import { setInputValue, setIsSubmitting, setIsOpenedDropList, setApiFoundProductsForDropList, setGotResFromServer, setIsCursorInsideDropList, setIsLoadingInDropList } from "../../../../redux/reducers/inputSearchSlice";
+import { debounce as debounceInputChange } from "../../../../utils/debounce"
 import api from "../../../../api/api";
-import ClearIcon from '@mui/icons-material/Clear';
-import IconButton from '@mui/material/IconButton';
-import Loading from "../../../Loading/Loading";
+import ItemDropList from "./ItemDropList/ItemDropList";
+import Input from "./Input/Input";
+import LoadingInDropList from "./LoadingInDropList/LoadingInDropList";
+import NoResultSearch from "./NoResultSearch/NoResultSearch";
 
-
-const StyledTextField = styled(TextField)(() => {
-  return {
-    width: '100%',
-    maxWidth: '600px',
-    backgroundColor: '#fff',
-    borderRadius: '4px',
-  }
-});
 
 const styleMainBox = {
   display: 'flex',
@@ -25,37 +17,6 @@ const styleMainBox = {
   minWidth: '250px',
   maxWidth: '600px',
   margin: '0 20px'
-}
-
-const styleImageBox = {
-  width: '64px',
-  marginRight: '5px',
-  display: 'flex',
-  alignItems: 'center'
-}
-
-const styleBrandAndCategoryBox = {
-  display: 'flex',
-  alignItems: 'center'
-}
-
-const styleBrandAndCategoryText = {
-  marginRight: '18px',
-  fontSize: '14px',
-  color: '#9c9c9c',
-  fontFamily: 'Comfortaa Variable',
-  lineHeight: '14px'
-}
-
-
-
-function debounceInputChange(callback, delay) {
-  let timeout
-
-  return function (e, newValue) {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => callback(e, newValue), delay)
-  }
 }
 
 
@@ -71,7 +32,7 @@ function InputSearch({ handleOnChange }) {
 
   const [value, setValue] = useState(null);
 
-  const timeoutReqApiAfterInputChange = useCallback(debounceInputChange(reqApiInputChange, 300), [])
+  const timeoutReqApiAfterInputLiveChange = useCallback(debounceInputChange(reqApiInputLiveChange, 300), [])
 
 
   useEffect(() => {
@@ -87,9 +48,10 @@ function InputSearch({ handleOnChange }) {
 
 
   // запрос к api, после изменения значения в строке поиска
-  function reqApiInputChange(event, newValue) {
-    if (event.target.value !== '' && event.type === 'change') {
+  function reqApiInputLiveChange(e, newValue) {
+    if (e.target.value !== '' && e.type === 'change') {
       dispatch(setGotResFromServer(false))
+      dispatch(setIsOpenedDropList(true))
 
       api.findProductBySubstr({ substr: newValue }) // поиск по подстроке
         .then((arrData) => {
@@ -98,15 +60,30 @@ function InputSearch({ handleOnChange }) {
         .catch(() => { new Error('Возникла ошибка во время поиска продукта') })
         .finally(() => { dispatch(setGotResFromServer(true)) })
 
-      dispatch(setIsOpenedDropList(true))
     } else {
       dispatch(setIsOpenedDropList(false))
     }
   }
 
 
+  function changeStatesAfterInputLiveChange(newValue, isSubmitting) {
+    handleLoadingInDropList(true)
+    dispatch(setInputValue(newValue))
+    dispatch(setApiFoundProductsForDropList(null))
+
+    // если был сабмит (отправка запроса на поиск продукта), то при изменении значения в строке поиска, состояние сабмита сбрасывается
+    isSubmitting && dispatch(setIsSubmitting(false))
+  }
+
+
+  // обработчик стэйта индикатора загрузки в выпадающем окне
+  function handleLoadingInDropList(state) {
+    dispatch(setIsLoadingInDropList(state))
+  }
+
+
   // вызывается при каждом изменении значения (с учётом debounce)
-  function handleInputChange(e, newValue) {
+  function handleInputLiveChange(e, newValue) {
 
     // если курсор на опции в выпадающем окне и нажимается "Enter"
     // тогда запоминаем введённое значение в поле ввода и прерываемся
@@ -116,20 +93,17 @@ function InputSearch({ handleOnChange }) {
       return
     }
 
-    timeoutReqApiAfterInputChange(e, newValue)
-    handleLoadingInDropList(true)
-    dispatch(setInputValue(newValue))
-    dispatch(setApiFoundProductsForDropList(null))
-    dispatch(setIsApiReqByCategory(false))
-
-    // если был сабмит (отправка запроса на поиск продукта), то при изменении значения в строке поиска, состояние сабмита сбрасывается
-    isSubmitting && dispatch(setSubmitting(false))
+    if (e.type === "change") {
+      changeStatesAfterInputLiveChange(newValue, isSubmitting)
+      timeoutReqApiAfterInputLiveChange(e, newValue)
+    }
   }
 
 
   // обработчик закрытия выпадающего окна
   function handleCloseDropList(e) {
-    // Если работает индикатор загрузки данных
+
+    // если работает индикатор загрузки данных
     if (isLoadingInDropList) {
       e.target.focus()
       return
@@ -144,14 +118,6 @@ function InputSearch({ handleOnChange }) {
   }
 
 
-  // обработчик кнопки очищения поля ввода
-  function handleClickClearButton() {
-    dispatch(setInputValue(''))
-    dispatch(setIsOpenedDropList(false))
-    dispatch(setApiFoundProductsForDropList(null))
-  }
-
-
   // если был ввод, появился предварительный результат в выпадающем окне, а потом произошёл клик вне выпадающего окна (оно закрылось), то при следующем клике в строку поиска, предыдущий результат вновь отобразится
   function handleOpenDropListWithData(e) {
     if (e.type === 'mousedown') {
@@ -159,12 +125,6 @@ function InputSearch({ handleOnChange }) {
         dispatch(setIsOpenedDropList(true))
       }
     }
-  }
-
-
-  // обработчик стэйта индикатора загрузки в выпадающем окне
-  function handleLoadingInDropList(state) {
-    dispatch(setIsLoadingInDropList(state))
   }
 
 
@@ -194,16 +154,17 @@ function InputSearch({ handleOnChange }) {
         value={value} // текущее значение выбранной опции
         onChange={handleOnChange} // вызывается при выборе опции из выпадающего списка
         inputValue={inputValue} // текущее значение поля ввода
-        onInputChange={handleInputChange} // вызывается при каждом изменении значения в поле ввода (с учётом debounce)
+        onInputChange={handleInputLiveChange} // вызывается при каждом изменении значения в поле ввода (с учётом debounce)
         open={isOpenedDropList}
         onClose={handleCloseDropList}
         onOpen={handleOpenDropListWithData}
         loadingText={
-          apiFoundProductsForDropList?.length === 0 ? <Typography>К сожалению, такой продукт не получилось найти 😕</Typography>
+          apiFoundProductsForDropList?.length === 0 ?
+            <NoResultSearch />
             :
-            <Box sx={{ display: 'flex', 'justifyContent': 'center' }}>
-              <Loading handleLoading={handleLoadingInDropList} size={20} color='primary' />
-            </Box>
+            <LoadingInDropList
+              handleLoadingInDropList={handleLoadingInDropList}
+            />
         }
         options={apiFoundProductsForDropList === null ? [] : apiFoundProductsForDropList} // принимает только массив
         getOptionLabel={(option) => {
@@ -220,56 +181,10 @@ function InputSearch({ handleOnChange }) {
             onMouseLeave: (e) => { handleMouseInsideListbox(e) }
           }
         } // сам элемент - "выпадающее окно"
-        renderOption={(props, option) => {
-          return (
-            <ListItem {...props} sx={{ height: '64px' }}>
-
-              {(option.brand || option.categories) && (
-                <Box sx={styleBrandAndCategoryBox}>
-
-                  <Typography sx={styleBrandAndCategoryText}>
-                    {option.brand ? 'БРЕНД:' : 'КАТЕГОРИЯ:'}
-                  </Typography>
-
-                  <Typography sx={{ fontWeight: 700 }}>
-                    {option.brand ? option.brand : option.categories}
-                  </Typography>
-
-                </Box>
-              )}
-
-              {option.imagesUrl && (
-                <>
-                  <Box sx={styleImageBox}>
-                    <img src={option.imagesUrl} alt="" />
-                  </Box>
-                  <Typography>{option.title}</Typography>
-                </>
-
-              )}
-
-            </ListItem>
-          )
-        }} // вызывается для каждой опции выпадающего окна
-        renderInput={(params) => (
-          <StyledTextField
-            {...params}
-            placeholder="Например: Хрутка"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {inputValue !== '' && (
-                    <IconButton title="Очистить" sx={{ marginRight: '5px' }} onClick={handleClickClearButton}>
-                      <ClearIcon sx={{ fontSize: "18px" }} />
-                    </IconButton>
-                  )}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            }}
-          />
-        )}
+        renderOption={(props, option) => <ItemDropList key={props.key} props={props} option={option} />
+        } // вызывается для каждой опции выпадающего окна
+        renderInput={(params) => <Input params={params} />
+        }
       />
     </Box>
   )
