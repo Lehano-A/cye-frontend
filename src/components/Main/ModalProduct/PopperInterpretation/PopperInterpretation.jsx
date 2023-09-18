@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Popper, Typography, Fade } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleVisiblePopper, setValueInterpretation } from "../../../../redux/reducers/popperInterpretationSlice";
 import { styled } from "@mui/material/styles";
+
+/* --------------------------------- slices --------------------------------- */
+import { toggleVisiblePopper, setValueInterpretation } from "../../../../redux/reducers/slices/popperInterpretationSlice";
+
 
 const StyledArrow = styled('div')(() => {
   return {
@@ -77,7 +80,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
           {
             name: "offset",
             options: {
-              offset: [0, 3], 
+              offset: [0, 3],
             }
           },
           {
@@ -112,7 +115,6 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
       }
 
     </Popper>
-
   )
 }
 

@@ -1,82 +1,107 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Box, Container, Fade } from "@mui/material";
-import FilterCategories from "./FilterCategories/FilterCategories";
+import React from "react";
+import { Box, Typography, Container, Fade } from "@mui/material";
 import GridCardsProduct from "./GridCardsProduct/GridCardsProduct";
 import { styled } from "@mui/material/styles";
-import { setIsFadeFirstDisplay } from "../../../redux/reducers/filterCategoriesSlice";
+import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
+import FilterCategoriesContainer from "../../../containers/FilterCategoriesContainer";
 
 const StyledBoxFilter = styled(Box)(({ datafordisplay }) => {
 
-  const { activeButtonInFilter, isCardsComletedForDisplay } = datafordisplay;
+  const { isCardsReadyForDisplay, activeButtonInFilter } = datafordisplay;
 
   return {
-    display: isCardsComletedForDisplay || activeButtonInFilter ? 'flex' : 'none',
+    display: isCardsReadyForDisplay || activeButtonInFilter ? 'flex' : 'none',
     justifyContent: 'center',
-    margin: '0 0 80px 0',
+    margin: "80px 0 0 0"
   }
 })
 
 
-function BoxSearchResult() {
-  const dispatch = useDispatch()
-
-  const apiFoundProductsAfterSubmit = useSelector(state => state.searchRequestProduct.apiFoundProductsAfterSubmit)
-  const searchBy = useSelector(state => state.searchRequestProduct.searchBy)
-  const arrForShowSearchResultProducts = useSelector(state => state.boxSearchResult.arrForShowSearchResultProducts)
-  const countLoadedImagesCards = useSelector(state => state.cardProduct.countLoadedImagesCards)
-  const countFilterCards = useSelector(state => state.filterCategories.countFilterCards)
-  const activeButtonInFilter = useSelector(state => state.filterCategories.activeButtonInFilter)
-  const isFadeFirstDisplay = useSelector(state => state.filterCategories.isFadeFirstDisplay)
-
-
-  // готовы ли карточки для отображения? (ожидаем загрузки изображений карточек)
-  const isCardsComletedForDisplay = (
-    (arrForShowSearchResultProducts.length === countFilterCards && countLoadedImagesCards === countFilterCards) ||
-    (countLoadedImagesCards === arrForShowSearchResultProducts.length)
-  )
-
-
-  useEffect(() => {
-    if (!isFadeFirstDisplay) {
-      dispatch(setIsFadeFirstDisplay(true))
-    }
-
-    return () => { dispatch(setIsFadeFirstDisplay(false)) }
-  }, [])
+function BoxSearchResult({
+  apiFoundProductsAfterSubmit,
+  isCardsReadyForDisplay,
+  activeButtonInFilter,
+  isFadeFirstDisplay,
+  searchBy,
+  arrForShowSearchResultProducts,
+  isLoadingBoxSearchResult,
+  searchValueWithoutResult,
+}) {
 
 
   return (
-
     <Container>
+      {
+        /* если после сабмита в ответе от сервера продуктов > 1 и карточки готовы к отображению,
+          или нажимается кнопка фильтра (тогда фильтр должен отображаться)
+       */
+      }
+      {((apiFoundProductsAfterSubmit?.length > 1 && isCardsReadyForDisplay) || activeButtonInFilter) &&
 
-      <Fade in={isFadeFirstDisplay}>
-        <StyledBoxFilter
-          datafordisplay={{
-            activeButtonInFilter,
-            isCardsComletedForDisplay
-          }}
-        >
-          {apiFoundProductsAfterSubmit.length > 1 &&
-            <FilterCategories
+        <Fade in={isFadeFirstDisplay}>
+          <StyledBoxFilter
+            datafordisplay={{
+              isCardsReadyForDisplay,
+              activeButtonInFilter,
+            }}
+          >
+
+            <FilterCategoriesContainer
               apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit}
               searchBy={searchBy}
             />
-          }
-        </StyledBoxFilter>
-      </Fade>
 
-      <Fade in={isCardsComletedForDisplay}>
-        <Container sx={{ display: isCardsComletedForDisplay ? 'block' : 'none' }}>
-          <GridCardsProduct
-            arrForShowSearchResultProducts={arrForShowSearchResultProducts}
-          />
-        </Container>
-      </Fade>
+          </StyledBoxFilter>
+        </Fade>
+      }
+
+
+      {
+        arrForShowSearchResultProducts?.length > 0 &&
+        <Fade in={isCardsReadyForDisplay}>
+
+          <Container sx={{
+            display: isCardsReadyForDisplay ? 'block' : 'none',
+            margin: "80px 0 0 0"
+          }}>
+            <GridCardsProduct
+              arrForShowSearchResultProducts={arrForShowSearchResultProducts}
+            />
+          </Container>
+
+        </Fade>
+      }
+
+
+      {
+        (apiFoundProductsAfterSubmit?.length === 0 && !isLoadingBoxSearchResult) &&
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+
+            <Box sx={{ display: 'flex', marginBottom: '10px' }}>
+              <Typography variant="h6" sx={{ marginRight: '10px' }}>Находились в поисках: </Typography>
+              <Typography variant="h6" sx={{ fontWeight: '700' }}>{searchValueWithoutResult}</Typography>
+            </Box>
+
+            <Typography>
+              К сожалению, такой продукт не получилось найти 😕
+            </Typography>
+          </Box>
+
+        </Box>
+      }
+
+
+      {
+        isLoadingBoxSearchResult &&
+        <Box sx={{ display: 'flex', justifyContent: 'center', margin: "80px 0 0 0" }}>
+          <LoadingIndicator />
+        </Box>
+      }
+
 
     </Container>
-
-
   )
 }
 

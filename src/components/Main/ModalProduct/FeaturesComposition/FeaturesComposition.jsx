@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { handleDataIcon } from "../../../../utils/IconsInforming/handleDataIcon";
+import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
 import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
 import { styled } from "@mui/material/styles";
 
@@ -55,7 +55,7 @@ function FeaturesComposition({ data }) {
     <>
       {
         data.map((feature, id) => {
-          
+
           const dataIcon = handleDataIcon(feature.feature)
 
           return (

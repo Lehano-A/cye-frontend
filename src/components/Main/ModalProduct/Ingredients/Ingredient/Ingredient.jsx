@@ -1,8 +1,10 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { toggleVisiblePopper, setValueInterpretation } from "../../../../../redux/reducers/popperInterpretationSlice";
 import { styled } from "@mui/material/styles";
+
+/* --------------------------------- slices --------------------------------- */
+import { toggleVisiblePopper, setValueInterpretation } from "../../../../../redux/reducers/slices/popperInterpretationSlice";
 
 
 const StyledTypography = styled(Typography)(({ color, interpretation, theme }) => {
@@ -20,9 +22,12 @@ const StyledTypography = styled(Typography)(({ color, interpretation, theme }) =
   }
 })
 
+
+
 function Ingredient({ data, setRefSelectedIngredient }) {
 
   const dispatch = useDispatch()
+
 
   const handleClickIngredient = (e, value) => {
     setRefSelectedIngredient(e.currentTarget)
@@ -33,13 +38,12 @@ function Ingredient({ data, setRefSelectedIngredient }) {
 
 
   /*
-  Здесь отображается два типа односоставных ингредиента:
-  1. Строка с определением
-  2. Простая строка
+    Здесь отображается два типа односоставных ингредиента:
+    1. Строка с определением
+    2. Простая строка
   */
 
   return (
-
     <>
       {data.ingredient ? <StyledTypography
         onClick={(e) => data.ingredient.interpretation && handleClickIngredient(e, data.ingredient.interpretation)}
@@ -57,7 +61,6 @@ function Ingredient({ data, setRefSelectedIngredient }) {
         </Typography>
       }
     </>
-
   )
 }
 

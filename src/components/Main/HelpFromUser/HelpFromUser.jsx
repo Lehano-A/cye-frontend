@@ -3,6 +3,7 @@ import { Button, Box } from "@mui/material";
 
 
 function HelpFromUser() {
+
   return (
     <Box>
       <Button sx={{ textTransform: 'none', }} variant="text">Заметили неточность?</Button>

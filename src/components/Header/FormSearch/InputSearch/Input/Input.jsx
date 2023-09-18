@@ -4,6 +4,10 @@ import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ClearButton from "./ClearButton/ClearButton";
 
+/* -------------------------------- selectors ------------------------------- */
+import { selectInputValue } from "../../../../../redux/reducers/selectors/inputSearchSelectors";
+
+
 const StyledTextField = styled(TextField)(() => {
   return {
     width: '100%',
@@ -14,9 +18,10 @@ const StyledTextField = styled(TextField)(() => {
 });
 
 
+
 function Input({ params }) {
 
-  const inputValue = useSelector(state => state.inputSearch.inputValue)
+  const inputValue = useSelector(selectInputValue)
 
 
   return (
@@ -27,7 +32,7 @@ function Input({ params }) {
         ...params.InputProps,
         endAdornment: (
           <>
-            {inputValue !== '' && <ClearButton />}
+            {inputValue.length > 0 && <ClearButton />}
             {params.InputProps.endAdornment}
           </>
         ),

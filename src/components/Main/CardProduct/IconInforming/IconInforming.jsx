@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { Box, IconButton, ClickAwayListener } from "@mui/material"
-import { handleDataIcon } from "../../../../utils/IconsInforming/handleDataIcon";
+import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
 import TooltipIcon from "./TooltipIconInforming/TooltipIconInforming";
-import { useSelector } from "react-redux";
 import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
+
+/* -------------------------------- selectors ------------------------------- */
+import { selectUserDevice } from "../../../../redux/reducers/selectors/checkUserDeviceSelectors";
 
 const StyledBoxIconCard = styled(Box)`
 margin: 0 10px 4px 0;
@@ -13,7 +16,6 @@ margin: 0 10px 4px 0;
     cursor: pointer;
   };
 `
-
 const StyledIconButton = styled(IconButton)(({ size }) => {
   return {
     width: size,
@@ -25,24 +27,25 @@ const StyledIconButton = styled(IconButton)(({ size }) => {
 
 function IconsInforming({ feature }) {
 
+  const SIZEICONANDBUTTON = '25px'
+
+  const [isOpenTooltip, setIsOpenTooltip] = useState(false)
+  const [dataIcon, setDataIcon] = useState(null)
+
+  const userDevice = useSelector(selectUserDevice)
+
+
   useEffect(() => {
     const data = handleDataIcon(feature)
     setDataIcon(data)
   }, [])
-
-  const sizeIconAndButton = '25px'
-
-  const [isOpenTooltip, setIsOpenTooltip] = useState(false)
-
-  const [dataIcon, setDataIcon] = useState(null)
-
-  const userDevice = useSelector(state => state.checkUserDevice.userDevice)
 
 
 
   const handleTooltipClose = () => {
     setIsOpenTooltip(false)
   };
+
 
   const handleVisibilityTooltipByButton = () => {
     if (isOpenTooltip) {
@@ -76,7 +79,7 @@ function IconsInforming({ feature }) {
 
                 <StyledIconButton
                   onClick={handleVisibilityTooltipByButton}
-                  size={sizeIconAndButton}
+                  size={SIZEICONANDBUTTON}
                   disableRipple
                 >
 
@@ -84,7 +87,7 @@ function IconsInforming({ feature }) {
                     color={dataIcon.color}
                     component={dataIcon.icon}
                     inheritViewBox
-                    size={sizeIconAndButton}
+                    size={SIZEICONANDBUTTON}
                   />
 
                 </StyledIconButton>
@@ -109,7 +112,7 @@ function IconsInforming({ feature }) {
           <StyledBoxIconCard>
 
             <StyledIconButton
-              size={sizeIconAndButton}
+              size={SIZEICONANDBUTTON}
               disableRipple
             >
 
@@ -117,7 +120,7 @@ function IconsInforming({ feature }) {
                 color={dataIcon.color}
                 component={dataIcon.icon}
                 inheritViewBox
-                size={sizeIconAndButton}
+                size={SIZEICONANDBUTTON}
               />
 
             </StyledIconButton>

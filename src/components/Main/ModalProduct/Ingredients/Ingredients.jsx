@@ -11,7 +11,7 @@ function Ingredients({ data, setRefSelectedIngredient }) {
      2. объект с свойством ingredient (с дополнительной информацией)
      3. объект с свойством compositeIngredient (составной ингредиент + возможно с дополнительной информацией)
      3.1 внутри compositeIngredient могут быть другие составные ингредиенты - innerCompositeIngredient
-   */
+  */
 
   return (
     <ListItem sx={{ padding: 0, display: 'inline-block' }}>

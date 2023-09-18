@@ -1,7 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Box, Paper } from "@mui/material";
-import FormSearch from "./FormSearch/FormSearch";
+import FormSearchContainer from "../../containers/FormSearchContainer";
+
+/* -------------------------------- selectors ------------------------------- */
+import { selectIsLoadingIndicatorBoxSearchResult } from "../../redux/reducers/selectors/boxSearchResultSelectors";
+
 
 const styleBoxForm = {
   display: 'flex',
@@ -11,8 +15,9 @@ const styleBoxForm = {
 
 
 function Header() {
-  const isVisibleFilterCategories = useSelector((state) => state.filterCategories.isVisible)
 
+  const isFilterDisplayed = useSelector((state) => state.filterCategories.isFilterDisplayed)
+  const isLoadingIndicatorBoxSearchResult = useSelector(selectIsLoadingIndicatorBoxSearchResult)
 
   return (
     <Paper variant='header'>
@@ -22,12 +27,12 @@ function Header() {
         sx={{
           'backgroundColor': '#eef0f9',
           padding: '120px 0',
-          margin: !isVisibleFilterCategories ? `0 0 80px 0` : `0 0 31px 0`,
+          margin: isFilterDisplayed || isLoadingIndicatorBoxSearchResult ? `0 0 80px 0` : `0 0 31px 0`,
         }}
       >
 
         <Box sx={styleBoxForm}>
-          <FormSearch />
+          <FormSearchContainer />
         </Box>
 
       </Box>

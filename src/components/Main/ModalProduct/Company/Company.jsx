@@ -38,8 +38,8 @@ const StyledValue = styled(Typography)(() => {
 function Company({ data }) {
 
   const { brand, manufacture, countryManufacture } = data
-  
   const { title } = brand
+
 
   return (
     <Box>

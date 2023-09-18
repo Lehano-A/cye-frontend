@@ -1,12 +1,22 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Loading from "../../../../Loading/Loading";
+import LoadingIndicator from "../../../../LoadingIndicator/LoadingIndicator";
+
+const styleMainBox = {
+  display: 'flex',
+  'justifyContent': 'center',
+}
+
 
 function LoadingInDropList({ handleLoadingInDropList }) {
 
   return (
-    <Box sx={{ display: 'flex', 'justifyContent': 'center' }}>
-      <Loading handleLoading={handleLoadingInDropList} size={20} color='primary' />
+    <Box sx={styleMainBox}>
+      <LoadingIndicator
+        handleLoading={handleLoadingInDropList}
+        size={20}
+        color='primary'
+      />
     </Box>
   )
 }

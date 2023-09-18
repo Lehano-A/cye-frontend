@@ -134,14 +134,15 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '.MuiInputBase-root:hover': {
-            borderColor: grey[400],
-            transition: '0.2s ease'
+            borderColor: "#d1d3db",
+
           },
 
           '.MuiInputBase-root': {
             border: '5px #a0abdf solid',
             height: '55px',
             padding: '0 0 0 9px',
+            transition: '0.2s ease'
           },
 
           '.MuiOutlinedInput-notchedOutline': {

@@ -7,30 +7,31 @@ const filterCategoriesSlice = createSlice({
     uniqueCategories: [],
     activeButtonInFilter: null,
     isActiveButtonShowAllProducts: true,
-    countFilterCards: 0,
+    countFilteredCards: 0,
     isFadeFirstDisplay: false,
-
+    isFilterDisplayed: null,
   },
   reducers: {
     setUniqueCategories: (state, action) => { state.uniqueCategories = action.payload },
+
     setActiveButtonInFilter: (state, action) => { state.activeButtonInFilter = action.payload },
+
     setIsActiveButtonShowAllProducts: (state, action) => { state.isActiveButtonShowAllProducts = action.payload },
-    incrementCountFilterCards: (state, action) => {
-      state.countFilterCards += action.payload
-    },
-    clearCountFilterCards: (state) => {
-      state.countFilterCards = 0
-    },
-    clearUniqueCategories: (state) => {
-      state.uniqueCategories = []
-    },
+
+    incrementCountFilteredCards: (state, action) => { state.countFilteredCards += action.payload },
+
+    clearCountFilteredCards: (state) => { state.countFilteredCards = 0 },
+
+    clearUniqueCategories: (state) => { state.uniqueCategories = [] },
+
     resetDefaultButtonsFilter: (state) => {
       state.activeButtonInFilter = null
       state.isActiveButtonShowAllProducts = true
     },
-    setIsFadeFirstDisplay: (state, action) => {
-      state.isFadeFirstDisplay = action.payload
-    },
+
+    setIsFadeFirstDisplay: (state, action) => { state.isFadeFirstDisplay = action.payload },
+
+    setIsFilterDisplayed: (state, action) => { state.isFilterDisplayed = action.payload },
   }
 })
 
@@ -38,11 +39,12 @@ export const {
   setUniqueCategories,
   setActiveButtonInFilter,
   setIsActiveButtonShowAllProducts,
-  incrementCountFilterCards,
-  clearCountFilterCards,
+  incrementCountFilteredCards,
+  clearCountFilteredCards,
   clearUniqueCategories,
   resetDefaultButtonsFilter,
-  setIsFadeFirstDisplay
+  setIsFadeFirstDisplay,
+  setIsFilterDisplayed,
 } = filterCategoriesSlice.actions
 
 export default filterCategoriesSlice.reducer

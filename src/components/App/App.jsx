@@ -4,9 +4,10 @@ import Header from "../Header/Header";
 import Main from "../Main/Main";
 import log from 'loglevel';
 
-
 if (process.env.NODE_ENV === 'development') {
-  log.setLevel('debug')
+  log.setLevel("debug")
+} else {
+  log.setLevel("silent")
 }
 
 function App() {

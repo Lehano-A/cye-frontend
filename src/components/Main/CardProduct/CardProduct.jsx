@@ -1,13 +1,13 @@
-import React, { useState } from "react"
-import { useDispatch } from "react-redux"
-import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlice"
-import { Box, Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material"
-import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice"
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Box, Card, CardActionArea, CardMedia, CardContent, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import IconsInforming from "./IconInforming/IconInforming"
-import {
-  incrementCountLoadedImagesCards,
-} from "../../../redux/reducers/cardProduct"
+import IconsInforming from "./IconInforming/IconInforming";
+
+/* --------------------------------- slices --------------------------------- */
+import { incrementCountLoadedImagesCards } from "../../../redux/reducers/slices/cardProductSlice";
+import { setSelectedCard } from "../../../redux/reducers/slices/cardProductSlice";
+import { changeVisibleModal } from "../../../redux/reducers/slices/modalCardProductSlice";
 
 
 const StyledTypography = styled(Typography)`
@@ -41,8 +41,7 @@ function CardProduct({ dataProduct }) {
 
   return (
     <>
-
-      <Box sx={{ display: isLoadedImage ? 'block' : 'none'}}>
+      <Box sx={{ display: isLoadedImage ? 'block' : 'none' }}>
         {
           featuresComposition && featuresComposition.length > 0 &&
           <Box sx={{ display: 'flex', margin: '3px 0 0 4px' }}>{

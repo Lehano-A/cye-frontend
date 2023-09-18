@@ -25,7 +25,6 @@ function TooltipIcon({ children, value, color, placement, isOpenTooltip, handleT
 
 
   return (
-
     <StyledTooltip
       onClose={handleTooltipClose}
       open={isOpenTooltip}
@@ -46,7 +45,6 @@ function TooltipIcon({ children, value, color, placement, isOpenTooltip, handleT
     >
       {children}
     </StyledTooltip>
-
   )
 }
 

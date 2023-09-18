@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Dialog, DialogActions, Box, IconButton, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
-import { changeVisibleModal } from "../../../redux/reducers/modalCardProductSlice";
 import { styled } from "@mui/material/styles";
-import { setSelectedCard } from "../../../redux/reducers/selectedCardProductSlice";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
-import { setValueInterpretation } from "../../../redux/reducers/popperInterpretationSlice";
 import SwiperSlider from "./SwiperSlider/SwiperSlider";
 import FeaturesComposition from "./FeaturesComposition/FeaturesComposition";
-
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import Company from "./Company/Company";
 import OtherInfo from "./OtherInfo/OtherInfo";
 import HelpFromUser from "../HelpFromUser/HelpFromUser";
+
+/* --------------------------------- slices --------------------------------- */
+import { changeVisibleModal } from "../../../redux/reducers/slices/modalCardProductSlice";
+import { setSelectedCard } from "../../../redux/reducers/slices/cardProductSlice";
+import { setValueInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
+
 
 /*
   Особенности, которые нужно учитывать:
@@ -88,11 +90,11 @@ function ModalProduct() {
 
   const dispatch = useDispatch()
   const isVisibleModal = useSelector(state => state.modalCardProduct.visible)
-  const product = useSelector(state => state.selectedCardProduct.selectedCard)
+  const selectedCard = useSelector(state => state.cardProduct.selectedCard)
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
 
-  const { title, imagesUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = product
+  const { title, imagesUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = selectedCard
 
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
 
@@ -137,7 +139,7 @@ function ModalProduct() {
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '500px', width: '100%' }}>
                 <SwiperSlider images={imagesUrl} />
               </Box>
-              
+
               <HelpFromUser />
             </Box>
 

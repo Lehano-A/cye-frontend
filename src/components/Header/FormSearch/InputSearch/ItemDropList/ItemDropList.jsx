@@ -1,5 +1,15 @@
 import React from "react";
-import { ListItem, Typography, Box } from "@mui/material";
+import { useSelector } from "react-redux";
+import { Box, ListItem, Typography } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import { grey } from '@mui/material/colors';
+
+/* -------------------------------- selectors ------------------------------- */
+import {
+  selectInputValue,
+  selectIsHistorySubmitDisplayed,
+} from "../../../../../redux/reducers/selectors/inputSearchSelectors";
+
 
 const styleImageBox = {
   width: '64px',
@@ -25,10 +35,13 @@ const styleBrandAndCategoryText = {
 
 function ItemDropList({ props, option }) {
 
-  return (
-    <ListItem  {...props} sx={{ height: '64px' }}>
+  const inputValue = useSelector(selectInputValue)
+  const isHistorySubmitDisplayed = useSelector(selectIsHistorySubmitDisplayed)
 
-      {(option.brand || option.categories) && (
+  return (
+    <ListItem {...props} sx={{ height: '64px' }}>
+
+      {((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.categories)) && (
         <Box sx={styleBrandAndCategoryBox}>
 
           <Typography sx={styleBrandAndCategoryText}>
@@ -42,14 +55,20 @@ function ItemDropList({ props, option }) {
         </Box>
       )}
 
-      {option.imagesUrl && (
+      {(inputValue.length >= 2 && !isHistorySubmitDisplayed) && option.imagesUrl && (
         <>
           <Box sx={styleImageBox}>
             <img src={option.imagesUrl} alt="" />
           </Box>
           <Typography>{option.title}</Typography>
         </>
+      )}
 
+      {isHistorySubmitDisplayed && (
+        <>
+          <SearchIcon sx={{ color: grey[400], marginRight: '10px' }}></SearchIcon>
+          <Typography>{option.title || option.brand || option.categories}</Typography>
+        </>
       )}
 
     </ListItem>

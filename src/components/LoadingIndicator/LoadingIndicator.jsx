@@ -2,7 +2,8 @@
 import React, { useEffect } from "react";
 import { CircularProgress } from "@mui/material";
 
-function Loading({ size, color, handleLoading }) {
+
+function LoadingIndicator({ size, color, handleLoading }) {
 
   useEffect(() => {
     if (handleLoading) {
@@ -12,7 +13,10 @@ function Loading({ size, color, handleLoading }) {
     }
   }, [])
 
-  return (<CircularProgress size={size} color={color} />)
+
+  return (
+    <CircularProgress size={size} color={color} />
+  )
 }
 
-export default Loading
+export default LoadingIndicator

@@ -38,6 +38,7 @@ class Api {
   }
 
 
+
   // поиск по нажатию "Enter" или выбору варианта из выпадающего окна
   findProductBySubmit(data) {
     return fetch(`${this.baseUrl}search/products`, {

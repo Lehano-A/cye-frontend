@@ -17,16 +17,14 @@ function CompositeIngredient({ data, setRefSelectedIngredient }) {
         {data.title + ':'}
       </Typography>
 
-      <Box sx={{marginLeft: '20px'}}>
+      <Box sx={{ marginLeft: '20px' }}>
         {data.composition.map((item, id) => {
           return item.innerCompositeIngredient ?
             <CompositeIngredient data={item.innerCompositeIngredient} key={id} setRefSelectedIngredient={setRefSelectedIngredient} /> : <Ingredient data={item} key={id} setRefSelectedIngredient={setRefSelectedIngredient} />
         })}
       </Box>
-
     </Box>
   )
-
 }
 
 export default CompositeIngredient
