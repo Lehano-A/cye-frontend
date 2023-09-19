@@ -2,7 +2,6 @@
 import '@fontsource-variable/comfortaa';
 
 import { createTheme } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
 import { regexAlphaNum } from "../utils/constants";
 
 const palette = {
@@ -133,16 +132,12 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          '.MuiInputBase-root:hover': {
-            borderColor: "#d1d3db",
-
-          },
-
           '.MuiInputBase-root': {
-            border: '5px #a0abdf solid',
+            border: `5px ${palette.primary.light} solid`,
+            borderRadius: "4px 0 0 4px",
+            borderRight: "none",
             height: '55px',
             padding: '0 0 0 9px',
-            transition: '0.2s ease'
           },
 
           '.MuiOutlinedInput-notchedOutline': {

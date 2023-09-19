@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,41 +9,73 @@ import { selectInputValue } from "../../../../redux/reducers/selectors/inputSear
 
 
 const StyledButton = styled(Button)(({ theme }) => {
+
   const primaryLight = theme.palette.primary.light;
 
   return {
-    width: '64px',
-    height: '64px',
+    height: '55px',
     boxShadow: 'none',
-    backgroundColor: primaryLight,
-    transition: 'all 0.2s',
+    backgroundColor: '#fff',
+    borderColor: primaryLight,
+    borderRadius: "0 4px 4px 0",
+    border: `5px solid ${primaryLight}`,
+    borderLeft: `none`,
+
     '&:hover': {
-      backgroundColor: primaryLight,
       boxShadow: 'none',
+      backgroundColor: '#fff',
     },
 
-    '&:active': {
-      transform: 'scale(0.88)',
-      boxShadow: 'none',
+    "&:active": {
+      "& > svg": { // трансформирем иконку в кнопке
+        transform: "scale(0.8)"
+      }
     },
   }
 });
 
-const styleIcon = {
-  width: '32px',
-  height: '32px',
-}
 
+const StyledSearchIcon = styled(SearchIcon)(({ theme, params }) => {
+  const { isButtonDisabled } = params
+
+  return {
+    width: '28px',
+    height: '28px',
+    fill: isButtonDisabled ? '#d9d9d9' : theme.palette.primary.light,
+    transition: 'transform  0.2s ease',
+  }
+})
 
 
 function ButtonSearch() {
 
   const inputValue = useSelector(selectInputValue)
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+
+
+  useEffect(() => {
+    if (inputValue.length <= 1 || inputValue.trim() === "") {
+      setIsButtonDisabled(true)
+    } else {
+      setIsButtonDisabled(false)
+    }
+  }, [inputValue])
+
 
   return (
-    <StyledButton disabled={inputValue.length <= 1 || inputValue.trim() === ""} type="submit" variant="contained">
-      <SearchIcon sx={styleIcon} fontSize="large" />
+    <StyledButton
+      disabled={isButtonDisabled}
+      type="submit"
+      disableRipple={true}
+      params={{ inputValue }}
+    >
+
+      <StyledSearchIcon
+        params={{ isButtonDisabled }}
+        fontSize="large"
+      />
+
     </StyledButton>
   )
 }

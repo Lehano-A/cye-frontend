@@ -13,10 +13,17 @@ const StyledTextField = styled(TextField)(() => {
     width: '100%',
     maxWidth: '600px',
     backgroundColor: '#fff',
-    borderRadius: '4px',
   }
 });
 
+const StyledVerticalLine = styled("span")(() => {
+  return {
+    widht: "1px",
+    height: "calc(100% - 10px)",
+    backgroundColor: "#000",
+    borderRight: "1px solid #d9d9d9",
+  }
+})
 
 
 function Input({ params }) {
@@ -33,6 +40,9 @@ function Input({ params }) {
         endAdornment: (
           <>
             {inputValue.length > 0 && <ClearButton />}
+
+            <StyledVerticalLine />
+
             {params.InputProps.endAdornment}
           </>
         ),

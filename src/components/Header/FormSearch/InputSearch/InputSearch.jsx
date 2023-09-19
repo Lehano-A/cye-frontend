@@ -10,9 +10,9 @@ const styleMainBox = {
   alignItems: 'center',
   minWidth: '250px',
   maxWidth: '600px',
-  margin: '0 20px'
+  //margin: '0 20px'
+  margin: "0 0 0 20px",
 }
-
 
 
 function InputSearch({
@@ -26,7 +26,6 @@ function InputSearch({
   handleOnOpen,
   handleMouseInsideListbox,
 }) {
-
 
 
   return (

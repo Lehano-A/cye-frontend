@@ -9,9 +9,11 @@ const Form = styled('form')`
   align-items: center;
   max-width: 700px;
   width: 100%;
-  margin: 0 25px;
+  margin: 0 0 0 25px;
+  /*margin: 0 25px;*/
+
    & > :first-of-type {
-    margin-right: 25px;
+     /*margin-right: 25px;*/
   }
 `
 
