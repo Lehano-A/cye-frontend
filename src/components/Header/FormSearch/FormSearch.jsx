@@ -10,11 +10,6 @@ const Form = styled('form')`
   max-width: 700px;
   width: 100%;
   margin: 0 0 0 25px;
-  /*margin: 0 25px;*/
-
-   & > :first-of-type {
-     /*margin-right: 25px;*/
-  }
 `
 
 

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearCountLoadedImagesCards } from "../redux/reducers/slices/cardProductSlice";
 import FilterCategories from "../components/Main/BoxSearchResult/FilterCategories/FilterCategories";
 
+/* --------------------------------- slices --------------------------------- */
 import {
   setUniqueCategories,
   setActiveButtonInFilter,

@@ -10,6 +10,7 @@ import { checkValidInputValue } from "../validation/formSearchValidation";
 import { checkActionByValue } from "../utils/FormSearch/checkActionByValue";
 import { getValueFromOption } from "../utils/FormSearch/getValueFromOption";
 
+/* --------------------------------- slices --------------------------------- */
 import {
   setIsOpenedDropList,
   setSaveboxDropListBeforeSubmit,

@@ -6,6 +6,7 @@ import api from "../api/api";
 import log from "loglevel";
 import { debounce as debounceInputChange } from "../utils/debounce";
 
+/* --------------------------------- slices --------------------------------- */
 import {
   setInputValue,
   setIsSubmitting,
@@ -98,6 +99,7 @@ function InputSearchContainer({ handleOnChange }) {
 
   // обновление данных, после ответа от сервера
   function saveServerDataAfterResApi(arrData) {
+
     if (arrData.length === 0) {
       dispatch(setIsOpenedDropList(false))
       dispatch(setIsHistorySubmitDisplayed(false))

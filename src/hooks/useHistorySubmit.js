@@ -1,15 +1,23 @@
 import { useSelector, useDispatch } from "react-redux";
 import { getDataLocalStorage } from "../utils/localStorage/localStorage";
-import { setIsHistorySubmitDisplayed } from "../redux/reducers/slices/inputSearchSlice";
-import { setIsOpenedDropList, setApiFoundProductsForDropList } from "../redux/reducers/slices/dropListPreSearchResultSlice";
 import log from 'loglevel';
+
+/* --------------------------------- slices --------------------------------- */
+import { setIsOpenedDropList, setApiFoundProductsForDropList } from "../redux/reducers/slices/dropListPreSearchResultSlice";
+
+import { setIsHistorySubmitDisplayed } from "../redux/reducers/slices/inputSearchSlice";
+
+
+/* -------------------------------- selectors ------------------------------- */
+import { selectIsOpenedDropList } from "../redux/reducers/selectors/dropListPreSearchResultSelectors";
+
 
 
 function useHistorySubmit() {
 
   const dispatch = useDispatch()
 
-  const isOpenedDropList = useSelector((state) => state.inputSearch.isOpenedDropList)
+  const isOpenedDropList = useSelector(selectIsOpenedDropList)
 
 
   function getAndSaveHistorySubmit() {
@@ -24,6 +32,7 @@ function useHistorySubmit() {
       dispatch(setApiFoundProductsForDropList(historySubmitData))
       return
     }
+
 
     if (!historySubmitData) {
       log.debug('Вызывается хук получения истории сабмитов: история сабмитов - отсутствует.')
