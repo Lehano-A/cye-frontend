@@ -3,29 +3,30 @@ import {
   getDataLocalStorage,
   saveItemLocalStorage,
   fullUpdateKeyLocalStorage,
+  deleteKeyFromLocalStorage,
 } from "../localStorage";
 
 
 // сохранить "поисковый запрос" в историю сабмитов
 function saveToHistorySubmit(data, searchValue) {
 
-  const key = "historySubmit"
+  const keyStorage = "historySubmit"
 
-  const historySubmit = getDataLocalStorage(key)
+  const historySubmit = getDataLocalStorage(keyStorage)
 
   if (historySubmit?.length > 0) {
     if (checkDoubleValueLocalStorage(historySubmit, searchValue)) {
 
-      filterCurrentValueInHistorySubmit(historySubmit, searchValue, key)
+      filterCurrentValueInHistorySubmit(historySubmit, searchValue, keyStorage)
       return
     }
   }
 
   if (historySubmit?.length === 5) {
-    removeOneFromHistory(key)
+    removeLastValueFromHistory(keyStorage)
   }
 
-  saveSubmitValueToLocalStorage(key, data)
+  saveSubmitValueToLocalStorage(keyStorage, data)
 }
 
 
@@ -51,7 +52,7 @@ function checkDoubleValueLocalStorage(historySubmit, searchValue) {
 
 
 // отфильтровать текущее значение в "истории сабмитов"
-function filterCurrentValueInHistorySubmit(historySubmit, searchValue, key) {
+function filterCurrentValueInHistorySubmit(historySubmit, searchValue, keyStorage) {
   let filtered = null
 
   const filter = historySubmit.filter((item) => {
@@ -80,30 +81,30 @@ function filterCurrentValueInHistorySubmit(historySubmit, searchValue, key) {
   // значит значение текущего "поискового запроса" совпадает с значением в истории
   if (historySubmit.length - filter.length === 1) {
     addSubmitValueToHistory(filter, filtered)
-    fullUpdateKeyLocalStorage(key, filter)
+    fullUpdateKeyLocalStorage(keyStorage, filter)
     return true
   }
 }
 
 
 // сохранить значение из инпута при сабмите в локальное хранилище
-function saveSubmitValueToLocalStorage(key, value) {
+function saveSubmitValueToLocalStorage(keyStorage, value) {
 
-  const historySubmit = getDataLocalStorage(key)
+  const historySubmit = getDataLocalStorage(keyStorage)
 
   log.debug(`"${Boolean(historySubmit)}" - проверка наличия ключа в хранилище`)
 
   if (historySubmit === null) {
-    log.debug(`"${key}" - такого ключа в хранилище нет. Создаём ключ и добавляем значение.`)
-    saveItemLocalStorage(key, [value])
+    log.debug(`"${keyStorage}" - такого ключа в хранилище нет. Создаём ключ и добавляем значение.`)
+    saveItemLocalStorage(keyStorage, [value])
     return
   }
 
   if (historySubmit?.length > 0) {
-    log.debug(`"${key}" - такой ключ  в хранилище уже есть. Добавляем значение.`)
+    log.debug(`"${keyStorage}" - такой ключ  в хранилище уже есть. Добавляем значение.`)
 
     addSubmitValueToHistory(historySubmit, value)
-    saveItemLocalStorage(key, historySubmit)
+    saveItemLocalStorage(keyStorage, historySubmit)
   }
 }
 
@@ -114,13 +115,37 @@ function addSubmitValueToHistory(arr, value) {
 }
 
 
-
 // удалить последний элемент из истории
-function removeOneFromHistory(key) {
-  const data = getDataLocalStorage(key)
+function removeLastValueFromHistory(keyStorage) {
+  const data = getDataLocalStorage(keyStorage)
   data.pop()
-  saveItemLocalStorage(key, data)
+  saveItemLocalStorage(keyStorage, data)
 }
+
+
+// удалить элемент по значению из истории
+function removeByValueFromHistory(targetValue) {
+  const keyStorage = 'historySubmit'
+
+  const data = getDataLocalStorage(keyStorage)
+  const filter = data.filter((option) => {
+
+    for (let key in option) {
+      if (option[key] !== targetValue) {
+        return option
+      }
+    }
+  })
+
+  if (filter.length === 0) {
+    deleteKeyFromLocalStorage(keyStorage)
+    return
+  }
+
+  saveItemLocalStorage(keyStorage, filter)
+  return filter
+}
+
 
 
 
@@ -129,5 +154,5 @@ export {
   saveSubmitValueToLocalStorage,
   addSubmitValueToHistory,
   checkDoubleValueLocalStorage,
-  removeOneFromHistory,
+  removeByValueFromHistory,
 }

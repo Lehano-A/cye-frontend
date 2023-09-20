@@ -19,7 +19,7 @@ const DropListbox = forwardRef((props, ref) => {
           variant="h5"
           sx={{ margin: '5px 0 12px 30px', }}
         >
-          Ваши поиски
+          Недавно искали
         </Typography>
       }
 

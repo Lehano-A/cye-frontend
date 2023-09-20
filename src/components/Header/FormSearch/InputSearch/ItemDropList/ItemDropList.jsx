@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { Box, ListItem, Typography } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { grey } from '@mui/material/colors';
+import { styled } from "@mui/material/styles"
+import ButtonDeleteFromHistorySubmit from "./ButtonDeleteFromHistorySubmit/ButtonDeleteFromHistorySubmit";
 
 /* -------------------------------- selectors ------------------------------- */
 import {
@@ -32,14 +34,31 @@ const styleBrandAndCategoryText = {
 }
 
 
+const StyledListItem = styled(ListItem)(({ params }) => {
+  const { isHistorySubmitDisplayed } = params
+
+  return {
+    height: '64px',
+
+    '&.MuiAutocomplete-option': {
+      display: "flex",
+      justifyContent: isHistorySubmitDisplayed ? 'space-between' : 'flex-start',
+    }
+
+  }
+})
+
+
 
 function ItemDropList({ props, option }) {
 
   const inputValue = useSelector(selectInputValue)
   const isHistorySubmitDisplayed = useSelector(selectIsHistorySubmitDisplayed)
 
+
+
   return (
-    <ListItem {...props} sx={{ height: '64px' }}>
+    <StyledListItem {...props} params={{ isHistorySubmitDisplayed }}>
 
       {((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.categories)) && (
         <Box sx={styleBrandAndCategoryBox}>
@@ -66,12 +85,17 @@ function ItemDropList({ props, option }) {
 
       {isHistorySubmitDisplayed && (
         <>
-          <SearchIcon sx={{ color: grey[400], marginRight: '10px' }}></SearchIcon>
-          <Typography>{option.title || option.brand || option.categories}</Typography>
+          <Box sx={{ display: "flex" }}>
+            <SearchIcon sx={{ color: grey[400], marginRight: '10px' }}></SearchIcon>
+            <Typography>{option.title || option.brand || option.categories}</Typography>
+          </Box>
+
+          <ButtonDeleteFromHistorySubmit option={option} />
         </>
       )}
 
-    </ListItem>
+
+    </StyledListItem>
   )
 }
 
