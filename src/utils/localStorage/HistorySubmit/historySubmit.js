@@ -51,6 +51,7 @@ function checkDoubleValueLocalStorage(historySubmit, searchValue) {
 }
 
 
+
 // отфильтровать текущее значение в "истории сабмитов"
 function filterCurrentValueInHistorySubmit(historySubmit, searchValue, keyStorage) {
   let filtered = null
@@ -85,6 +86,7 @@ function filterCurrentValueInHistorySubmit(historySubmit, searchValue, keyStorag
     return true
   }
 }
+
 
 
 // сохранить значение из инпута при сабмите в локальное хранилище
@@ -123,30 +125,45 @@ function removeLastValueFromHistory(keyStorage) {
 }
 
 
+
 // удалить элемент по значению из истории
 function removeByValueFromHistory(targetValue) {
   const keyStorage = 'historySubmit'
 
-  const data = getDataLocalStorage(keyStorage)
-  const filter = data.filter((option) => {
+  const dataStorage = getDataLocalStorage(keyStorage)
+  const filteredData = searchValueInStorage(dataStorage, targetValue)
 
-    for (let key in option) {
-      if (option[key] !== targetValue) {
-        return option
-      }
-    }
-  })
-
-  if (filter.length === 0) {
+  if (filteredData.length === 0) {
     deleteKeyFromLocalStorage(keyStorage)
     return
   }
 
-  saveItemLocalStorage(keyStorage, filter)
-  return filter
+  saveItemLocalStorage(keyStorage, filteredData)
+  return filteredData
 }
 
 
+
+// поиск значения в хранилище
+function searchValueInStorage(dataStorage, targetValue) {
+
+  return dataStorage.filter((option) => {
+    let matchedValue
+
+    // проходимся по ключам объекта
+    for (let key in option) {
+      // если значение в хранилище совпадает с значением, которое удаляем
+      if (option[key] === targetValue) {
+        matchedValue = option
+        continue
+      }
+    }
+
+    if (!matchedValue) {
+      return option
+    }
+  })
+}
 
 
 export {
