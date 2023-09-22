@@ -9,7 +9,6 @@ import FeaturesComposition from "./FeaturesComposition/FeaturesComposition";
 import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
-import Company from "./Company/Company";
 import OtherInfo from "./OtherInfo/OtherInfo";
 import HelpFromUser from "../HelpFromUser/HelpFromUser";
 
@@ -111,7 +110,7 @@ function ModalProduct() {
     dispatch(changeVisibleModal(false)) // закрывает модальное окно продукта
   }
 
-  console.log(selectedCard);
+
   return (
     <Dialog disableAutoFocus disableRestoreFocus maxWidth={'xl'} scroll="body" onClose={handleCloseModal} aria-labelledby="modal-title" open={isVisibleModal} slotProps={styleSlotProps}>
 
@@ -135,7 +134,13 @@ function ModalProduct() {
               alignItems: 'center',
               marginRight: '30px',
             }}>
-
+              <Typography
+                {...titleProps}
+                id="modal-title"
+                sx={{ marginBottom: '35px' }}
+              >
+                {title}
+              </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '500px', width: '100%' }}>
                 <SwiperSlider images={imagesUrl} />
               </Box>
@@ -144,13 +149,12 @@ function ModalProduct() {
             </Box>
 
 
-            <Box sx={{ marginLeft: '50px' }}>
-              <Typography id="modal-title" sx={{ marginBottom: '35px' }} {...titleProps}>
-                {title}
-              </Typography>
+            <Box sx={{ marginLeft: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
               <FeaturesComposition data={featuresComposition} />
+              <OtherInfo data={{ company, otherInfo }} />
               {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
+
             </Box>
           </Box>
 
@@ -171,16 +175,8 @@ function ModalProduct() {
             </Box>
           </StyledBoxComposition>
 
-
-          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 5, maxWidth: '500px', margin: '0 auto' }}>
-
-            <Company data={company} />
-            <OtherInfo data={otherInfo} />
-
-          </Box>
-
-
         </Box>
+
 
         {refSelectedIngredient && (
           <PopperInterpretation

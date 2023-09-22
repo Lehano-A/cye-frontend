@@ -7,6 +7,7 @@ const StyledTableCell = styled(TableCell)(() => {
   return {
     fontSize: '12px',
     fontWeight: 'bold',
+    textTransform: 'uppercase',
   }
 })
 
@@ -15,7 +16,7 @@ const styleMainBox = {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '8px 0',
+  padding: '15px 0',
 }
 
 const styleTextNutritionalValue = {
@@ -35,10 +36,10 @@ function TableNutritionalValue({ data }) {
       <Table>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">БЕЛКИ</StyledTableCell>
-            <StyledTableCell align="center">ЖИРЫ</StyledTableCell>
-            <StyledTableCell align="center">УГЛЕВОДЫ</StyledTableCell>
-            <StyledTableCell align="center">КАЛОРИЙНОСТЬ</StyledTableCell>
+            <StyledTableCell align="center">Белки</StyledTableCell>
+            <StyledTableCell align="center">Жиры</StyledTableCell>
+            <StyledTableCell align="center">Углеводы</StyledTableCell>
+            <StyledTableCell align="center">Калорийность</StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -51,7 +52,7 @@ function TableNutritionalValue({ data }) {
           </TableRow>
         </TableBody>
       </Table>
-      
+
       <Typography sx={styleTextNutritionalValue}>
         пищевая ценность на 100 г
       </Typography>

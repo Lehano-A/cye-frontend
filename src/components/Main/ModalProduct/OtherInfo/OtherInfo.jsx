@@ -2,34 +2,51 @@ import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+const StyledMainBox = styled(Box)(() => {
+  return {
+    width: '100%',
+    minWidth: '300px',
+    maxWidth: '500px',
+  }
+})
+
 const StyledList = styled(List)(() => {
   return {
     display: 'flex',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+    padding: '15px 0',
   }
 })
 
 const StyledListItem = styled(ListItem)(() => {
   return {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    padding: 0,
-    width: '50%',
-    '&:nth-of-type(n+3)': { paddingTop: '20px' },
+    justifyContent: 'space-between',
   }
 })
 
 const StyledTitle = styled(Typography)(() => {
   return {
-    fontSize: "16px",
+    display: 'inline-flex',
+    width: '100%',
+    fontSize: "12px",
     fontWeight: 700,
+    textTransform: 'uppercase',
+    whiteSpace: 'nowrap',
+
+    '&::after': {
+      content: "''",
+      display: 'inline',
+      width: '100%',
+      borderBottom: '1px dashed #d9d9d9',
+      margin: '0 10px 5px'
+    }
   }
 })
 
 const StyledValue = styled(Typography)(() => {
   return {
-    paddingTop: '8px',
+    whiteSpace: 'nowrap',
   }
 })
 
@@ -37,23 +54,42 @@ const StyledValue = styled(Typography)(() => {
 
 function OtherInfo({ data }) {
 
-  const { typePackage, weight, shelfLife } = data
+  const { company, otherInfo } = data
+
+  const { brand, manufacture, countryManufacture } = company
+  const { title } = brand
+
+  const { typePackage, weight, shelfLife } = otherInfo
 
   return (
-    <Box>
+    <StyledMainBox>
       <StyledList>
 
         <StyledListItem>
-          <StyledTitle variant="h6">Тип упаковки</StyledTitle>
-          <StyledValue variant="body2">{typePackage}</StyledValue>
+          <StyledTitle variant="h6">Бренд</StyledTitle>
+          <StyledValue variant="body2" >{title}</StyledValue>
         </StyledListItem>
 
+
+        <StyledListItem>
+          <StyledTitle variant="h6" >Производитель</StyledTitle>
+          <StyledValue variant="body2" >{manufacture}</StyledValue>
+        </StyledListItem>
+
+        <StyledListItem>
+          <StyledTitle variant="h6" >Страна производства</StyledTitle>
+          <StyledValue variant="body2">{countryManufacture}</StyledValue>
+        </StyledListItem>
 
         <StyledListItem>
           <StyledTitle variant="h6">Срок хранения</StyledTitle>
           <StyledValue variant="body2">{shelfLife}</StyledValue>
         </StyledListItem>
 
+        <StyledListItem>
+          <StyledTitle variant="h6">Тип упаковки</StyledTitle>
+          <StyledValue variant="body2">{typePackage}</StyledValue>
+        </StyledListItem>
 
         <StyledListItem>
           <StyledTitle variant="h6">Вес</StyledTitle>
@@ -61,7 +97,7 @@ function OtherInfo({ data }) {
         </StyledListItem>
 
       </StyledList>
-    </Box>
+    </StyledMainBox>
   )
 }
 

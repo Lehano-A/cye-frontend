@@ -13,7 +13,7 @@ const StyledMainBox = styled(Box)(({ theme, color }) => {
     minHeight: '70px',
     backgroundColor: theme.palette[`${color}`].light,
     borderRadius: '15px',
-    marginBottom: '20px',
+    marginBottom: '40px',
   }
 })
 
