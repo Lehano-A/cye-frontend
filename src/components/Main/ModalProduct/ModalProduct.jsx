@@ -111,7 +111,7 @@ function ModalProduct() {
     dispatch(changeVisibleModal(false)) // закрывает модальное окно продукта
   }
 
-
+  console.log(selectedCard);
   return (
     <Dialog disableAutoFocus disableRestoreFocus maxWidth={'xl'} scroll="body" onClose={handleCloseModal} aria-labelledby="modal-title" open={isVisibleModal} slotProps={styleSlotProps}>
 
@@ -150,6 +150,7 @@ function ModalProduct() {
               </Typography>
 
               <FeaturesComposition data={featuresComposition} />
+              {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
             </Box>
           </Box>
 
@@ -172,8 +173,6 @@ function ModalProduct() {
 
 
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 5, maxWidth: '500px', margin: '0 auto' }}>
-
-            {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
 
             <Company data={company} />
             <OtherInfo data={otherInfo} />

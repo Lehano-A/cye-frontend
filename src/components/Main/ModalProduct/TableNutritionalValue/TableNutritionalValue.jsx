@@ -1,12 +1,28 @@
 import React from "react"
 import { Box, Typography, Table, TableRow, TableCell, TableHead, TableBody } from '@mui/material'
 import { styled } from "@mui/material/styles";
+import { grey } from '@mui/material/colors';
 
 const StyledTableCell = styled(TableCell)(() => {
   return {
-    fontWeight: 'bold'
+    fontSize: '12px',
+    fontWeight: 'bold',
   }
 })
+
+const styleMainBox = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '8px 0',
+}
+
+const styleTextNutritionalValue = {
+  margin: '10px 0 0 0',
+  color: grey[400],
+  fontSize: "13px",
+}
 
 
 function TableNutritionalValue({ data }) {
@@ -15,15 +31,14 @@ function TableNutritionalValue({ data }) {
 
 
   return (
-    <Box sx={{ padding: '8px 0' }}>
-      <Typography variant="h6" fontSize="16px" fontWeight={700}>Пищевая ценность на 100 г</Typography>
+    <Box sx={styleMainBox}>
       <Table>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Белки</StyledTableCell>
-            <StyledTableCell align="center">Жиры</StyledTableCell>
-            <StyledTableCell align="center">Углеводы</StyledTableCell>
-            <StyledTableCell align="center">Калорийность</StyledTableCell>
+            <StyledTableCell align="center">БЕЛКИ</StyledTableCell>
+            <StyledTableCell align="center">ЖИРЫ</StyledTableCell>
+            <StyledTableCell align="center">УГЛЕВОДЫ</StyledTableCell>
+            <StyledTableCell align="center">КАЛОРИЙНОСТЬ</StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -36,6 +51,10 @@ function TableNutritionalValue({ data }) {
           </TableRow>
         </TableBody>
       </Table>
+      
+      <Typography sx={styleTextNutritionalValue}>
+        пищевая ценность на 100 г
+      </Typography>
     </Box>
   )
 }
