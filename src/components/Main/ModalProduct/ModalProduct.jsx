@@ -10,7 +10,7 @@ import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import OtherInfo from "./OtherInfo/OtherInfo";
-import HelpFromUser from "../HelpFromUser/HelpFromUser";
+
 
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModal } from "../../../redux/reducers/slices/modalCardProductSlice";
@@ -27,32 +27,23 @@ import { setValueInterpretation } from "../../../redux/reducers/slices/popperInt
     с последующим сравнением элементов, где произошёл клик: на кнопке закрытия или на backdrop.
 */
 
-
-const styleCommonBox = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  flexDirection: 'column',
-  gap: 5,
-
-}
-
-const styleMainBox = {
-  position: 'relative',
-  display: 'flex',
-  bgcolor: 'background.paper',
-  borderRadius: 3,
-  padding: '20px 0px 40px 0px',
-  margin: '40px auto',
-}
-
 const styleIcon = (theme) => {
   return {
     color: theme.palette.primary.light,
   }
 }
 
+const styleTitleProduct = {
+  marginBottom: '35px',
+}
+
 const styleSlotProps = {
-  backdrop: { style: { backgroundColor: 'rgba(0, 0, 0, 0.1)', pointerEvents: 'none' } }
+  backdrop: {
+    style: {
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+      pointerEvents: 'none'
+    }
+  }
 }
 
 const titleProps = {
@@ -62,24 +53,97 @@ const titleProps = {
   fontWeight: 700,
 }
 
+const StyledMainBox = styled(Box)(() => {
+  return {
+    position: 'relative',
+    display: 'flex',
+    bgcolor: 'background.paper',
+    borderRadius: 3,
+    margin: '40px auto 0',
+  }
+})
+
+const StyledCommonBox = styled(Box)(() => {
+  return {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    gap: 5,
+  }
+})
+
+const StyledTopHalfCommonBox = styled(Box)(() => {
+  return {
+    display: 'flex',
+    'flexDirection': 'column',
+    padding: '0 110px 0 110px'
+  }
+})
+
+const StyledBoxSliderAndOtherInfo = styled(Box)(() => {
+  return {
+    display: 'flex',
+  }
+})
+
+const StyledBoxTitleAndSlider = styled(Box)(() => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: ' 0 100px 70px 0',
+  }
+})
+
+const StyledBoxTitle = styled(Box)(() => {
+  return {
+    maxWidth: '420px'
+  }
+})
+
+const StyledBoxSlider = styled(Box)(() => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '420px',
+  }
+})
+
+const StyledBoxNoteToComposition = styled(Box)(({ theme }) => {
+  return {
+    position: 'relative',
+    top: '-140px',
+    left: '-270px',
+    backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
+    padding: '20px 20px 20px 25px',
+    maxWidth: '440px',
+    display: 'inline-flex',
+    flexDirection: 'column',
+    borderRadius: '15px',
+    margin: '0 0 0 100px'
+  }
+})
+
+const StyledCommonBoxComposition = styled(Box)(({ theme }) => {
+  return {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: theme.palette.getAlphaColor('primaryTint', 100, 1),
+    padding: '100px 0 0 0px ',
+    margin: '50px 0 0',
+    alignItems: 'center',
+  }
+})
+
 const StyledButtonClose = styled(IconButton)(() => {
   return {
     position: 'absolute',
     top: 15,
     right: 15,
     backgroundColor: 'transparent',
-  }
-})
-
-const StyledBoxComposition = styled(Box)(() => {
-  return {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#eef0f9',
-    padding: '35px 0',
-    alignItems: 'center',
   }
 })
 
@@ -112,7 +176,16 @@ function ModalProduct() {
 
 
   return (
-    <Dialog disableAutoFocus disableRestoreFocus maxWidth={'xl'} scroll="body" onClose={handleCloseModal} aria-labelledby="modal-title" open={isVisibleModal} slotProps={styleSlotProps}>
+    <Dialog
+      disableAutoFocus
+      disableRestoreFocus
+      maxWidth={'xl'}
+      scroll="body"
+      onClose={handleCloseModal}
+      aria-labelledby="modal-title"
+      open={isVisibleModal}
+      slotProps={styleSlotProps}
+    >
 
       <DialogActions>
         <StyledButtonClose color="primary" onClick={handleCloseModal}>
@@ -120,62 +193,64 @@ function ModalProduct() {
         </StyledButtonClose>
       </DialogActions>
 
-      <Box sx={styleMainBox}>
-        <Box sx={styleCommonBox}>
 
-          <Box sx={{
-            display: 'flex',
-            padding: '0 100px 0 60px',
-          }}>
 
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              marginRight: '30px',
-            }}>
-              <Typography
-                {...titleProps}
-                id="modal-title"
-                sx={{ marginBottom: '35px' }}
-              >
-                {title}
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '500px', width: '100%' }}>
-                <SwiperSlider images={imagesUrl} />
+      <StyledMainBox>
+        <StyledCommonBox>
+          <StyledTopHalfCommonBox>
+            <StyledBoxSliderAndOtherInfo>
+              <StyledBoxTitleAndSlider>
+
+                <StyledBoxTitle>
+                  <Typography
+                    {...titleProps}
+                    id="modal-title"
+                    sx={styleTitleProduct}
+                  >
+                    {title}
+                  </Typography>
+                </StyledBoxTitle>
+
+
+                <StyledBoxSlider>
+                  <SwiperSlider images={imagesUrl} />
+                </StyledBoxSlider>
+              </StyledBoxTitleAndSlider>
+
+
+              <Box>
+                <FeaturesComposition data={featuresComposition} />
+                <OtherInfo data={{ company, otherInfo }} />
+                {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
               </Box>
 
-              <HelpFromUser />
-            </Box>
-
-
-            <Box sx={{ marginLeft: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-              <FeaturesComposition data={featuresComposition} />
-              <OtherInfo data={{ company, otherInfo }} />
-              {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
-
-            </Box>
-          </Box>
+            </StyledBoxSliderAndOtherInfo>
+          </StyledTopHalfCommonBox>
 
 
 
-          <StyledBoxComposition>
+
+          <StyledCommonBoxComposition>
+
+            {
+              noteToComposition &&
+              <StyledBoxNoteToComposition>
+                <NoteToComposition data={noteToComposition} />
+              </StyledBoxNoteToComposition>
+            }
+
+
             <Box sx={{ maxWidth: '500px' }}>
-              <Box sx={{ marginBottom: '35px' }}>
+              <Box sx={{ position: 'relative', top: '-70px', }}>
                 <Composition
                   data={composition}
                   setRefSelectedIngredient={setRefSelectedIngredient}
                 />
               </Box>
-
-              <Box>
-                {noteToComposition && <NoteToComposition data={noteToComposition} />}
-              </Box>
             </Box>
-          </StyledBoxComposition>
+          </StyledCommonBoxComposition>
 
-        </Box>
+        </StyledCommonBox>
 
 
         {refSelectedIngredient && (
@@ -185,7 +260,7 @@ function ModalProduct() {
           />
         )}
 
-      </Box>
+      </StyledMainBox>
 
     </Dialog>
   )

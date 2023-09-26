@@ -2,23 +2,37 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { styled } from "@mui/material/styles";
+import { grey } from '@mui/material/colors';
 
 /* --------------------------------- slices --------------------------------- */
 import { toggleVisiblePopper, setValueInterpretation } from "../../../../../redux/reducers/slices/popperInterpretationSlice";
 
 
-const StyledTypography = styled(Typography)(({ color, interpretation, theme }) => {
+const StyledValueWithDefinition = styled(Typography)(({ color, interpretation, theme }) => {
 
   return {
     display: 'inline-block',
-    color: color && theme.palette[`${color}`].main,
+    color: color ? theme.palette[`${color}`].main : grey[600],
     cursor: interpretation && 'pointer',
-    fontStyle: 'italic',
-    fontWeight: interpretation && 'bold',
+    backgroundColor: color && theme.palette[`${color}`].light,
+    padding: '0 5px',
+    borderRadius: '5px',
+    fontWeight: !color && 'bold',
     margin: '0 20px 0 0',
+    transition: 'background-color 0.2s',
+
     '&:hover': {
-      textDecoration: interpretation && 'underline dashed'
+      backgroundColor: color ? theme.palette.getAlphaColor(color, 'light', 0.2) : grey[300]
     }
+  }
+})
+
+const StyledSimpleValue = styled(Typography)(() => {
+
+  return {
+    display: 'inline-block',
+    margin: '0 25px 0 0px',
+    color: grey[500]
   }
 })
 
@@ -27,7 +41,6 @@ const StyledTypography = styled(Typography)(({ color, interpretation, theme }) =
 function Ingredient({ data, setRefSelectedIngredient }) {
 
   const dispatch = useDispatch()
-
 
   const handleClickIngredient = (e, value) => {
     setRefSelectedIngredient(e.currentTarget)
@@ -45,20 +58,23 @@ function Ingredient({ data, setRefSelectedIngredient }) {
 
   return (
     <>
-      {data.ingredient ? <StyledTypography
-        onClick={(e) => data.ingredient.interpretation && handleClickIngredient(e, data.ingredient.interpretation)}
-        variant="body2"
-        interpretation={data.ingredient.interpretation}
-        color={data.ingredient.type}
-      >
-        {data.ingredient.title}
-      </StyledTypography>
+      {
+        data.ingredient ? // если строка с определением
 
-        :
+          <StyledValueWithDefinition
+            onClick={(e) => data.ingredient.interpretation && handleClickIngredient(e, data.ingredient.interpretation)}
+            variant="body2"
+            interpretation={data.ingredient.interpretation}
+            color={data.ingredient.type}
+          >
+            {data.ingredient.title}
+          </StyledValueWithDefinition>
 
-        <Typography sx={{ display: 'inline-block', margin: '0 20px 0 0px' }} variant="body2">
-          {data}
-        </Typography>
+          : // иначе
+
+          <StyledSimpleValue variant="body2">
+            {data}
+          </StyledSimpleValue>
       }
     </>
   )

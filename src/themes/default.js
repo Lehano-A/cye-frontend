@@ -1,14 +1,20 @@
 // Supports weights 300-700
 import '@fontsource-variable/comfortaa';
-
 import { createTheme } from "@mui/material/styles";
 import { regexAlphaNum } from "../utils/constants";
+
 
 const palette = {
   primary: {
     light: 'rgba(160, 171, 223, 1)',
     main: '#5c70c8',
     dark: '#263a9c',
+  },
+
+  primaryTint: {
+    100: 'rgba(247, 248, 253, 1)',
+    200: 'rgba(226, 230, 245, 1)',
+    500: 'rgba(124, 133, 175, 1)',
   },
 
   secondary: {
@@ -59,7 +65,6 @@ const palette = {
 
 
 
-
 const theme = createTheme({
   MuiDialog: {
     styleOverrides: {
@@ -73,7 +78,7 @@ const theme = createTheme({
   },
 
   typography: {
-    fontFamily: 'Roboto'
+    fontFamily: 'Roboto',
   },
 
   palette: palette,

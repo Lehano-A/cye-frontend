@@ -14,7 +14,7 @@ const StyledList = styled(List)(() => {
   return {
     display: 'flex',
     flexDirection: 'column',
-    padding: '15px 0',
+    padding: '20px 0',
   }
 })
 

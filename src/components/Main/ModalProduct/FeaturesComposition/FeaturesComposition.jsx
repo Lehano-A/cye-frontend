@@ -13,7 +13,7 @@ const StyledMainBox = styled(Box)(({ theme, color }) => {
     minHeight: '70px',
     backgroundColor: theme.palette[`${color}`].light,
     borderRadius: '15px',
-    marginBottom: '40px',
+    marginBottom: '20px',
   }
 })
 
@@ -36,7 +36,7 @@ const StyledBoxTitleIngredients = styled(Box)(() => {
     flexDirection: 'column',
     justifyContent: 'space-between',
     maxWidth: '290px',
-    marginLeft: '15px',
+    marginLeft: '25px',
     padding: '10px 0',
   }
 })

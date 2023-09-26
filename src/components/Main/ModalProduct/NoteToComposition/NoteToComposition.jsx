@@ -1,20 +1,27 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+
+const styleTitle =  {
+    fontSize: '16px',
+    fontWeight: 700,
+    textTransform: 'upperCase',
+}
+
+
 
 function NoteToComposition({ data }) {
 
   return (
-    <Box>
+    <>
       <Typography
         variant="h6"
-        fontSize="16px"
-        fontWeight={700}
+        sx={styleTitle}
       >
         Примечание к составу
       </Typography>
 
       <Typography sx={{ pt: 1 }} variant="body2">{data}</Typography>
-    </Box>
+    </>
   )
 }
 
