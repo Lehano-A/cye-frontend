@@ -8,6 +8,7 @@ import filterCategoriesSlice from "./slices/filterCategoriesSlice";
 import boxSearchResultSlice from "./slices/boxSearchResultSlice";
 import cardProductSlice from "./slices/cardProductSlice"
 import dropListPreSearchResultSlice from "./slices/dropListPreSearchResultSlice";
+import buttonPaginationSlice from "./slices/buttonPaginationSlice";
 
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   boxSearchResult: boxSearchResultSlice,
   cardProduct: cardProductSlice,
   dropListPreSearchResult: dropListPreSearchResultSlice,
+  buttonPagination: buttonPaginationSlice,
 })
 
 export default rootReducer;

@@ -15,7 +15,7 @@ function LoadingIndicator({ size, color, handleLoading }) {
 
 
   return (
-    <CircularProgress size={size} color={color} />
+    <CircularProgress size={size} sx={{ color: color }} />
   )
 }
 

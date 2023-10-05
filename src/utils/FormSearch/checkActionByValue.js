@@ -1,4 +1,5 @@
 import log from "loglevel"
+import { PER_PAGE } from "../constants"
 
 // "keydown":
 // 1) поиск через ENTER, по введённой подстроке
@@ -6,17 +7,27 @@ import log from "loglevel"
 // "submit" - поиск по клику на кнопке поиска (только подстрока)
 // "click" - поиск по клику на вариант из выпадающего списка
 function checkActionByValue({ e, option }) {
+  const defaultPaginationData = {
+    page: null,
+    perPage: PER_PAGE,
+    totalDocs: null,
+    totalPages: null,
+  }
 
   if ((e.type === 'click' || e.type === "keydown")) {
 
     if (option.brand) {
       log.debug(`
-        В выпадающем списке выбрана опция - 'бренд':
+        В выпадающем списке выбрана опция - 'brand':
         ${option.brand}
       `)
 
       return {
-        searchValue: { brand: option.brand },
+        searchValue: {
+          searchBy: 'brands',
+          value: option.brand,
+          pagination: defaultPaginationData,
+        },
         endpoint: 'brands'
       }
     }
@@ -29,7 +40,11 @@ function checkActionByValue({ e, option }) {
       `)
 
       return {
-        searchValue: { categories: option.categories },
+        searchValue: {
+          searchBy: 'categories',
+          value: option.categories,
+          pagination: defaultPaginationData,
+        },
         endpoint: 'categories'
       }
     }
@@ -41,7 +56,11 @@ function checkActionByValue({ e, option }) {
         ${option.title}
       `)
       return {
-        searchValue: { title: option.title },
+        searchValue: {
+          searchBy: 'title',
+          value: option.title,
+          pagination: defaultPaginationData,
+        },
         endpoint: 'submit'
       }
     }
@@ -62,7 +81,11 @@ function checkActionByValue({ e, option }) {
   // если есть вариант .title, значит вариант выбран "стрелками" + "Enter"
   // иначе, введена "подстрока" + "Enter"
   return {
-    searchValue: option.title ? option : { title: option.trim() },
+    searchValue: {
+      searchBy: 'title',
+      value: option.title ? option.title : option.trim(),
+      pagination: defaultPaginationData,
+    },
     endpoint: 'submit'
   }
 }

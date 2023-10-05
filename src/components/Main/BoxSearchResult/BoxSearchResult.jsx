@@ -1,107 +1,106 @@
 import React from "react";
-import { Box, Typography, Container, Fade } from "@mui/material";
-import GridCardsProduct from "./GridCardsProduct/GridCardsProduct";
+import { Box, Stack, Fade } from "@mui/material";
+import GridCardsProductsContainer from "../../../containers/GridCardsProductsContainer";
 import { styled } from "@mui/material/styles";
 import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import FilterCategoriesContainer from "../../../containers/FilterCategoriesContainer";
+import ButtonPagination from "./ButtonPagination/ButtonPagination";
+import NoResultSearch from "./NoResultSearch/NoResultSearch";
 
-const StyledBoxFilter = styled(Box)(({ datafordisplay }) => {
+const StyledBoxLoadingIndicator = styled(Box)(() => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: "80px 0 0 0",
+  }
+})
 
-  const { isCardsReadyForDisplay, activeButtonInFilter } = datafordisplay;
+const StyledBoxFilter = styled(Box)(() => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: "30px 0 0 0"
+  }
+})
+
+const StyledBoxGridCardsProducts = styled(Stack)(({ params }) => {
+  const { isDisplayedButtonPagination } = params
 
   return {
-    display: isCardsReadyForDisplay || activeButtonInFilter ? 'flex' : 'none',
-    justifyContent: 'center',
-    margin: "80px 0 0 0"
+    margin: `80px 0 ${isDisplayedButtonPagination ? '38px' : '88px'} 0`,
   }
 })
 
 
 function BoxSearchResult({
   apiFoundProductsAfterSubmit,
-  isCardsReadyForDisplay,
   activeButtonInFilter,
-  isFadeFirstDisplay,
   searchBy,
   arrForShowSearchResultProducts,
   isLoadingBoxSearchResult,
   searchValueWithoutResult,
+  isDisplayedButtonPagination,
 }) {
 
 
   return (
-    <Container>
+    <Stack sx={{ alignItems: 'center' }}>
       {
-        /* если после сабмита в ответе от сервера продуктов > 1 и карточки готовы к отображению,
-          или нажимается кнопка фильтра (тогда фильтр должен отображаться)
+        /* если после сабмита в ответе от сервера продуктов > 1 или нажимается кнопка фильтра (тогда фильтр должен отображаться)
        */
       }
-      {((apiFoundProductsAfterSubmit?.length > 1 && isCardsReadyForDisplay) || activeButtonInFilter) &&
-
-        <Fade in={isFadeFirstDisplay}>
-          <StyledBoxFilter
-            datafordisplay={{
-              isCardsReadyForDisplay,
-              activeButtonInFilter,
-            }}
-          >
-
+      {((apiFoundProductsAfterSubmit?.result.length > 1) || activeButtonInFilter) &&
+        <Fade in={true}>
+          <StyledBoxFilter>
             <FilterCategoriesContainer
-              apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit}
+              apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit?.result}
               searchBy={searchBy}
             />
-
           </StyledBoxFilter>
         </Fade>
       }
 
 
       {
-        arrForShowSearchResultProducts?.length > 0 &&
-        <Fade in={isCardsReadyForDisplay}>
-
-          <Container sx={{
-            display: isCardsReadyForDisplay ? 'block' : 'none',
-            margin: "80px 0 0 0"
-          }}>
-            <GridCardsProduct
+        arrForShowSearchResultProducts.length > 0 &&
+        <Fade in={true}>
+          <StyledBoxGridCardsProducts params={{ isDisplayedButtonPagination }}>
+            <GridCardsProductsContainer
               arrForShowSearchResultProducts={arrForShowSearchResultProducts}
             />
-          </Container>
-
+          </StyledBoxGridCardsProducts>
         </Fade>
       }
 
 
       {
-        (apiFoundProductsAfterSubmit?.length === 0 && !isLoadingBoxSearchResult) &&
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-
-            <Box sx={{ display: 'flex', marginBottom: '10px' }}>
-              <Typography variant="h6" sx={{ marginRight: '10px' }}>Находились в поисках: </Typography>
-              <Typography variant="h6" sx={{ fontWeight: '700' }}>{searchValueWithoutResult}</Typography>
-            </Box>
-
-            <Typography>
-              К сожалению, такой продукт не получилось найти 😕
-            </Typography>
+        isDisplayedButtonPagination &&
+        <Fade in={true}>
+          <Box sx={{ margin: '0 0 50px' }}>
+            <ButtonPagination />
           </Box>
+        </Fade>
+      }
 
-        </Box>
+
+      {
+        (apiFoundProductsAfterSubmit?.result.length === 0 && !isLoadingBoxSearchResult) &&
+        <Fade in={true}>
+          <Box>
+            <NoResultSearch searchValueWithoutResult={searchValueWithoutResult} />
+          </Box>
+        </Fade>
       }
 
 
       {
         isLoadingBoxSearchResult &&
-        <Box sx={{ display: 'flex', justifyContent: 'center', margin: "80px 0 0 0" }}>
+        <StyledBoxLoadingIndicator>
           <LoadingIndicator />
-        </Box>
+        </StyledBoxLoadingIndicator>
       }
 
-
-    </Container>
+    </Stack>
   )
 }
 

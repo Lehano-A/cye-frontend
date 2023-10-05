@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Dialog, DialogActions, Box, IconButton, Typography } from "@mui/material"
+import { Stack, Dialog, DialogActions, Box, IconButton, Typography } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from "@mui/material/styles";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
@@ -56,26 +56,21 @@ const titleProps = {
 const StyledMainBox = styled(Box)(() => {
   return {
     position: 'relative',
-    display: 'flex',
     bgcolor: 'background.paper',
     borderRadius: 3,
     margin: '40px auto 0',
   }
 })
 
-const StyledCommonBox = styled(Box)(() => {
+const StyledCommonBox = styled(Stack)(() => {
   return {
-    display: 'flex',
     justifyContent: 'space-between',
-    flexDirection: 'column',
     gap: 5,
   }
 })
 
-const StyledTopHalfCommonBox = styled(Box)(() => {
+const StyledTopHalfCommonBox = styled(Stack)(() => {
   return {
-    display: 'flex',
-    'flexDirection': 'column',
     padding: '0 110px 0 110px'
   }
 })
@@ -86,10 +81,8 @@ const StyledBoxSliderAndOtherInfo = styled(Box)(() => {
   }
 })
 
-const StyledBoxTitleAndSlider = styled(Box)(() => {
+const StyledBoxTitleAndSlider = styled(Stack)(() => {
   return {
-    display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
     margin: ' 0 100px 70px 0',
   }
@@ -101,16 +94,14 @@ const StyledBoxTitle = styled(Box)(() => {
   }
 })
 
-const StyledBoxSlider = styled(Box)(() => {
+const StyledBoxSlider = styled(Stack)(() => {
   return {
-    display: 'flex',
-    flexDirection: 'column',
     alignItems: 'center',
     width: '420px',
   }
 })
 
-const StyledBoxNoteToComposition = styled(Box)(({ theme }) => {
+const StyledBoxNoteToComposition = styled(Stack)(({ theme }) => {
   return {
     position: 'relative',
     top: '-140px',
@@ -118,23 +109,25 @@ const StyledBoxNoteToComposition = styled(Box)(({ theme }) => {
     backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
     padding: '20px 20px 20px 25px',
     maxWidth: '440px',
-    display: 'inline-flex',
-    flexDirection: 'column',
     borderRadius: '15px',
     margin: '0 0 0 100px'
   }
 })
 
-const StyledCommonBoxComposition = styled(Box)(({ theme }) => {
+const StyledCommonBoxComposition = styled(Stack)(({ theme }) => {
   return {
     width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: theme.palette.getAlphaColor('primaryTint', 100, 1),
     padding: '100px 0 0 0px ',
     margin: '50px 0 0',
     alignItems: 'center',
+  }
+})
+
+const StyledBoxComposition = styled(Box)(() => {
+  return {
+    position: 'relative', top: '-90px',
   }
 })
 
@@ -241,12 +234,12 @@ function ModalProduct() {
 
 
             <Box sx={{ maxWidth: '500px' }}>
-              <Box sx={{ position: 'relative', top: '-70px', }}>
+              <StyledBoxComposition>
                 <Composition
                   data={composition}
                   setRefSelectedIngredient={setRefSelectedIngredient}
                 />
-              </Box>
+              </StyledBoxComposition>
             </Box>
           </StyledCommonBoxComposition>
 

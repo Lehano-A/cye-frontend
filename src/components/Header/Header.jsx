@@ -5,7 +5,7 @@ import FormSearchContainer from "../../containers/FormSearchContainer";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectIsLoadingIndicatorBoxSearchResult } from "../../redux/reducers/selectors/boxSearchResultSelectors";
-
+import { selectIsFilterDisplayed } from "../../redux/reducers/selectors/filterCategoriesSelectors";
 
 const styleBoxForm = {
   display: 'flex',
@@ -16,12 +16,13 @@ const styleBoxForm = {
 
 function Header() {
 
-  const isFilterDisplayed = useSelector((state) => state.filterCategories.isFilterDisplayed)
+  const isFilterDisplayed = useSelector(selectIsFilterDisplayed)
   const isLoadingIndicatorBoxSearchResult = useSelector(selectIsLoadingIndicatorBoxSearchResult)
 
-  return (
-    <Paper variant='header'>
 
+  return (
+    
+    <Paper variant="header">
       <Box
         component="header"
         sx={{

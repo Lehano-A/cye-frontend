@@ -3,7 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import log from 'loglevel'
 import api from "../api/api";
 import FormSearch from "../components/Header/FormSearch/FormSearch"
-import { clearCountLoadedImagesCards } from "../redux/reducers/slices/cardProductSlice";
+import {
+  ENDPOINT_SUBMIT,
+  ENDPOINT_BRANDS,
+  ENDPOINT_CATEGORIES,
+} from "../utils/constants";
+
 import { saveToHistorySubmit } from "../utils/localStorage/HistorySubmit/historySubmit"
 import forcedBlur from "../utils/forcedBlur";
 import { checkValidInputValue } from "../validation/formSearchValidation";
@@ -11,6 +16,8 @@ import { checkActionByValue } from "../utils/FormSearch/checkActionByValue";
 import { getValueFromOption } from "../utils/FormSearch/getValueFromOption";
 
 /* --------------------------------- slices --------------------------------- */
+import { setIsDisplayedButtonPagination, setPaginationData } from "../redux/reducers/slices/buttonPaginationSlice";
+
 import {
   setIsOpenedDropList,
   setSaveboxDropListBeforeSubmit,
@@ -23,16 +30,14 @@ import {
   setWasFirstSubmit,
 } from "../redux/reducers/slices/inputSearchSlice";
 
-import { setApiFoundProductsAfterSubmit, setSearchBy } from "../redux/reducers/slices/searchRequestProductSlice";
+import { setApiFoundProductsAfterSubmit, } from "../redux/reducers/slices/searchRequestProductSlice";
 
 import {
   setArrForShowSearchResultProducts,
-  saveTimerIdDelayStartLoadingIndicator as saveTimerIdDelayStartLoadingIndicatorBoxSearchResult,
   setSearchValueWithoutResult,
 } from "../redux/reducers/slices/boxSearchResultSlice";
 
 import {
-  clearCountFilteredCards,
   clearUniqueCategories,
   resetDefaultButtonsFilter,
 } from "../redux/reducers/slices/filterCategoriesSlice";
@@ -45,14 +50,19 @@ import {
   selectWasFirstSubmit,
 } from "../redux/reducers/selectors/inputSearchSelectors";
 
+import { selectApiFoundProductsAfterSubmit } from "../redux/reducers/selectors/searchRequestProductSelectors";
 
 /* --------------------------------- actions -------------------------------- */
-import { startLoadingIndicatorBoxSearchResult } from "../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions";
+import {
+  startLoadingIndicatorBoxSearchResult,
+  endLoadingIndicatorBoxSearchResult,
+} from "../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions";
 
 
 /* ---------------------------------- hooks --------------------------------- */
 import useDelayStartLoadingIndicator from "../hooks/useDelayStartLoadingIndicator";
-import useSaveTimerId from "../hooks/useSaveTimerId";
+
+
 
 
 function FormSearchContainer() {
@@ -62,75 +72,84 @@ function FormSearchContainer() {
   const inputValue = useSelector(selectInputValue)
   const savedInputValueAfterSubmit = useSelector(selectSavedInputValueAfterSubmit)
   const wasFirstSubmit = useSelector(selectWasFirstSubmit)
+  const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
+  const delayStartLoadingIndicatorBoxSearchResult = useDelayStartLoadingIndicator(startLoadingIndicatorBoxSearchResult, [apiFoundProductsAfterSubmit?.result], 300)
 
-  const { saveTimerId } = useSaveTimerId()
 
-  const delayStartLoadingIndicatorBoxSearchResult = useDelayStartLoadingIndicator(startLoadingIndicatorBoxSearchResult, 300)
-
+  function sendReq(method, searchData) {
+    api[method](searchData)
+      .then((response) => {
+        saveDataAndUpdateStateAfterResApi(response, searchData.value)
+      })
+      .catch(() => {
+        throw new Error(`Возникла ошибка при запросе поиска продукта`)
+      })
+      .finally(() => {
+        dispatch(endLoadingIndicatorBoxSearchResult())
+      })
+  }
 
 
   // отправление запроса на сервер
-  function sendReqToServer(searchValue, endpoint) {
-    const endpointSubmit = endpoint === 'submit'
-    const endpointBrand = endpoint === 'brands'
-    const endpointCategory = endpoint === 'categories'
-
-    if (endpointSubmit) {
-      api.findProductBySubmit(searchValue)
-        .then((res) => {
-          const { searchBy, result } = res
-
-          saveDataAndUpdateStateAfterResApi(searchBy, result, searchValue.title)
-        })
-        .catch(new Error('Возникла ошибка во время сабмита поиска продукта'))
-
+  function sendReqToServer(searchData, endpoint) {
+    // сабмит
+    if (ENDPOINT_SUBMIT === endpoint) {
+      sendReq('findProductBySubmit', searchData)
       return
     }
 
-    if (endpointBrand || endpointCategory) {
-      api.findProductByBrandOrCategory(searchValue, endpoint)
-        .then((res) => {
-          const { searchBy, result } = res
-          saveDataAndUpdateStateAfterResApi(searchBy, result, endpointBrand ? searchValue.brands : searchValue.categories)
-        })
-        .catch(new Error('Возникла ошибка во время запроса поиска продукта по названию категории'))
+    // бренд
+    if (ENDPOINT_BRANDS === endpoint) {
+      sendReq('findProductByBrand', searchData)
+      return
+    }
 
+    // категории
+    if (ENDPOINT_CATEGORIES === endpoint) {
+      sendReq('findProductByCategory', searchData)
       return
     }
   }
 
 
-
   // изменение стэйтов перед запросом на сервер
   function changeStatesBeforeReqApi() {
     dispatch(setArrForShowSearchResultProducts([]))
-    dispatch(clearCountLoadedImagesCards())
-    dispatch(clearCountFilteredCards())
     dispatch(clearUniqueCategories())
     dispatch(resetDefaultButtonsFilter())
     dispatch(setIsSubmitting(true))
     dispatch(setIsOpenedDropList(false))
     dispatch(setSaveboxDropListBeforeSubmit(null))
+    dispatch(setIsDisplayedButtonPagination(false))
+    dispatch(setPaginationData(null))
     forcedBlur() // если строка с пробелом в конце, тогда "выпадающий список" уже будет закрытым, поэтому обработчик handleCloseDropList, в котором находится необходимая логика, не сработает
 
-    const timerId = delayStartLoadingIndicatorBoxSearchResult.createTimer()
-    saveTimerId(saveTimerIdDelayStartLoadingIndicatorBoxSearchResult, timerId)
+    delayStartLoadingIndicatorBoxSearchResult.createTimer()
 
     !wasFirstSubmit && dispatch(setWasFirstSubmit(true))
   }
 
 
   // сохранение данных от сервера и обновление стэйтов, после ответа
-  function saveDataAndUpdateStateAfterResApi(searchBy, result, searchValue) {
+  function saveDataAndUpdateStateAfterResApi(response, searchValue) {
+    const { result } = response
+
+    dispatch(setApiFoundProductsAfterSubmit(response))
+    dispatch(setArrForShowSearchResultProducts(result))
+    dispatch(setSavedInputValueAfterSubmit(searchValue))
+
     if (result.length === 0) {
       dispatch(setSearchValueWithoutResult(searchValue))
+      return
     }
 
-    dispatch(setApiFoundProductsAfterSubmit(result))
-    dispatch(setArrForShowSearchResultProducts(result))
-    dispatch(setSearchBy(searchBy))
-    dispatch(setSavedInputValueAfterSubmit(searchValue))
+    const { pagination } = response
+    const { page, totalPages } = pagination
+
+    totalPages - page > 0 && dispatch(setIsDisplayedButtonPagination(true))
+    dispatch(setPaginationData(pagination))
   }
+
 
 
   /*

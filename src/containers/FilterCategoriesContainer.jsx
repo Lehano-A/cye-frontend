@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { clearCountLoadedImagesCards } from "../redux/reducers/slices/cardProductSlice";
 import FilterCategories from "../components/Main/BoxSearchResult/FilterCategories/FilterCategories";
 
 /* --------------------------------- slices --------------------------------- */
@@ -8,16 +7,12 @@ import {
   setUniqueCategories,
   setActiveButtonInFilter,
   setIsActiveButtonShowAllProducts,
-  incrementCountFilteredCards,
-  clearCountFilteredCards,
   clearUniqueCategories,
 } from "../redux/reducers/slices/filterCategoriesSlice";
 
 import {
   setArrForShowSearchResultProducts,
-  saveTimerIdDelayStartLoadingIndicator as saveTimerIdDelayStartLoadingIndicatorBoxSearchResult
 } from "../redux/reducers/slices/boxSearchResultSlice";
-
 
 /* -------------------------------- selectors ------------------------------- */
 import {
@@ -27,25 +22,15 @@ import {
 } from "../redux/reducers/selectors/filterCategoriesSelectors";
 
 
-/* --------------------------------- actions -------------------------------- */
-import { startLoadingIndicatorBoxSearchResult } from "../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions";
-
-
-/* ---------------------------------- hooks --------------------------------- */
-import useSaveTimerId from "../hooks/useSaveTimerId";
-import useDelayStartLoadingIndicator from "../hooks/useDelayStartLoadingIndicator";
-
 
 function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
-
 
   const dispatch = useDispatch()
 
   const uniqueCategories = useSelector(selectUniqueCategories)
   const activeButtonInFilter = useSelector(selectActiveButtonInFilter)
   const isActiveButtonShowAllProducts = useSelector(selectIsActiveButtonShowAllProducts)
-  const delayStartLoadingIndicatorBoxSearchResult = useDelayStartLoadingIndicator(startLoadingIndicatorBoxSearchResult, 300)
-  const { saveTimerId } = useSaveTimerId()
+
 
   useEffect(() => {
     // определение коллекции имён кнопок для фильтра
@@ -59,7 +44,6 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
 
 
   useEffect(() => {
-
     // если нажата кнопка "показать все продукты"
     if (activeButtonInFilter === 'showAllProducts') {
       dispatch(setIsActiveButtonShowAllProducts(true))
@@ -69,11 +53,13 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
 
     // если нажата "любая другая кнопка категории"
     if (activeButtonInFilter !== null) {
+
       const filteredProducts = filterProductsByTargetCategory(activeButtonInFilter)
+
       dispatch(setArrForShowSearchResultProducts(filteredProducts))
       dispatch(setIsActiveButtonShowAllProducts(false))
-    }
 
+    }
   }, [activeButtonInFilter])
 
 
@@ -94,7 +80,6 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
         })
       }
     });
-
     return Object.keys(box)
   }
 
@@ -108,14 +93,8 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
     if (nameButton === activeButtonInFilter || nameButton === null || (nameButton === 'showAllProducts' && activeButtonInFilter === null)) {
       return
     }
-
     dispatch(setArrForShowSearchResultProducts([]))
-    dispatch(clearCountLoadedImagesCards())
-    dispatch(clearCountFilteredCards())
     dispatch(setActiveButtonInFilter(nameButton))
-
-    const timerId = delayStartLoadingIndicatorBoxSearchResult.createTimer()
-    saveTimerId(saveTimerIdDelayStartLoadingIndicatorBoxSearchResult, timerId)
   }
 
 
@@ -137,9 +116,9 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
       })
     })
 
-    dispatch(incrementCountFilteredCards(filteredProduct.length))
     return filteredProduct
   }
+
 
   return (
     <FilterCategories

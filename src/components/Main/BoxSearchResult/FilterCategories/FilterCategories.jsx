@@ -1,6 +1,5 @@
-
 import React from "react";
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 
 function FilterCategories({
@@ -11,7 +10,7 @@ function FilterCategories({
 }) {
 
   return (
-    <Box>
+    <>
       <ToggleButtonGroup
         exclusive
         onChange={handleOnChange}
@@ -21,7 +20,7 @@ function FilterCategories({
         {uniqueCategories.length > 0 &&
           <ToggleButton
             value="showAllProducts"
-            sx={{ marginRight: '40px' }}
+            sx={{ marginRight: '40px', transition: 'all 0.25s ease' }}
             selected={isActiveButtonShowAllProducts}
           >
             Всё подряд
@@ -33,7 +32,7 @@ function FilterCategories({
             <ToggleButton
               value={category}
               key={id}
-              sx={{ marginRight: '10px' }}
+              sx={{ marginRight: '10px', transition: 'all 0.25s ease' }}
             >
               {category}
             </ToggleButton>
@@ -41,7 +40,7 @@ function FilterCategories({
 
         })}
       </ToggleButtonGroup>
-    </Box>
+    </>
   )
 }
 

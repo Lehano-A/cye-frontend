@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import BoxSearchResultContainer from "../../containers/BoxSearchResultContainers";
+import BoxSearchResultContainer from "../../containers/BoxSearchResultContainer";
 import ModalProduct from "./ModalProduct/ModalProduct";
 import Welcome from "./ModalProduct/Welcome/Welcome";
 import checkerUserDevice from "../../utils/checkerUserDevice";
@@ -8,6 +8,8 @@ import checkerUserDevice from "../../utils/checkerUserDevice";
 /* --------------------------------- slices --------------------------------- */
 import { setUserDevice } from "../../redux/reducers/slices/checkUserDeviceSlice";
 
+/* -------------------------------- selectors ------------------------------- */
+import { selectWasFirstSubmit } from "../../redux/reducers/selectors/inputSearchSelectors";
 
 const styleMainBox = {
   maxWidth: '1280px',
@@ -20,12 +22,11 @@ function Main() {
   const dispatch = useDispatch()
 
   const isVisible = useSelector(state => state.modalCardProduct.visible)
-  const wasFirstSubmit = useSelector(state => state.inputSearch.wasFirstSubmit)
+  const wasFirstSubmit = useSelector(selectWasFirstSubmit)
 
   useEffect(() => {
     const device = checkerUserDevice()
     dispatch(setUserDevice(device))
-
   }, [])
 
 

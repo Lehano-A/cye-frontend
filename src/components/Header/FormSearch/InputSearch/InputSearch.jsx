@@ -8,10 +8,8 @@ const styleMainBox = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  minWidth: '250px',
+  minWidth: '219px',
   maxWidth: '600px',
-  //margin: '0 20px'
-  margin: "0 0 0 20px",
 }
 
 

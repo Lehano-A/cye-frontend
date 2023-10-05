@@ -2,17 +2,17 @@ const selectArrForShowSearchResultProducts = state => state.boxSearchResult.arrF
 
 const selectIsLoadingIndicatorBoxSearchResult = state => state.boxSearchResult.isLoadingIndicator;
 
-const selectIsCardsReadyForDisplay = state => state.boxSearchResult.isCardsReadyForDisplay;
-
 const selectTimerIdDelayStartLoadingIndicator = state => state.boxSearchResult.timerIdDelayStartLoadingIndicator;
 
-const selectSearchValueWithoutResult= state => state.boxSearchResult.searchValueWithoutResult;
+const selectSearchValueWithoutResult = state => state.boxSearchResult.searchValueWithoutResult;
+
+const selectСolumnsGridCards = state => state.boxSearchResult.columnsGridCards;
 
 
 export {
   selectArrForShowSearchResultProducts,
   selectIsLoadingIndicatorBoxSearchResult,
-  selectIsCardsReadyForDisplay,
   selectTimerIdDelayStartLoadingIndicator,
   selectSearchValueWithoutResult,
+  selectСolumnsGridCards,
 }

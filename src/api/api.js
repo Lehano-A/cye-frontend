@@ -1,8 +1,8 @@
 class Api {
 
   constructor() {
-    // this.baseUrl = 'http://localhost:3000/api/'
-    this.baseUrl = 'https://чтояем.рф/api/'
+    this.baseUrl = 'http://localhost:3000/api/'
+    // this.baseUrl = 'https://чтояем.рф/api/'
   }
 
 
@@ -12,9 +12,22 @@ class Api {
   }
 
 
-  // поиск по "бренду" или "категории"
-  findProductByBrandOrCategory(data, endpoint) {
-    return fetch(`${this.baseUrl}search/products/${endpoint}`, {
+  // поиск по "бренду"
+  findProductByBrand(data) {
+    return fetch(`${this.baseUrl}search/products/brands`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((res) => { return this._getResponse(res) })
+  }
+
+
+  // поиск по "категории"
+  findProductByCategory(data) {
+    return fetch(`${this.baseUrl}search/products/categories`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -38,7 +51,6 @@ class Api {
   }
 
 
-
   // поиск по нажатию "Enter" или выбору варианта из выпадающего окна
   findProductBySubmit(data) {
     return fetch(`${this.baseUrl}search/products`, {
@@ -54,7 +66,7 @@ class Api {
   _getResponse(res) {
 
     if (!res.ok) {
-      throw (new Error('res.ok <== undefined'))
+      throw new Error('res.ok <== undefined')
     }
     return res.json()
   }

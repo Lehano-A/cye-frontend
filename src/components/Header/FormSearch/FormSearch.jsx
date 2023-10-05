@@ -9,6 +9,7 @@ const Form = styled('form')`
   align-items: center;
   max-width: 700px;
   width: 100%;
+  padding: 0 10px;
 `
 
 
