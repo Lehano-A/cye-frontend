@@ -41,22 +41,26 @@ function ItemDropList({ props, option }) {
     <StyledListItem {...props} params={{ isHistorySubmitDisplayed }}>
 
 
-      {((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.categories)) && (
+      {
+        ((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.categories)) &&
         <BrandAndCategoryOption option={option} />
-      )}
+      }
 
 
-      {(inputValue.length >= 2 && !isHistorySubmitDisplayed) && option.imagesUrl && (
-        <WithImageOption option={option} />
-      )}
+      {
+        (inputValue.length >= 2 && !isHistorySubmitDisplayed) && option.imagesUrl && (
+          <WithImageOption option={option} />
+        )
+      }
 
 
-      {isHistorySubmitDisplayed && (
+      {
+        isHistorySubmitDisplayed &&
         <>
           <HistorySubmitOption option={option} />
           <ButtonDeleteFromHistorySubmit option={option} />
         </>
-      )}
+      }
 
 
     </StyledListItem>

@@ -4,7 +4,7 @@ const regexAlphaNum = /\d+(?:\.\d+)?(?=\))/
 
 const PER_PAGE = 12 // подгружаемых карточек в boxSearchResult за 1 запрос
 
-const DELAY_SKELETON = 400
+const DELAY_SKELETON = 0
 
 const SIZE_ICON_AND_BUTTON_INFORMING = '25px'
 
