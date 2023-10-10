@@ -15,7 +15,7 @@ function useDelayStartLoadingIndicator(action, dependence, delay) {
   }, [...dependence])
 
 
-  
+
   function createTimer() {
     clearTimeout(timerId)
 

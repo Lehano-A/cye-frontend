@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, Skeleton, Fade } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import IconsInforming from './IconInforming/IconInforming';
-import { SIZE_ICON_AND_BUTTON_INFORMING } from '../../../utils/constants';
+import { DELAY_SKELETON, SIZE_ICON_AND_BUTTON_INFORMING } from '../../../utils/constants';
 
 /* --------------------------------- slices --------------------------------- */
 import { setSelectedCard } from '../../../redux/reducers/slices/cardProductSlice';
@@ -96,7 +96,7 @@ function CardProduct({ dataProduct }) {
   useEffect(() => {
     const timerId = setTimeout(() => {
       setIsDisplayedSkeleton(true)
-    }, 1000)
+    }, DELAY_SKELETON)
     setTimerIdSkeleton(timerId)
   }, [])
 
@@ -104,7 +104,7 @@ function CardProduct({ dataProduct }) {
   useEffect(() => {
     if (timerIdSkeleton) {
       clearTimeout(timerIdSkeleton)
-      setTimerIdSkeleton(null)
+      setTimerIdSkeleton(false)
     }
   }, [isLoadedImage])
 

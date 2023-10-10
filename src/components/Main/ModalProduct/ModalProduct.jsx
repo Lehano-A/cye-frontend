@@ -11,7 +11,6 @@ import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import OtherInfo from "./OtherInfo/OtherInfo";
 
-
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModal } from "../../../redux/reducers/slices/modalCardProductSlice";
 import { setSelectedCard } from "../../../redux/reducers/slices/cardProductSlice";
@@ -139,7 +138,6 @@ const StyledButtonClose = styled(IconButton)(() => {
     backgroundColor: 'transparent',
   }
 })
-
 
 
 function ModalProduct() {
