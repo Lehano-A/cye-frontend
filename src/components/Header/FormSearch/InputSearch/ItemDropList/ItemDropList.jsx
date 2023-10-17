@@ -20,7 +20,7 @@ const StyledListItem = styled(ListItem)(({ params }) => {
 
   return {
     height: '64px',
-
+    maxWidth: "600px",
     '&.MuiAutocomplete-option': {
       display: "flex",
       justifyContent: isHistorySubmitDisplayed ? 'space-between' : 'flex-start',

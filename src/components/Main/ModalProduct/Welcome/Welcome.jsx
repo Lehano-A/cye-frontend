@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, List, ListItem, Typography } from "@mui/material";
+import { Box, List, ListItem, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledList = styled(List)`
@@ -44,7 +44,7 @@ const styleDescription = {
 
 function Welcome() {
   return (
-    <Container sx={{ margin: "80px 0 0 0" }}>
+    <Box sx={{ margin: "80px 0 0 0"}}>
       <StyledList>
 
         <StyledListItem bgcolor="rgba(0, 255, 208, 0.05)">
@@ -95,7 +95,7 @@ function Welcome() {
         </StyledListItem>
 
       </StyledList>
-    </Container>
+    </Box>
   )
 }
 

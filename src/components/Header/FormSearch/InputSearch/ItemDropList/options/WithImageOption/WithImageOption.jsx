@@ -38,6 +38,7 @@ function WithImageOption({ option }) {
     }
   }, [isLoadedImage])
 
+  
   return (
     <>
       <StyledBoxImage params={{ isLoadedImage }}>
@@ -54,7 +55,10 @@ function WithImageOption({ option }) {
         {isDisplayedSkeleton && <Skeleton width="64px" height="64px" />}
 
       </StyledBoxImage>
-      <Typography>{option.title}</Typography>
+      <Typography sx={{
+        whiteSpace: "nowrap",
+        overflow: "hidden", textOverflow: "ellipsis"
+      }}>{option.title}</Typography>
     </>
   )
 }
