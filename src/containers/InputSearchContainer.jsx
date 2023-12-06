@@ -39,6 +39,7 @@ import {
 
 /* ---------------------------------- hooks --------------------------------- */
 import useHistorySubmit from "../hooks/useHistorySubmit";
+import queryString from 'query-string';
 
 
 
@@ -53,7 +54,6 @@ function InputSearchContainer({ handleOnChange }) {
   const isHistorySubmitDisplayed = useSelector(selectIsHistorySubmitDisplayed)
   const saveboxDropListBeforeSubmit = useSelector(selectSaveboxDropListBeforeSubmit)
   const apiFoundProductsForDropList = useSelector(selectApiFoundProductsForDropList)
-
 
   const [value, setValue] = useState(null)
 
@@ -80,13 +80,16 @@ function InputSearchContainer({ handleOnChange }) {
   }, [isOpenedDropList])
 
 
+  /* ----------------------------------------------------------------------- */
+
 
   // запрос к api, после изменения значения в строке поиска
   function reqApiInputLiveChange(e, liveChangeValue) {
     if (e.type === 'change') {
       dispatch(setHasResFromServerAfterLiveChange(false))
+      const searchParams = queryString.stringify({ substr: liveChangeValue })
 
-      api.findProductBySubstr({ substr: liveChangeValue }) // поиск по подстроке
+      api.findProductBySubstr(searchParams) // поиск по подстроке
         .then((arrData) => {
           saveServerDataAfterResApi(arrData)
           updateStateAfterResApi(arrData)
@@ -97,17 +100,19 @@ function InputSearchContainer({ handleOnChange }) {
   }
 
 
+  /* ----------------------------------------------------------------------- */
+
+
   // обновление данных, после ответа от сервера
   function saveServerDataAfterResApi(arrData) {
+    dispatch(setIsHistorySubmitDisplayed(false))
 
     if (arrData.length === 0) {
       dispatch(setIsOpenedDropList(false))
-      dispatch(setIsHistorySubmitDisplayed(false))
     }
 
     if (arrData.length > 0) {
       dispatch(setIsOpenedDropList(true))
-      dispatch(setIsHistorySubmitDisplayed(false))
     }
   }
 
@@ -119,14 +124,16 @@ function InputSearchContainer({ handleOnChange }) {
   }
 
 
+  /* ----------------------------------------------------------------------- */
+
+
   // вызывается при каждом изменении значения (с учётом debounce)
-  function handleInputLiveChange(e, liveChangeValue) {
+  function handleInputLiveChange(e, valueLiveChange) {
 
-    dispatch(setInputValue(liveChangeValue))
-    const liveChangeValueTrim = liveChangeValue.trim()
+    dispatch(setInputValue(valueLiveChange))
+    const valueLiveChangeTrim = valueLiveChange.trim()
 
-
-    if (liveChangeValueTrim === "") {
+    if (valueLiveChangeTrim === "") {
       log.warn(`
         Обработчик: handleInputLiveChange
 
@@ -144,16 +151,16 @@ function InputSearchContainer({ handleOnChange }) {
 
     if (e.type === "change") {
 
-      if (liveChangeValueTrim.length <= 1) {
+      if (valueLiveChangeTrim.length <= 1) {
         getAndSaveHistorySubmit()
         return
       }
 
-      if (liveChangeValueTrim.length >= 2) {
+      if (valueLiveChangeTrim.length >= 2) {
         // если был сабмит (отправка запроса на поиск продукта), то при изменении значения в строке поиска, состояние сабмита сбрасывается
         isSubmitting && dispatch(setIsSubmitting(false))
 
-        timeoutReqApiAfterInputLiveChange(e, liveChangeValueTrim)
+        timeoutReqApiAfterInputLiveChange(e, valueLiveChangeTrim)
         return
       }
     }
@@ -167,6 +174,8 @@ function InputSearchContainer({ handleOnChange }) {
     }
   }
 
+
+  /* ----------------------------------------------------------------------- */
 
 
   /*
@@ -377,10 +386,11 @@ function InputSearchContainer({ handleOnChange }) {
   }
 
 
+  /* ----------------------------------------------------------------------- */
+
 
   // обработчик клика (фокуса) на инпуте
-  function handleOnOpen(e,) {
-
+  function handleOnOpen(e) {
     const inputValueTrim = inputValue.trim()
 
 

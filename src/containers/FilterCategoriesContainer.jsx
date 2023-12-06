@@ -5,9 +5,10 @@ import FilterCategories from "../components/Main/BoxSearchResult/FilterCategorie
 /* --------------------------------- slices --------------------------------- */
 import {
   setUniqueCategories,
-  setActiveButtonInFilter,
+  setActiveButtonFilter,
   setIsActiveButtonShowAllProducts,
   clearUniqueCategories,
+  setWasUsedFilter,
 } from "../redux/reducers/slices/filterCategoriesSlice";
 
 import {
@@ -16,61 +17,62 @@ import {
 
 /* -------------------------------- selectors ------------------------------- */
 import {
-  selectActiveButtonInFilter,
+  selectNameActiveButtonInFilter,
   selectUniqueCategories,
   selectIsActiveButtonShowAllProducts
 } from "../redux/reducers/selectors/filterCategoriesSelectors";
 
 
 
-function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
+function FilterCategoriesContainer({ foundProducts, searchBy }) {
 
   const dispatch = useDispatch()
 
   const uniqueCategories = useSelector(selectUniqueCategories)
-  const activeButtonInFilter = useSelector(selectActiveButtonInFilter)
+  const activeButtonFilter = useSelector(selectNameActiveButtonInFilter)
   const isActiveButtonShowAllProducts = useSelector(selectIsActiveButtonShowAllProducts)
+  const wasUsedFilter = useSelector((state) => state.filterCategories.wasUsedFilter)
 
 
   useEffect(() => {
     // определение коллекции имён кнопок для фильтра
-    const collectionCategories = searchUniqueCategories(apiFoundProductsAfterSubmit)
+    const collectionCategories = searchUniqueCategories(foundProducts)
     dispatch(setUniqueCategories(collectionCategories))
 
     return () => { dispatch(clearUniqueCategories()) }
-  }, [apiFoundProductsAfterSubmit])
-
+  }, [foundProducts])
 
 
 
   useEffect(() => {
-    // если нажата кнопка "показать все продукты"
-    if (activeButtonInFilter === 'showAllProducts') {
-      dispatch(setIsActiveButtonShowAllProducts(true))
-      dispatch(setArrForShowSearchResultProducts(apiFoundProductsAfterSubmit))
-      return
+
+    if (wasUsedFilter) {
+      // если нажата кнопка "показать все продукты"
+      if (activeButtonFilter === 'showAllProducts') {
+        dispatch(setIsActiveButtonShowAllProducts(true))
+        dispatch(setArrForShowSearchResultProducts(foundProducts))
+
+      } else if (activeButtonFilter !== null) { // если нажата "любая другая кнопка категории"
+
+        const filteredProducts = filterProductsByTargetCategory(activeButtonFilter)
+
+        dispatch(setArrForShowSearchResultProducts(filteredProducts))
+        dispatch(setIsActiveButtonShowAllProducts(false))
+      }
     }
 
-    // если нажата "любая другая кнопка категории"
-    if (activeButtonInFilter !== null) {
+    return () => { dispatch(setWasUsedFilter(false)) }
 
-      const filteredProducts = filterProductsByTargetCategory(activeButtonInFilter)
-
-      dispatch(setArrForShowSearchResultProducts(filteredProducts))
-      dispatch(setIsActiveButtonShowAllProducts(false))
-
-    }
-  }, [activeButtonInFilter])
-
+  }, [wasUsedFilter])
 
 
 
   //  Поиск уникальных категорий из входящего массива продуктов
-  function searchUniqueCategories(apiFoundProductsAfterSubmit) {
+  function searchUniqueCategories(dataProducts) {
     const box = {}
 
-    apiFoundProductsAfterSubmit.forEach((product) => {
-      if (searchBy !== "categories") {
+    dataProducts.forEach((product) => {
+      if (searchBy !== "category") {
         box[product.categories.main] = true
       }
 
@@ -90,22 +92,25 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
 
     // эти правила, чтобы кнопка не отжималась
     // а всегда, было одна из всех - активная, и повторные нажатия на активную кнопку игнорировались
-    if (nameButton === activeButtonInFilter || nameButton === null || (nameButton === 'showAllProducts' && activeButtonInFilter === null)) {
+    if (nameButton === activeButtonFilter || nameButton === null || (nameButton === 'showAllProducts' && activeButtonFilter === null)) {
       return
     }
+
     dispatch(setArrForShowSearchResultProducts([]))
-    dispatch(setActiveButtonInFilter(nameButton))
+    dispatch(setActiveButtonFilter(nameButton))
+    dispatch(setWasUsedFilter(true))
   }
+
 
 
   // фильтрация продуктов по целевой категории (при нажатии на соответствующую кнопку фильтра)
   function filterProductsByTargetCategory(nameButton) {
-    const filteredProduct = apiFoundProductsAfterSubmit.filter((product) => {
+    const filteredProduct = foundProducts.filter((product) => {
 
-      // если ранее запрос на поиск продуктов НЕ был по "категории"
+      // если запрос на поиск продуктов НЕ был по "категории"
       // тогда нужно отобразить дополнительную кнопку фильтра с "основной" категорией продукта
       // (а если БЫЛ запрос по "категории" - тогда этой кнопки не будет)
-      if (searchBy !== "categories") {
+      if (searchBy !== "category") {
         if (nameButton === product.categories.main) {
           return true
         }
@@ -120,13 +125,13 @@ function FilterCategoriesContainer({ apiFoundProductsAfterSubmit, searchBy }) {
   }
 
 
+
   return (
     <FilterCategories
       handleOnChange={handleOnChange}
-      activeButtonInFilter={activeButtonInFilter}
+      activeButtonFilter={activeButtonFilter}
       uniqueCategories={uniqueCategories}
       isActiveButtonShowAllProducts={isActiveButtonShowAllProducts}
-
     />
   )
 }

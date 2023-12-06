@@ -13,6 +13,7 @@ const StyledBoxImage = styled(Box)(() => {
   }
 })
 
+
 function WithImageOption({ option }) {
 
   const [isLoadedImage, setIsLoadedImage] = useState(null)
@@ -30,7 +31,6 @@ function WithImageOption({ option }) {
   }, [])
 
 
-
   useEffect(() => {
     if (isLoadedImage) {
       clearTimeout(timerIdSkeleton)
@@ -38,7 +38,8 @@ function WithImageOption({ option }) {
     }
   }, [isLoadedImage])
 
-  
+
+
   return (
     <>
       <StyledBoxImage params={{ isLoadedImage }}>

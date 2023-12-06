@@ -14,7 +14,6 @@ import {
 } from "../../../../../redux/reducers/selectors/inputSearchSelectors";
 
 
-
 const StyledListItem = styled(ListItem)(({ params }) => {
   const { isHistorySubmitDisplayed } = params
 
@@ -35,14 +34,11 @@ function ItemDropList({ props, option }) {
   const inputValue = useSelector(selectInputValue)
   const isHistorySubmitDisplayed = useSelector(selectIsHistorySubmitDisplayed)
 
-
-
   return (
     <StyledListItem {...props} params={{ isHistorySubmitDisplayed }}>
 
-
       {
-        ((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.categories)) &&
+        ((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.category)) &&
         <BrandAndCategoryOption option={option} />
       }
 
@@ -61,7 +57,6 @@ function ItemDropList({ props, option }) {
           <ButtonDeleteFromHistorySubmit option={option} />
         </>
       }
-
 
     </StyledListItem>
   )

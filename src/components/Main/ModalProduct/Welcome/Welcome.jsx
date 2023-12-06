@@ -43,8 +43,9 @@ const styleDescription = {
 
 
 function Welcome() {
+
   return (
-    <Box sx={{ margin: "80px 0 0 0"}}>
+    <Box sx={{ margin: "80px 0 0 0" }}>
       <StyledList>
 
         <StyledListItem bgcolor="rgba(0, 255, 208, 0.05)">

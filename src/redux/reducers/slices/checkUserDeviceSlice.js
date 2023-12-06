@@ -1,15 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  userDevice: null,
+}
+
 
 const checkUserDeviceSlice = createSlice({
   name: 'checkUserDevice',
-  initialState: {
-    userDevice: null,
-  },
+  initialState,
   reducers: {
     setUserDevice: (state, action) => { state.userDevice = action.payload },
   }
 })
+
 
 export const { setUserDevice } = checkUserDeviceSlice.actions
 

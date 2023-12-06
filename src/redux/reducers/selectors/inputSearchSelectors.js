@@ -1,6 +1,6 @@
 const selectInputValue = state => state.inputSearch.inputValue;
 
-const selectSavedInputValueAfterSubmit = state => state.inputSearch.savedInputValueAfterSubmit;
+const selectInputValueAfterSubmit = state => state.inputSearch.inputValueAfterSubmit;
 
 const selectIsSubmitting = state => state.inputSearch.isSubmitting;
 
@@ -10,15 +10,12 @@ const selectHasResFromServerAfterLiveChange = state => state.inputSearch.hasResF
 
 const selectIsHistorySubmitDisplayed = state => state.inputSearch.isHistorySubmitDisplayed;
 
-const selectIsNoResultLivingSearch = state => state.inputSearch.isNoResultLivingSearch;
-
 
 export {
   selectInputValue,
-  selectSavedInputValueAfterSubmit,
+  selectInputValueAfterSubmit,
   selectIsSubmitting,
   selectWasFirstSubmit,
   selectHasResFromServerAfterLiveChange,
   selectIsHistorySubmitDisplayed,
-  selectIsNoResultLivingSearch,
 }

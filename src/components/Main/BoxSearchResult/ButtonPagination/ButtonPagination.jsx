@@ -1,28 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles"
-import api from "../../../../api/api";
 import LoadingIndicator from "../../../LoadingIndicator/LoadingIndicator";
+import { useLocation, useParams } from "react-router-dom";
+import createReqConfigSearchProduct from "../../../../utils/containers/FormSearchContainer/createConfigReqSearchProduct";
+import createOptionForPagination from "../../../../utils/containers/FormSearchContainer/createOptionForPagination";
 
 /* --------------------------------- slices --------------------------------- */
-import { setPaginationData } from "../../../../redux/reducers/slices/buttonPaginationSlice";
-
-import { setIsDisplayedButtonPagination } from "../../../../redux/reducers/slices/buttonPaginationSlice";
-
-import { setApiFoundProductsAfterSubmit } from "../../../../redux/reducers/slices/searchRequestProductSlice";
-
-import { resetDefaultButtonsFilter } from "../../../../redux/reducers/slices/filterCategoriesSlice";
-
-import { setArrForShowSearchResultProducts } from "../../../../redux/reducers/slices/boxSearchResultSlice";
-
+import { setIsPressedButtonPagination } from "../../../../redux/reducers/slices/paginationSlice";
+import { resetByDefaultButtonsFilter } from "../../../../redux/reducers/slices/filterCategoriesSlice";
 
 /* -------------------------------- selectors ------------------------------- */
-import { selectPaginationData } from "../../../../redux/reducers/selectors/buttonPaginationSelectors";
-
+import { selectPaginationData } from "../../../../redux/reducers/selectors/paginationSelectors";
 import { selectApiFoundProductsAfterSubmit } from "../../../../redux/reducers/selectors/searchRequestProductSelectors";
 
-import { selectSavedInputValueAfterSubmit } from "../../../../redux/reducers/selectors/inputSearchSelectors";
+/* -------------------------------- hooks ------------------------------- */
+import useSendingReqToApi from "../../../../hooks/useSendingReqToApi";
 
 
 const StyledButton = styled(Button)(({ theme }) => {
@@ -44,84 +38,51 @@ const StyledButton = styled(Button)(({ theme }) => {
 function ButtonPagination() {
 
   const dispatch = useDispatch()
+  const sendReqToApi = useSendingReqToApi()
+  const params = useParams()
+  const location = useLocation()
+
   const paginationData = useSelector(selectPaginationData)
-  const [isPressedButton, setIsPressedButton] = useState(null)
-
+  const isPressedButtonPagination = useSelector((state) => state.pagination.isPressedButtonPagination)
   const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
-  const savedInputValueAfterSubmit = useSelector(selectSavedInputValueAfterSubmit)
-
-
-
-  function saveDataAndUpdateStateAfterResApi(response) {
-    const { page, totalPages } = paginationData
-    const { searchBy, pagination, result } = response
-    
-    const concatProducts = apiFoundProductsAfterSubmit.result.concat(result)
-
-    dispatch(setApiFoundProductsAfterSubmit({
-      searchBy: searchBy,
-      pagination: pagination,
-      result: concatProducts,
-    }))
-    dispatch(setArrForShowSearchResultProducts(concatProducts))
-    dispatch(setPaginationData(pagination))
-
-    if (totalPages - page === 1) {
-      dispatch(setIsDisplayedButtonPagination(false))
-    }
-  }
-
-
-
-  function sendReqPagination(method, newDataPaginationToServer) {
-    const { searchBy } = apiFoundProductsAfterSubmit
-
-    api[method](newDataPaginationToServer)
-      .then((response) => {
-        saveDataAndUpdateStateAfterResApi(response)
-      })
-      .catch(() => {
-        throw new Error(`
-      searchBy: ${searchBy}
-      Возникла ошибка во время поиска продукта при нажатии кнопки "Показать ещё"
-      `)
-      })
-      .finally(() => { setIsPressedButton(false) })
-  }
-
 
 
   function handleOnClick() {
-    const { searchBy } = apiFoundProductsAfterSubmit
+    const { search } = apiFoundProductsAfterSubmit
+    const { searchBy } = search
 
-    setIsPressedButton(true)
-    dispatch(resetDefaultButtonsFilter())
+    dispatch(setIsPressedButtonPagination(true))
+    dispatch(resetByDefaultButtonsFilter())
 
-    const newDataForPaginationToServer = {
-      searchBy: searchBy,
-      value: savedInputValueAfterSubmit,
-      pagination: paginationData,
-    }
+    const dataForOption = createOptionForPagination(
+      apiFoundProductsAfterSubmit,
+      paginationData,
+      location,
+      params
+    )
 
-    if (searchBy === 'brands') {
-      sendReqPagination('findProductByBrand', newDataForPaginationToServer) // бренд
-      return
-    }
+    const { apiMethod, searchData } = createReqConfigSearchProduct(
+      { ...dataForOption, page: paginationData.page },
+    )
 
-    if (searchBy === 'categories') {
-      sendReqPagination('findProductByCategory', newDataForPaginationToServer) // категория
-      return
-    }
-
-    sendReqPagination('findProductBySubmit', newDataForPaginationToServer) // всё остальное
+    sendReqToApi.findProductForPagination(apiMethod, searchData, searchBy)
   }
-
 
 
 
   return (
-    <StyledButton onClick={handleOnClick}>
-      {isPressedButton ? <LoadingIndicator color={(theme) => { return theme.palette.fullNatural.main }} /> : "Показать ещё"}
+    <StyledButton
+      onClick={handleOnClick}
+      disabled={isPressedButtonPagination}
+    >
+      {
+        isPressedButtonPagination ?
+          <LoadingIndicator
+            color={(theme) => { return theme.palette.fullNatural.main }}
+          />
+          :
+          "Показать ещё"
+      }
     </StyledButton>
   )
 }

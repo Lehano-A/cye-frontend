@@ -1,43 +1,41 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import BoxSearchResultContainer from "../../containers/BoxSearchResultContainer";
-import ModalProduct from "./ModalProduct/ModalProduct";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Box } from "@mui/material";
+import { styled } from "@mui/material/styles"
 import Welcome from "./ModalProduct/Welcome/Welcome";
-import checkerUserDevice from "../../utils/checkerUserDevice";
-
-/* --------------------------------- slices --------------------------------- */
-import { setUserDevice } from "../../redux/reducers/slices/checkUserDeviceSlice";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectWasFirstSubmit } from "../../redux/reducers/selectors/inputSearchSelectors";
 
-const styleMainBox = {
-  maxWidth: '1280px',
-  margin: '0 auto'
-}
+
+const StyledBoxLoadingIndicator = styled(Box)(() => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: "80px 0 0 0",
+  }
+})
 
 
 
 function Main() {
-  const dispatch = useDispatch()
 
-  const isVisible = useSelector(state => state.modalCardProduct.visible)
   const wasFirstSubmit = useSelector(selectWasFirstSubmit)
-
-  useEffect(() => {
-    const device = checkerUserDevice()
-    dispatch(setUserDevice(device))
-  }, [])
+  const isLoadingBoxSearchResult = useSelector((state) => state.boxSearchResult.isLoadingIndicator)
 
 
   return (
-    <main style={styleMainBox}>
+    <>
+      {!wasFirstSubmit && <Welcome />}
 
-      {wasFirstSubmit ? <BoxSearchResultContainer /> : <Welcome />}
-
-      {isVisible && <ModalProduct />}
-
-    </main>
+      {
+        isLoadingBoxSearchResult &&
+        <StyledBoxLoadingIndicator>
+          <LoadingIndicator />
+        </StyledBoxLoadingIndicator>
+      }
+    </>
   )
 }
 

@@ -1,38 +1,52 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  uniqueCategories: [],
+  activeButtonFilter: null,
+  isActiveButtonShowAllProducts: true,
+  isFilterDisplayed: null,
+  wasUsedFilter: null,
+}
+
 
 const filterCategoriesSlice = createSlice({
   name: 'filterCategories',
-  initialState: {
-    uniqueCategories: [],
-    activeButtonInFilter: null,
-    isActiveButtonShowAllProducts: true,
-    isFilterDisplayed: null,
-  },
+  initialState,
   reducers: {
     setUniqueCategories: (state, action) => { state.uniqueCategories = action.payload },
 
-    setActiveButtonInFilter: (state, action) => { state.activeButtonInFilter = action.payload },
+    setActiveButtonFilter: (state, action) => { state.activeButtonFilter = action.payload },
 
     setIsActiveButtonShowAllProducts: (state, action) => { state.isActiveButtonShowAllProducts = action.payload },
 
     clearUniqueCategories: (state) => { state.uniqueCategories = [] },
 
-    resetDefaultButtonsFilter: (state) => {
-      state.activeButtonInFilter = null
+    setWasUsedFilter: (state, action) => { state.wasUsedFilter = action.payload },
+
+    setIsFilterDisplayed: (state, action) => { state.isFilterDisplayed = action.payload },
+
+    resetByDefaultButtonsFilter: (state) => {
+      state.activeButtonFilter = null
       state.isActiveButtonShowAllProducts = true
     },
-    setIsFilterDisplayed: (state, action) => { state.isFilterDisplayed = action.payload },
+
+    replaceSliceFilterCategories: (state, action) => { return action.payload },
+
+    resetStatesByDefaultFilterCategories: () => { return initialState },
   }
 })
 
+
 export const {
   setUniqueCategories,
-  setActiveButtonInFilter,
+  setActiveButtonFilter,
   setIsActiveButtonShowAllProducts,
   clearUniqueCategories,
-  resetDefaultButtonsFilter,
   setIsFilterDisplayed,
+  setWasUsedFilter,
+  resetByDefaultButtonsFilter,
+  replaceSliceFilterCategories,
+  resetStatesByDefaultFilterCategories,
 } = filterCategoriesSlice.actions
 
 export default filterCategoriesSlice.reducer

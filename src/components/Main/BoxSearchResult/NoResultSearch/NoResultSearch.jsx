@@ -2,7 +2,16 @@ import React from "react";
 import { Box, Container, Stack, Typography, } from "@mui/material";
 
 
-function NoResultSearch({ searchValueWithoutResult }) {
+
+function NoResultSearch({ searchValueWithoutResult, apiFoundProductsAfterSubmit }) {
+
+  const { search } = apiFoundProductsAfterSubmit
+  const { searchBy } = search
+
+  const searchByValue = searchBy === 'brand' ? 'бренда' : searchBy === 'category' && 'категории'
+  const textFailedSearch = searchBy === 'brand' ? 'такой бренд' : searchBy === 'category' ? ' такую категорию' : 'такой продукт'
+
+
   return (
     <Container>
       <Stack>
@@ -11,7 +20,7 @@ function NoResultSearch({ searchValueWithoutResult }) {
           <Typography
             variant="h6"
             sx={{ marginRight: '10px' }}>
-            Находились в поисках:
+            Находились в поисках {searchByValue}
           </Typography>
 
           <Typography
@@ -23,7 +32,7 @@ function NoResultSearch({ searchValueWithoutResult }) {
         </Box>
 
         <Typography>
-          К сожалению, такой продукт не получилось найти 😕
+          К сожалению, {textFailedSearch} не получилось найти 😕
         </Typography>
 
       </Stack>

@@ -1,22 +1,16 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux";
 import log from 'loglevel'
-import api from "../api/api";
 import FormSearch from "../components/Header/FormSearch/FormSearch"
-import {
-  ENDPOINT_SUBMIT,
-  ENDPOINT_BRANDS,
-  ENDPOINT_CATEGORIES,
-} from "../utils/constants";
-
 import { saveToHistorySubmit } from "../utils/localStorage/HistorySubmit/historySubmit"
 import forcedBlur from "../utils/forcedBlur";
 import { checkValidInputValue } from "../validation/formSearchValidation";
-import { checkActionByValue } from "../utils/FormSearch/checkActionByValue";
-import { getValueFromOption } from "../utils/FormSearch/getValueFromOption";
+import { getValueFromOption } from "../utils/containers/FormSearchContainer/getValueFromOption.js";
+import createReqConfigSearchProduct from "../utils/containers/FormSearchContainer/createConfigReqSearchProduct.js";
+import { AFTER_ERROR_PAGE, BEFORE_REQ_TO_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK } from "../utils/constants.js";
 
 /* --------------------------------- slices --------------------------------- */
-import { setIsDisplayedButtonPagination, setPaginationData } from "../redux/reducers/slices/buttonPaginationSlice";
+import { resetStatesByDefaultButtonPagination, setIsDisplayedButtonPagination, setPaginationData } from "../redux/reducers/slices/paginationSlice.js";
 
 import {
   setIsOpenedDropList,
@@ -25,103 +19,69 @@ import {
 
 import {
   setInputValue,
-  setSavedInputValueAfterSubmit,
   setIsSubmitting,
   setWasFirstSubmit,
 } from "../redux/reducers/slices/inputSearchSlice";
 
-import { setApiFoundProductsAfterSubmit, } from "../redux/reducers/slices/searchRequestProductSlice";
-
 import {
   setArrForShowSearchResultProducts,
-  setSearchValueWithoutResult,
+  setIsLoadingIndicator,
 } from "../redux/reducers/slices/boxSearchResultSlice";
 
 import {
   clearUniqueCategories,
-  resetDefaultButtonsFilter,
+  resetByDefaultButtonsFilter,
 } from "../redux/reducers/slices/filterCategoriesSlice";
 
 
 /* -------------------------------- selectors ------------------------------- */
 import {
   selectInputValue,
-  selectSavedInputValueAfterSubmit,
+  selectInputValueAfterSubmit,
   selectWasFirstSubmit,
 } from "../redux/reducers/selectors/inputSearchSelectors";
 
 import { selectApiFoundProductsAfterSubmit } from "../redux/reducers/selectors/searchRequestProductSelectors";
 
+
 /* --------------------------------- actions -------------------------------- */
-import {
-  startLoadingIndicatorBoxSearchResult,
-  endLoadingIndicatorBoxSearchResult,
-} from "../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions";
+import { startLoadingIndicatorBoxSearchResult } from "../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions";
 
 
 /* ---------------------------------- hooks --------------------------------- */
 import useDelayStartLoadingIndicator from "../hooks/useDelayStartLoadingIndicator";
-
+import useSendingReqToApi from "../hooks/useSendingReqToApi.js";
+import useActionsNavigation from "../hooks/useActionsNavigation/useActionsNavigation.js";
 
 
 
 function FormSearchContainer() {
 
   const dispatch = useDispatch();
+  const sendingReqToApi = useSendingReqToApi()
+  const actionsNavigation = useActionsNavigation()
 
   const inputValue = useSelector(selectInputValue)
-  const savedInputValueAfterSubmit = useSelector(selectSavedInputValueAfterSubmit)
+  const inputValueAfterSubmit = useSelector(selectInputValueAfterSubmit)
   const wasFirstSubmit = useSelector(selectWasFirstSubmit)
   const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
   const delayStartLoadingIndicatorBoxSearchResult = useDelayStartLoadingIndicator(startLoadingIndicatorBoxSearchResult, [apiFoundProductsAfterSubmit?.result], 300)
-
-
-  function sendReq(method, searchData) {
-    api[method](searchData)
-      .then((response) => {
-        saveDataAndUpdateStateAfterResApi(response, searchData.value)
-      })
-      .catch(() => {
-        throw new Error(`Возникла ошибка при запросе поиска продукта`)
-      })
-      .finally(() => {
-        dispatch(endLoadingIndicatorBoxSearchResult())
-      })
-  }
-
-
-  // отправление запроса на сервер
-  function sendReqToServer(searchData, endpoint) {
-    // сабмит
-    if (ENDPOINT_SUBMIT === endpoint) {
-      sendReq('findProductBySubmit', searchData)
-      return
-    }
-
-    // бренд
-    if (ENDPOINT_BRANDS === endpoint) {
-      sendReq('findProductByBrand', searchData)
-      return
-    }
-
-    // категории
-    if (ENDPOINT_CATEGORIES === endpoint) {
-      sendReq('findProductByCategory', searchData)
-      return
-    }
-  }
+  const inputValueBeforeClear = useSelector((state) => state.inputSearch.inputValueBeforeClear)
+  const pageWithError = useSelector((state) => state.navigation.pageWithError)
 
 
   // изменение стэйтов перед запросом на сервер
   function changeStatesBeforeReqApi() {
     dispatch(setArrForShowSearchResultProducts([]))
     dispatch(clearUniqueCategories())
-    dispatch(resetDefaultButtonsFilter())
+    dispatch(resetByDefaultButtonsFilter())
     dispatch(setIsSubmitting(true))
     dispatch(setIsOpenedDropList(false))
     dispatch(setSaveboxDropListBeforeSubmit(null))
     dispatch(setIsDisplayedButtonPagination(false))
     dispatch(setPaginationData(null))
+    dispatch(resetStatesByDefaultButtonPagination())
+    dispatch(setIsLoadingIndicator(true))
     forcedBlur() // если строка с пробелом в конце, тогда "выпадающий список" уже будет закрытым, поэтому обработчик handleCloseDropList, в котором находится необходимая логика, не сработает
 
     delayStartLoadingIndicatorBoxSearchResult.createTimer()
@@ -130,39 +90,8 @@ function FormSearchContainer() {
   }
 
 
-  // сохранение данных от сервера и обновление стэйтов, после ответа
-  function saveDataAndUpdateStateAfterResApi(response, searchValue) {
-    const { result } = response
 
-    dispatch(setApiFoundProductsAfterSubmit(response))
-    dispatch(setArrForShowSearchResultProducts(result))
-    dispatch(setSavedInputValueAfterSubmit(searchValue))
-
-    if (result.length === 0) {
-      dispatch(setSearchValueWithoutResult(searchValue))
-      return
-    }
-
-    const { pagination } = response
-    const { page, totalPages } = pagination
-
-    totalPages - page > 0 && dispatch(setIsDisplayedButtonPagination(true))
-    dispatch(setPaginationData(pagination))
-  }
-
-
-
-  /*
-    e.type === "click " - выбор опции кликом
-    e.type === "keydown" - "поиск по подстроке через ENTER" или "выбор опции стрелками + ENTER"
-    option - может быть объектом или строкой:
-      { brand: "Nestle" } или "nes"
-    action - "createOption"
-    ---
-    вызывается при сабмите введённой строки или при выборе опции (стрелками или курсором) из выпадающего списка
-  */
   const handleOnChange = (e, option, action) => {
-
     if (action === "createOption") {
       log.debug(`
       Обработчик: handleOnChange
@@ -179,15 +108,13 @@ function FormSearchContainer() {
     const onlyValueWithoutTrim = getValueFromOption(option)
     const onlyValueTrim = onlyValueWithoutTrim.trim()
 
-    dispatch(setInputValue(onlyValueWithoutTrim))
-
     // inputValue и onlyValueTrim будут отличаться,
     // если в инпут введена подстрока и выбрано значение из выпадающего списка
     const isValidInputValue = checkValidInputValue({
       eventType: e.type,
       option,
       inputValue,
-      savedInputValueAfterSubmit,
+      inputValueAfterSubmit,
       onlyValueTrim,
     })
 
@@ -197,13 +124,40 @@ function FormSearchContainer() {
       return
     }
 
+
+    if (pageWithError.status === 404) {
+
+      actionsNavigation.pushPathInHistory({
+        stage: AFTER_ERROR_PAGE,
+        pathData: { option }
+      })
+    } else {
+
+      actionsNavigation.replacePathname({
+        stage: BEFORE_REQ_TO_API,
+        dataForSavingLocationState: {
+          inputValue: inputValueBeforeClear || onlyValueTrim
+        }
+      })
+    }
+
+    dispatch(setInputValue(onlyValueWithoutTrim))
+
     changeStatesBeforeReqApi()
 
-    const { searchValue, endpoint } = checkActionByValue({ e, option })
-    sendReqToServer(searchValue, endpoint)
+    const { apiMethod, searchData, segmentSearch = null } = createReqConfigSearchProduct({ e, option, searchValuePagination: onlyValueTrim })
 
-    const isSubStr = !option?.title && !option.brand && !option.categories
-    saveToHistorySubmit(isSubStr ? { title: onlyValueTrim } : option, onlyValueTrim)
+
+    if (pageWithError.status === 404) {
+      sendingReqToApi.findProduct({ apiMethod, segmentSearch, searchData, stage: MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK })
+
+    } else {
+      sendingReqToApi.findProduct({ apiMethod, segmentSearch, searchData })
+    }
+
+    const isSubStr = !option?.text && !option.permalink && !option.title // .permalink - будет обязательно у 'brand' или у 'category'
+
+    saveToHistorySubmit(isSubStr ? { text: onlyValueTrim } : option, onlyValueTrim)
   }
 
 
@@ -212,7 +166,6 @@ function FormSearchContainer() {
 
     handleOnChange(e, inputValue)
   }
-
 
 
 

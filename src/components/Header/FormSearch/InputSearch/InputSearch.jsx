@@ -4,6 +4,7 @@ import ItemDropList from "./ItemDropList/ItemDropList";
 import Input from "./Input/Input";
 import DropListbox from "./DropListbox/DropListbox";
 
+
 const styleMainBox = {
   display: 'flex',
   justifyContent: 'center',
@@ -13,7 +14,9 @@ const styleMainBox = {
 }
 
 
+
 function InputSearch({
+
   value,
   inputValue,
   isOpenedDropList,
@@ -41,16 +44,16 @@ function InputSearch({
         onInputChange={handleInputLiveChange} // вызывается при каждом изменении значения в поле ввода (с учётом debounce)
         open={isOpenedDropList}
         onClose={handleCloseDropList}
-        onOpen={handleOnOpen
-        }
+        onOpen={handleOnOpen}
         filterOptions={(option) => option}
         options={apiFoundProductsForDropList === null ? [] : apiFoundProductsForDropList} // принимает только массив
         getOptionLabel={(option) => {
+          const { brand, category, text, title } = option
+
           return (
-            option.brand ? option.brand :
-              option.categories ? option.categories :
-                option.title ? option.title : option
+            brand || category || text || title || option
           )
+
         }} // нужно вернуть только строку (вызывается для каждой опции выпадающего окна)
         ListboxComponent={DropListbox}
         componentsProps={{

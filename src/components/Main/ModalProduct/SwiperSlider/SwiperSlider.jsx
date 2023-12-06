@@ -15,7 +15,6 @@ import './styles.css';
 
 
 function SwiperSlider({ images }) {
-
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [boxStatesLoadedInCarousel, setBoxStatesLoadedInCarousel] = useState([])
   const [isLoadedInCarousel, setIsLoadedInCarousel] = useState({})

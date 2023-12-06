@@ -7,7 +7,11 @@ function checkValidInputValue(params) {
   params.inputValue = params.inputValue.trim()
   params.onlyValueTrim = params.onlyValueTrim.trim()
 
-  const { eventType, option, inputValue, savedInputValueAfterSubmit,  onlyValueTrim } = params
+  const { eventType, option, inputValue, inputValueAfterSubmit, onlyValueTrim } = params
+  const optionValue = option.text ? option.text :
+                      option.brand ? option.brand :
+                      option.category
+
 
 
   // если длина значения <= 1, тогда запрос не отправляется или пустая строка
@@ -31,11 +35,11 @@ function checkValidInputValue(params) {
   // (в том числе, когда сначала выбрали вариант из списка, стёрли символ и опять нажали на этот же вариант в списке)
   // "keydown":
   // 1) поиск через ENTER, по введённой подстроке
-  // 2) или по выбранному варианту стрелками на клавиатуре + ENTER (в этом случае -  option имеет объект {title: ..., imagesUrl: ...})
+  // 2) или по выбранному варианту стрелками на клавиатуре + ENTER (в этом случае -  option имеет объект {text: ..., imagesUrl: ...})
   if (eventType === 'keydown') {
     // убеждаемся, что выбран вариант из выпадающего списка
     // и что этот вариант совпадает с предыдущим значением сабмита
-    if (option.title && option.title === savedInputValueAfterSubmit) {
+    if (optionValue && optionValue === inputValueAfterSubmit) {
       log.error(`
         ********** Тип события: ${eventType} **********
 
@@ -46,7 +50,7 @@ function checkValidInputValue(params) {
     }
 
     // если значение в строке совпадает со значением, после сабмита
-    if (inputValue === savedInputValueAfterSubmit && (inputValue === option.title || savedInputValueAfterSubmit === option.title)) {
+    if (inputValue === inputValueAfterSubmit && (inputValue === optionValue || inputValueAfterSubmit === optionValue)) {
       log.error(`
         ********** Тип события: ${eventType} **********
 
@@ -56,7 +60,7 @@ function checkValidInputValue(params) {
       return false
     }
 
-    if (inputValue === savedInputValueAfterSubmit && option.title === undefined) {
+    if (inputValue === inputValueAfterSubmit && optionValue === undefined) {
       log.error(`
         ********** Тип события: ${eventType} **********
 
@@ -69,7 +73,7 @@ function checkValidInputValue(params) {
 
   // "submit" - поиск по клику на кнопке поиска (только подстрока)
   if (eventType === 'submit') {
-    if (inputValue === savedInputValueAfterSubmit) {
+    if (inputValue === inputValueAfterSubmit) {
       log.error(`
         ********** Тип события: ${eventType} **********
 
@@ -81,7 +85,7 @@ function checkValidInputValue(params) {
 
   // "click" - поиск по клику на вариант из выпадающего списка
   if (eventType === 'click') {
-    if (option.title && option.title === savedInputValueAfterSubmit) {
+    if (optionValue && optionValue === inputValueAfterSubmit) {
       log.error(`
         ********** Тип события: ${eventType} **********
 

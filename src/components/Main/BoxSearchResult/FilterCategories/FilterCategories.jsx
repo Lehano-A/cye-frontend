@@ -4,17 +4,18 @@ import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 function FilterCategories({
   handleOnChange,
-  activeButtonInFilter,
+  activeButtonFilter,
   uniqueCategories,
   isActiveButtonShowAllProducts,
 }) {
+
 
   return (
     <>
       <ToggleButtonGroup
         exclusive
         onChange={handleOnChange}
-        value={activeButtonInFilter}
+        value={activeButtonFilter}
       >
 
         {uniqueCategories.length > 0 &&

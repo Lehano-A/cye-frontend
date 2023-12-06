@@ -66,6 +66,17 @@ const palette = {
 
 
 const theme = createTheme({
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        body: {
+          margin: 0,
+        }
+      }
+    },
+  },
+
+
   MuiDialog: {
     styleOverrides: {
       root: {
@@ -77,11 +88,14 @@ const theme = createTheme({
     },
   },
 
+
   typography: {
     fontFamily: 'Roboto',
   },
 
+
   palette: palette,
+
 
   components: {
     MuiAutocomplete: {
@@ -101,6 +115,7 @@ const theme = createTheme({
       },
     },
 
+
     MuiTypography: {
       defaultProps: {
         variantMapping: {
@@ -115,6 +130,7 @@ const theme = createTheme({
       },
     },
 
+
     MuiPaper: {
       variants: [{
         props: { variant: 'header' },
@@ -125,6 +141,7 @@ const theme = createTheme({
       }],
     },
 
+
     MuiCard: {
       variants: [{
         props: { variant: 'searchResult' },
@@ -133,6 +150,7 @@ const theme = createTheme({
         }
       }]
     },
+
 
     MuiTextField: {
       styleOverrides: {
@@ -156,6 +174,7 @@ const theme = createTheme({
       },
     },
 
+    
     MuiToggleButtonGroup: {
       styleOverrides: {
         root: {

@@ -1,13 +1,16 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Paper } from "@mui/material";
 import FormSearchContainer from "../../containers/FormSearchContainer";
 import logo from '../../images/logo/logo.svg'
 
-
 /* -------------------------------- selectors ------------------------------- */
 import { selectIsLoadingIndicatorBoxSearchResult } from "../../redux/reducers/selectors/boxSearchResultSelectors";
 import { selectIsFilterDisplayed } from "../../redux/reducers/selectors/filterCategoriesSelectors";
+
+/* --------------------------------- actions --------------------------------- */
+import { resetStatesApp } from "../../redux/reducers/actions/common/resetStatesApp";
 
 
 const styleBoxForm = {
@@ -17,14 +20,17 @@ const styleBoxForm = {
 }
 
 
+
 function Header() {
+
+  const dispatch = useDispatch()
 
   const isFilterDisplayed = useSelector(selectIsFilterDisplayed)
   const isLoadingIndicatorBoxSearchResult = useSelector(selectIsLoadingIndicatorBoxSearchResult)
+  const pageWithError = useSelector((state) => state.navigation.pageWithError)
 
 
   return (
-
     <Paper variant="header">
       <Box
         component="header"
@@ -35,15 +41,20 @@ function Header() {
           minHeight: "240px",
           'backgroundColor': '#eef0f9',
           padding: '0 0 80px',
-          margin: isFilterDisplayed || isLoadingIndicatorBoxSearchResult ? `0 0 80px 0` : `0 0 31px 0`,
+          margin: isFilterDisplayed || isLoadingIndicatorBoxSearchResult || pageWithError.status ? `0 0 80px 0` : `0 0 31px 0`,
         }}
       >
-
 
         <Box sx={{ position: 'relative', height: "60px", display: "flex", flexDirection: "column", alignItems: "center", margin: "30px 0 50px " }}>
 
           <Box sx={{ width: "150px" }}>
-            <img src={logo} sx={{ opacity: '100%' }} alt="Логотип сайта" />
+            <Link
+              to="/"
+              state={{ inputValue: "" }}
+              onClick={() => { dispatch(resetStatesApp()) }}
+            >
+              <img src={logo} sx={{ opacity: '100%' }} alt="Логотип сайта" />
+            </Link>
           </Box>
 
         </Box>

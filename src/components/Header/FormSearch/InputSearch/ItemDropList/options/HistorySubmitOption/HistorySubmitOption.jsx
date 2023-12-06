@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { grey } from '@mui/material/colors';
 
 
+
 function HistorySubmitOption({ option }) {
 
   return (
@@ -12,7 +13,7 @@ function HistorySubmitOption({ option }) {
       <SearchIcon sx={{ color: grey[400], marginRight: '10px' }} />
 
       <Typography sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-        {option.title || option.brand || option.categories}
+        {option.text || option.brand || option.category || option.title}
       </Typography>
 
     </Box>

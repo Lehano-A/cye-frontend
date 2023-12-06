@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
+
 const styleBrandAndCategoryBox = {
   display: 'flex',
   alignItems: 'center'
@@ -15,7 +16,9 @@ const styleBrandAndCategoryText = {
 }
 
 
+
 function BrandAndCategoryOption({ option }) {
+
   return (
     <Box sx={styleBrandAndCategoryBox}>
 
@@ -24,7 +27,7 @@ function BrandAndCategoryOption({ option }) {
       </Typography>
 
       <Typography sx={{ fontWeight: 700 }}>
-        {option.brand ? option.brand : option.categories}
+        {option.brand ? option.brand : option.category}
       </Typography>
 
     </Box>

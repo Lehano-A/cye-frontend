@@ -2,9 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton } from "@mui/material";
-import { getValueFromOption } from "../../../../../../utils/FormSearch/getValueFromOption";
+import { getValueFromOption } from "../../../../../../utils/containers/FormSearchContainer/getValueFromOption";
 import { removeByValueFromHistory } from "../../../../../../utils/localStorage/HistorySubmit/historySubmit";
-
 
 /* --------------------------------- slices --------------------------------- */
 import { setApiFoundProductsForDropList } from "../../../../../../redux/reducers/slices/dropListPreSearchResultSlice";

@@ -1,35 +1,14 @@
 class Api {
 
   constructor() {
-    this.baseUrl = 'http://localhost:3000/api/'
-    // this.baseUrl = 'https://чтояем.рф/api/'
+    // this.baseUrl = 'http://localhost:3000/api/'
+    this.baseUrl = 'https://чтояем.рф/api/'
   }
 
-
-  findProductById(id) {
-    return fetch(`${this.baseUrl}search/products/${id}`)
-      .then((res) => { return this._getResponse(res) })
-  }
-
-
-  // поиск по "бренду"
-  findProductByBrand(data) {
-    return fetch(`${this.baseUrl}search/products/brands`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((res) => { return this._getResponse(res) })
-  }
-
-
-  // поиск по "категории"
-  findProductByCategory(data) {
-    return fetch(`${this.baseUrl}search/products/categories`, {
-      method: 'POST',
-      body: JSON.stringify(data),
+  // поиск по бренду, категории или тексту
+  findProduct = (querySearchParams, segmentSearch) => {
+    return fetch(`${this.baseUrl}search/products${segmentSearch ? `/${segmentSearch}` : '/'}?${querySearchParams}`, {
+      method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -39,10 +18,9 @@ class Api {
 
 
   // "живой" поиск по подстроке
-  findProductBySubstr(data) {
-    return fetch(`${this.baseUrl}search/live/products/`, {
-      method: 'POST',
-      body: JSON.stringify(data),
+  findProductBySubstr = (querySearchParams) => {
+    return fetch(`${this.baseUrl}search/live/products/?${querySearchParams}`, {
+      method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -51,26 +29,28 @@ class Api {
   }
 
 
-  // поиск по нажатию "Enter" или выбору варианта из выпадающего окна
-  findProductBySubmit(data) {
-    return fetch(`${this.baseUrl}search/products`, {
-      method: 'POST',
-      body: JSON.stringify(data),
+  // поиск по permalink названия продукта
+  findProductByTitlePermalink = (querySearchParams) => {
+    return fetch(`${this.baseUrl}search/products/permalink/?${querySearchParams}`, {
+      method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
-    })
+    }
+    )
       .then((res) => { return this._getResponse(res) })
   }
+
 
   _getResponse(res) {
 
     if (!res.ok) {
-      throw new Error('res.ok <== undefined')
+      return Promise.reject(res.json())
     }
     return res.json()
   }
 }
+
 
 const api = new Api()
 

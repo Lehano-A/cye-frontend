@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, Skeleton, Fade } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import IconsInforming from './IconInforming/IconInforming';
-import { DELAY_SKELETON, SIZE_ICON_AND_BUTTON_INFORMING } from '../../../utils/constants';
+import queryString from 'query-string';
+import { DELAY_SKELETON, OPENING_MODAL_PRODUCT, SIZE_ICON_AND_BUTTON_INFORMING } from '../../../utils/constants';
 
 /* --------------------------------- slices --------------------------------- */
 import { setSelectedCard } from '../../../redux/reducers/slices/cardProductSlice';
-import { changeVisibleModal } from '../../../redux/reducers/slices/modalCardProductSlice';
+import { changeVisibleModalProduct } from '../../../redux/reducers/slices/modalProductSlice';
+
+/* --------------------------------- selectors -------------------------------- */
+import { selectApiFoundProductsAfterSubmit } from '../../../redux/reducers/selectors/searchRequestProductSelectors';
+import { selectInputValue } from '../../../redux/reducers/selectors/inputSearchSelectors';
+
+/* --------------------------------- actions -------------------------------- */
+import { saveCurrentPathDataBeforeOpeningModalProduct } from '../../../redux/reducers/actions/navigation/navigation';
+
+/* ---------------------------------- hooks --------------------------------- */
+import useActionsNavigation from '../../../hooks/useActionsNavigation/useActionsNavigation';
+
 
 const StyledTypography = styled(Typography)`
   display: -webkit-box;
@@ -83,7 +96,13 @@ const StyledMainBox = styled(Box)(() => {
 
 
 function CardProduct({ dataProduct }) {
+
   const dispatch = useDispatch()
+  const actionsNavigation = useActionsNavigation()
+  const params = useParams()
+
+  const inputValue = useSelector(selectInputValue)
+  const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
 
   const { title, imagesUrl, featuresComposition } = dataProduct
   const mainImageUrl = imagesUrl[0].mediumUrl
@@ -109,15 +128,46 @@ function CardProduct({ dataProduct }) {
   }, [isLoadedImage])
 
 
-  const handleCardClick = () => {
-    dispatch(setSelectedCard(dataProduct)) // сохраняем данные выбранной карточки
-    dispatch(changeVisibleModal(true)) // открывается модальное окно продукта
+
+  function handleCardClick() {
+    const { searchValue } = apiFoundProductsAfterSubmit.search
+
+    // сохраняем данные выбранной карточки
+    dispatch(setSelectedCard({
+      data: dataProduct,
+      status: 'ok',
+      message: null
+    }))
+
+    const pathDataBeforeOpeningModalProduct = dispatch(saveCurrentPathDataBeforeOpeningModalProduct({
+      dataForSavingLocationState: {
+        params: params,
+        searchValue: inputValue,
+      }
+    }))
+
+
+    const parsedQueryParams = queryString.parse(pathDataBeforeOpeningModalProduct.search)
+
+    actionsNavigation.replacePathname({
+      stage: OPENING_MODAL_PRODUCT,
+      dataProduct,
+      apiFoundProductsAfterSubmit,
+      dataForQueryParams: {
+        ...params,
+        ...parsedQueryParams,
+        searchValue
+      }
+    })
+
+    dispatch(changeVisibleModalProduct(true)) // открывается модальное окно продукта
   }
 
 
   function handleOnLoad() {
     setIsLoadedImage(true)
   }
+
 
 
   return (
@@ -143,17 +193,18 @@ function CardProduct({ dataProduct }) {
           <StyledCard variant='searchResult' onClick={handleCardClick}>
             <StyledCardActionArea>
 
-              {<StyledBoxCardMedia params={{ isLoadedImage }}>
-                <Fade in={isLoadedImage}>
-                  <StyledCardMedia
-                    component='img'
-                    image={mainImageUrl}
-                    onLoad={handleOnLoad}
-                    onError={(e) => e.target.style.display = 'none'}
-                    params={{ isLoadedImage }}
-                  />
-                </Fade>
-              </StyledBoxCardMedia>
+              {
+                <StyledBoxCardMedia params={{ isLoadedImage }}>
+                  <Fade in={isLoadedImage}>
+                    <StyledCardMedia
+                      component='img'
+                      image={mainImageUrl}
+                      onLoad={handleOnLoad}
+                      onError={(e) => e.target.style.display = 'none'}
+                      params={{ isLoadedImage }}
+                    />
+                  </Fade>
+                </StyledBoxCardMedia>
               }
 
               {

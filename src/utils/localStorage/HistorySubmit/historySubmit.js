@@ -7,8 +7,9 @@ import {
 } from "../localStorage";
 
 
+
 // сохранить "поисковый запрос" в историю сабмитов
-function saveToHistorySubmit(data, searchValue) {
+function saveToHistorySubmit(dataForSave, searchValue) {
 
   const keyStorage = "historySubmit"
 
@@ -26,7 +27,7 @@ function saveToHistorySubmit(data, searchValue) {
     removeLastValueFromHistory(keyStorage)
   }
 
-  saveSubmitValueToLocalStorage(keyStorage, data)
+  saveSubmitValueToLocalStorage(keyStorage, dataForSave)
 }
 
 
@@ -54,35 +55,43 @@ function checkDoubleValueLocalStorage(historySubmit, searchValue) {
 
 // отфильтровать текущее значение в "истории сабмитов"
 function filterCurrentValueInHistorySubmit(historySubmit, searchValue, keyStorage) {
-  let filtered = null
+  let filteredElement = null
 
-  const filter = historySubmit.filter((item) => {
+  /*
+    Если значения - разные, тогда 'different' - будет true.
+    Если значения - одинаковые, тогда элемент истории присвоится в 'filteredElement', а методу .filter вернётся false, и он его не запишет в новый массив.
+    Далее, если уже найден отфильтрованный элемент, то до конца массива будет возвращаться true, т.к. цель одна, и она найдена.
+  */
+  const filteredHistory = historySubmit.filter((item) => {
+    let different = null
 
-    let differents = null
+    if (filteredElement) {
+      return true
+    }
 
     for (let innerKey in item) { // проходимся по ключу
 
       if (item[innerKey] !== searchValue) {
-        differents = item
+        different = true
       } else {
-        filtered = item
-        return
+        filteredElement = item
+        return false
       }
     }
 
-    return differents
+    return different
   })
 
 
-  if (filter.length === 0) {
+  if (filteredHistory.length === 0) {
     return
   }
 
   // если изначальный массив длиннее отфильтрованного,
   // значит значение текущего "поискового запроса" совпадает с значением в истории
-  if (historySubmit.length - filter.length === 1) {
-    addSubmitValueToHistory(filter, filtered)
-    fullUpdateKeyLocalStorage(keyStorage, filter)
+  if (historySubmit.length - filteredHistory.length === 1) {
+    addSubmitValueToHistory(filteredHistory, filteredElement)
+    fullUpdateKeyLocalStorage(keyStorage, filteredHistory)
     return true
   }
 }
@@ -90,7 +99,7 @@ function filterCurrentValueInHistorySubmit(historySubmit, searchValue, keyStorag
 
 
 // сохранить значение из инпута при сабмите в локальное хранилище
-function saveSubmitValueToLocalStorage(keyStorage, value) {
+function saveSubmitValueToLocalStorage(keyStorage, dataForSave) {
 
   const historySubmit = getDataLocalStorage(keyStorage)
 
@@ -98,14 +107,14 @@ function saveSubmitValueToLocalStorage(keyStorage, value) {
 
   if (historySubmit === null) {
     log.debug(`"${keyStorage}" - такого ключа в хранилище нет. Создаём ключ и добавляем значение.`)
-    saveItemLocalStorage(keyStorage, [value])
+    saveItemLocalStorage(keyStorage, [dataForSave])
     return
   }
 
   if (historySubmit?.length > 0) {
     log.debug(`"${keyStorage}" - такой ключ  в хранилище уже есть. Добавляем значение.`)
 
-    addSubmitValueToHistory(historySubmit, value)
+    addSubmitValueToHistory(historySubmit, dataForSave)
     saveItemLocalStorage(keyStorage, historySubmit)
   }
 }

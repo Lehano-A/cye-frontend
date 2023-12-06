@@ -4,9 +4,7 @@ import log from 'loglevel';
 
 /* --------------------------------- slices --------------------------------- */
 import { setIsOpenedDropList, setApiFoundProductsForDropList } from "../redux/reducers/slices/dropListPreSearchResultSlice";
-
 import { setIsHistorySubmitDisplayed } from "../redux/reducers/slices/inputSearchSlice";
-
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectIsOpenedDropList } from "../redux/reducers/selectors/dropListPreSearchResultSelectors";
@@ -24,7 +22,10 @@ function useHistorySubmit() {
     const historySubmitData = getDataLocalStorage("historySubmit")
 
     if (historySubmitData) {
-      log.debug('Вызывается хук получения истории сабмитов: история сабмитов - существует.')
+      log.debug(`
+      Вызывается хук получения истории сабмитов
+
+      Результат: история сабмитов - СУЩЕСТВУЕТ.`)
       if (!isOpenedDropList) {
         dispatch(setIsOpenedDropList(true))
       }
@@ -35,7 +36,10 @@ function useHistorySubmit() {
 
 
     if (!historySubmitData) {
-      log.debug('Вызывается хук получения истории сабмитов: история сабмитов - отсутствует.')
+      log.debug(`
+      Вызывается хук получения истории сабмитов
+
+      Результат: история сабмитов - ОТСУТСТВУЕТ.`)
       if (isOpenedDropList) {
         dispatch(setIsOpenedDropList(false))
       }

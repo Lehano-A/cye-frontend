@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Stack, Dialog, DialogActions, Box, IconButton, Typography } from "@mui/material"
+import { useLocation, useNavigationType } from "react-router-dom";
+import { Stack, Dialog, DialogActions, Box, IconButton } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from "@mui/material/styles";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
@@ -10,11 +11,25 @@ import PopperInterpretation from "./PopperInterpretation/PopperInterpretation";
 import Composition from "./Composition/Composition";
 import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import OtherInfo from "./OtherInfo/OtherInfo";
+import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
+import loglevel from 'loglevel';
+import NotFoundProduct from "./NotFoundProduct/NotFoundProduct";
+import TitleContainer from "./containersModalProduct/TitleContainer";
+import { CLOSING_MODAL_PRODUCT, LOADING, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
 
 /* --------------------------------- slices --------------------------------- */
-import { changeVisibleModal } from "../../../redux/reducers/slices/modalCardProductSlice";
-import { setSelectedCard } from "../../../redux/reducers/slices/cardProductSlice";
+import { changeVisibleModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
+import { resetStatesByDefaultCardProduct } from "../../../redux/reducers/slices/cardProductSlice";
 import { setValueInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
+import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../redux/reducers/slices/navigationSlice";
+
+/* ---------------------------------- selectors --------------------------------- */
+import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
+
+
+/* ---------------------------------- hooks --------------------------------- */
+import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
+
 
 
 /*
@@ -32,10 +47,6 @@ const styleIcon = (theme) => {
   }
 }
 
-const styleTitleProduct = {
-  marginBottom: '35px',
-}
-
 const styleSlotProps = {
   backdrop: {
     style: {
@@ -45,19 +56,28 @@ const styleSlotProps = {
   }
 }
 
-const titleProps = {
-  variant: 'h4',
-  marginBottom: '10px',
-  fontSize: '16px',
-  fontWeight: 700,
-}
+const StyledBoxTitle = styled(Box)(() => {
+  return {
+    maxWidth: '420px',
+  }
+})
 
-const StyledMainBox = styled(Box)(() => {
+const StyledBoxSlider = styled(Stack)(() => {
+  return {
+    alignItems: 'center',
+    width: '420px',
+  }
+})
+
+const StyledMainBox = styled(Box)(({ settings }) => {
+  const { status } = settings
+
   return {
     position: 'relative',
-    bgcolor: 'background.paper',
+    backgroundColor: 'background.paper',
     borderRadius: 3,
-    margin: '40px auto 0',
+    margin: `${status === NOT_FOUND ? '0 auto' : '40px auto 0'}`
+    ,
   }
 })
 
@@ -77,6 +97,7 @@ const StyledTopHalfCommonBox = styled(Stack)(() => {
 const StyledBoxSliderAndOtherInfo = styled(Box)(() => {
   return {
     display: 'flex',
+
   }
 })
 
@@ -84,19 +105,7 @@ const StyledBoxTitleAndSlider = styled(Stack)(() => {
   return {
     alignItems: 'center',
     margin: ' 0 100px 70px 0',
-  }
-})
-
-const StyledBoxTitle = styled(Box)(() => {
-  return {
-    maxWidth: '420px'
-  }
-})
-
-const StyledBoxSlider = styled(Stack)(() => {
-  return {
-    alignItems: 'center',
-    width: '420px',
+    display: 'flex'
   }
 })
 
@@ -132,25 +141,31 @@ const StyledBoxComposition = styled(Box)(() => {
 
 const StyledButtonClose = styled(IconButton)(() => {
   return {
-    position: 'absolute',
-    top: 15,
-    right: 15,
     backgroundColor: 'transparent',
   }
 })
 
+const log = loglevel.getLogger(MODAL_PRODUCT)
+
+
 
 function ModalProduct() {
 
+  const location = useLocation()
+  const navigationType = useNavigationType()
   const dispatch = useDispatch()
-  const isVisibleModal = useSelector(state => state.modalCardProduct.visible)
+  const actionsNavigation = useActionsNavigation()
+
   const selectedCard = useSelector(state => state.cardProduct.selectedCard)
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
-
-  const { title, imagesUrl, composition, noteToComposition, nutritionalValue, company, otherInfo, featuresComposition } = selectedCard
-
+  const savedPathDataBeforeOpeningModalProduct = useSelector(state => state.navigation.savedPathDataBeforeOpeningModalProduct)
+  const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
+
+
+  const { data, status, message } = selectedCard || {}
+  const { title, imagesUrl, featuresComposition, company, otherInfo, nutritionalValue, noteToComposition, composition } = data || {}
 
 
   useEffect(() => {
@@ -160,10 +175,34 @@ function ModalProduct() {
   }, [dispatch, isVisiblePopper, refSelectedIngredient])
 
 
-  const handleCloseModal = () => {
-    dispatch(setSelectedCard(null))     // сбрасываем стэйт выбранной карточки
-    dispatch(changeVisibleModal(false)) // закрывает модальное окно продукта
+  function handleCloseModal() {
+    log.debug(`
+    Произошёл вызов: handleCloseModal
+    Что будем делать: закрывать модальное окно продукта
+
+    navigationType: ${navigationType}
+    location: `, location)
+
+    dispatch(resetStatesByDefaultCardProduct())
+    dispatch(changeVisibleModalProduct(false)) // закрывает модальное окно продукта
+
+    dispatch(resetByDefaultSavedPathDataBeforeOpeningModalProduct())
+
+    if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
+
+      actionsNavigation.replacePathname({
+        stage: CLOSING_MODAL_PRODUCT,
+        notFoundModalAndBGProducts: true
+      })
+    } else {
+
+      actionsNavigation.replacePathname({
+        stage: CLOSING_MODAL_PRODUCT,
+        savedPathDataBeforeOpeningModalProduct
+      })
+    }
   }
+
 
 
   return (
@@ -174,72 +213,90 @@ function ModalProduct() {
       scroll="body"
       onClose={handleCloseModal}
       aria-labelledby="modal-title"
-      open={isVisibleModal}
+      //open={isVisibleModal}
+      open={true}
       slotProps={styleSlotProps}
     >
 
-      <DialogActions>
+      <DialogActions sx={{ position: 'absolute', zIndex: 10, top: '15px', right: '15px' }}>
         <StyledButtonClose color="primary" onClick={handleCloseModal}>
+
           <CloseIcon sx={styleIcon} />
+
         </StyledButtonClose>
       </DialogActions>
 
 
-
-      <StyledMainBox>
+      <StyledMainBox settings={{ status }}>
         <StyledCommonBox>
-          <StyledTopHalfCommonBox>
-            <StyledBoxSliderAndOtherInfo>
-              <StyledBoxTitleAndSlider>
+          {
+            data && (<>
+              <StyledTopHalfCommonBox>
+                <StyledBoxSliderAndOtherInfo>
+                  <StyledBoxTitleAndSlider>
 
-                <StyledBoxTitle>
-                  <Typography
-                    {...titleProps}
-                    id="modal-title"
-                    sx={styleTitleProduct}
-                  >
-                    {title}
-                  </Typography>
-                </StyledBoxTitle>
+                    <StyledBoxTitle>
+                      <TitleContainer
+                        title={title}
+                      />
+                    </StyledBoxTitle>
 
 
-                <StyledBoxSlider>
-                  <SwiperSlider images={imagesUrl} />
-                </StyledBoxSlider>
-              </StyledBoxTitleAndSlider>
+                    <StyledBoxSlider>
+                      <SwiperSlider images={imagesUrl} />
+                    </StyledBoxSlider>
+                  </StyledBoxTitleAndSlider>
 
 
-              <Box>
-                <FeaturesComposition data={featuresComposition} />
-                <OtherInfo data={{ company, otherInfo }} />
-                {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
-              </Box>
+                  <Box>
+                    <FeaturesComposition data={featuresComposition} />
+                    <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
+                    {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
+                  </Box>
 
-            </StyledBoxSliderAndOtherInfo>
-          </StyledTopHalfCommonBox>
+                </StyledBoxSliderAndOtherInfo>
+              </StyledTopHalfCommonBox>
 
 
 
 
-          <StyledCommonBoxComposition>
+              <StyledCommonBoxComposition>
 
-            {
-              noteToComposition &&
-              <StyledBoxNoteToComposition>
-                <NoteToComposition data={noteToComposition} />
-              </StyledBoxNoteToComposition>
-            }
+                {
+                  noteToComposition &&
+                  <StyledBoxNoteToComposition>
+                    <NoteToComposition data={noteToComposition} />
+                  </StyledBoxNoteToComposition>
+                }
 
 
-            <Box sx={{ maxWidth: '500px' }}>
-              <StyledBoxComposition>
-                <Composition
-                  data={composition}
-                  setRefSelectedIngredient={setRefSelectedIngredient}
-                />
-              </StyledBoxComposition>
+                <Box sx={{ maxWidth: '500px' }}>
+                  <StyledBoxComposition>
+                    <Composition
+                      data={composition}
+                      setRefSelectedIngredient={setRefSelectedIngredient}
+                    />
+                  </StyledBoxComposition>
+                </Box>
+              </StyledCommonBoxComposition>
+
+            </>)}
+
+
+
+          {
+            status === NOT_FOUND && <Box sx={{
+              width: "800px", height: "50%", display: "flex",
+              justifyContent: "center", alignItems: "center"
+            }}><NotFoundProduct message={message} status={status} /></Box>
+          }
+
+
+          {
+            status === LOADING && <Box sx={{ width: "1100px", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <LoadingIndicator />
             </Box>
-          </StyledCommonBoxComposition>
+          }
 
         </StyledCommonBox>
 

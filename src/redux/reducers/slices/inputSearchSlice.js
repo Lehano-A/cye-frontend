@@ -1,24 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  inputValue: '',
+  inputValueAfterSubmit: null, // для useActionsPagination.
+  isSubmitting: false,
+  wasFirstSubmit: false,
+  hasResFromServerAfterLiveChange: null,
+  isHistorySubmitDisplayed: null,
+  searchValueLastFoundProduct: null,
+  isPressedClearButton: null,
+  inputValueBeforeClear: null,
+}
+
 
 const inputSearchSlice = createSlice({
   name: 'inputSearch',
-  initialState: {
-    inputValue: '',
-    savedInputValueAfterSubmit: null,
-    isSubmitting: false,
-    wasFirstSubmit: false,
-    hasResFromServerAfterLiveChange: null,
-    isHistorySubmitDisplayed: null,
-    searchValueLastFoundProduct: null,
-    isNoResultLivingSearch: null,
-    isPressedClearButton: null
-  },
+  initialState,
 
   reducers: {
     setInputValue: (state, action) => { state.inputValue = action.payload },
 
-    setSavedInputValueAfterSubmit: (state, action) => { state.savedInputValueAfterSubmit = action.payload },
+    setInputValueAfterSubmit: (state, action) => { state.inputValueAfterSubmit = action.payload },
 
     setIsSubmitting: (state, action) => { state.isSubmitting = action.payload },
 
@@ -30,22 +32,26 @@ const inputSearchSlice = createSlice({
 
     setSearchValueLastFoundProduct: (state, action) => { state.searchValueLastFoundProduct = action.payload },
 
-    setIsNoResultLivingSearch: (state, action) => { state.isNoResultLivingSearch = action.payload },
-
     setIsPressedClearButton: (state, action) => { state.isPressedClearButton = action.payload },
+
+    setInputValueBeforeClear: (state, action) => { state.inputValueBeforeClear = action.payload },
+
+    resetStatesByDefaultInputSearch: () => { return initialState }
   }
 })
 
+
 export const {
   setInputValue,
-  setSavedInputValueAfterSubmit,
+  setInputValueAfterSubmit,
   setIsSubmitting,
   setWasFirstSubmit,
   setHasResFromServerAfterLiveChange,
   setIsHistorySubmitDisplayed,
   setSearchValueLastFoundProduct,
-  setIsNoResultLivingSearch,
   setIsPressedClearButton,
+  setInputValueBeforeClear,
+  resetStatesByDefaultInputSearch,
 } = inputSearchSlice.actions
 
 export default inputSearchSlice.reducer

@@ -54,6 +54,7 @@ function IconsInforming({ feature }) {
     }
   };
 
+  
 
   return (
     <>
