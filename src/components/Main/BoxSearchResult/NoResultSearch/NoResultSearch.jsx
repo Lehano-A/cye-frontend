@@ -1,5 +1,18 @@
 import React from "react";
-import { Box, Container, Stack, Typography, } from "@mui/material";
+import { Stack, Typography, } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+
+
+const StyledMainStack = styled(Stack)(() => {
+  return {
+    alignItems: 'center',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      margin: '40px 20px 10px'
+    }
+  }
+})
 
 
 
@@ -13,30 +26,23 @@ function NoResultSearch({ searchValueWithoutResult, apiFoundProductsAfterSubmit 
 
 
   return (
-    <Container>
-      <Stack>
+    <StyledMainStack>
 
-        <Box sx={{ display: 'flex', marginBottom: '10px' }}>
-          <Typography
-            variant="h6"
-            sx={{ marginRight: '10px' }}>
-            Находились в поисках {searchByValue}
-          </Typography>
+      <Typography
+        variant="h6"
+        sx={{ textAlign: 'center' }}
+      >
+        Находились в {!searchByValue ? 'поисках: ' : `поисках ${searchByValue}: `}
+        <span style={{ display: 'inline', fontWeight: '700' }}>
+          {searchValueWithoutResult}
+        </span>
+      </Typography>
 
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: '700' }}
-          >
-            {searchValueWithoutResult}
-          </Typography>
-        </Box>
+      <Typography sx={{ textAlign: 'center', margin: '20px 0 0' }}>
+        К сожалению, {textFailedSearch} не получилось найти 😕
+      </Typography>
 
-        <Typography>
-          К сожалению, {textFailedSearch} не получилось найти 😕
-        </Typography>
-
-      </Stack>
-    </Container>
+    </StyledMainStack>
   )
 }
 

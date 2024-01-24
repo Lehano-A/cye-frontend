@@ -7,7 +7,7 @@ function getValueFromOption(option) {
 
   /*
    если есть option.title, значит это объект продукта с ключами:
-   id, imagesURL и title
+   id, imagesURI и title
   */
   if (option.title) {
     return option.title

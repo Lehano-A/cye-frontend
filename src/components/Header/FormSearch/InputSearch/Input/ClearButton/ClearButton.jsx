@@ -7,14 +7,14 @@ import log from 'loglevel'
 /* --------------------------------- slices --------------------------------- */
 import { setInputValueBeforeClear, setIsPressedClearButton } from "../../../../../../redux/reducers/slices/inputSearchSlice"
 import { setApiFoundProductsForDropList } from "../../../../../../redux/reducers/slices/dropListPreSearchResultSlice"
-import { setInputValue } from "../../../../../../redux/reducers/slices/inputSearchSlice"
+import { setInputValue
+} from "../../../../../../redux/reducers/slices/inputSearchSlice"
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectInputValue } from "../../../../../../redux/reducers/selectors/inputSearchSelectors";
 
 /* ---------------------------------- hooks --------------------------------- */
 import useHistorySubmit from "../../../../../../hooks/useHistorySubmit";
-
 
 
 
@@ -32,6 +32,7 @@ function ClearButton() {
   }, [])
 
 
+  
   // обработчик кнопки очищения поля ввода
   function handleClickClearButton() {
     log.debug('Нажали на кнопку очищения инпута');
@@ -43,6 +44,7 @@ function ClearButton() {
 
     getAndSaveHistorySubmit()
   }
+
 
 
   return (

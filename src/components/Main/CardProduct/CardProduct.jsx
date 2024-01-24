@@ -22,7 +22,8 @@ import { saveCurrentPathDataBeforeOpeningModalProduct } from '../../../redux/red
 import useActionsNavigation from '../../../hooks/useActionsNavigation/useActionsNavigation';
 
 
-const StyledTypography = styled(Typography)`
+const
+  StyledTypography = styled(Typography)`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -38,6 +39,7 @@ const StyledBoxImageSkeleton = styled(Box)(() => {
   }
 })
 
+
 const StyledBoxCardMedia = styled(Box)(({ params }) => {
   const { isLoadedImage } = params
 
@@ -46,6 +48,7 @@ const StyledBoxCardMedia = styled(Box)(({ params }) => {
     height: isLoadedImage ? '100%' : 0,
   }
 })
+
 
 const StyledCardMedia = styled(CardMedia)(({ params }) => {
   const { isLoadedImage } = params
@@ -57,6 +60,7 @@ const StyledCardMedia = styled(CardMedia)(({ params }) => {
   }
 })
 
+
 const StyledCardActionArea = styled(CardActionArea)(() => {
   return {
     height: '100%',
@@ -65,6 +69,7 @@ const StyledCardActionArea = styled(CardActionArea)(() => {
     justifyContent: 'stretch',
   }
 })
+
 
 const StyledCard = styled(Card)(() => {
   return {
@@ -75,6 +80,7 @@ const StyledCard = styled(Card)(() => {
   }
 })
 
+
 const StyledIconsInforming = styled(Box)(() => {
   return {
     display: 'flex',
@@ -83,6 +89,7 @@ const StyledIconsInforming = styled(Box)(() => {
     height: SIZE_ICON_AND_BUTTON_INFORMING,
   }
 })
+
 
 const StyledMainBox = styled(Box)(() => {
   return {
@@ -118,6 +125,7 @@ function CardProduct({ dataProduct }) {
     }, DELAY_SKELETON)
     setTimerIdSkeleton(timerId)
   }, [])
+
 
 
   useEffect(() => {
@@ -162,6 +170,7 @@ function CardProduct({ dataProduct }) {
 
     dispatch(changeVisibleModalProduct(true)) // открывается модальное окно продукта
   }
+
 
 
   function handleOnLoad() {

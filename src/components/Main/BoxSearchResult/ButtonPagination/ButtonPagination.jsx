@@ -17,18 +17,27 @@ import { selectApiFoundProductsAfterSubmit } from "../../../../redux/reducers/se
 
 /* -------------------------------- hooks ------------------------------- */
 import useSendingReqToApi from "../../../../hooks/useSendingReqToApi";
+import { MEDIA_SM_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
 
 
 const StyledButton = styled(Button)(({ theme }) => {
   return {
-    width: '150px',
-    height: '60px',
     backgroundColor: theme.palette.fullNatural.light,
     color: theme.palette.fullNatural.main,
     fontWeight: 700,
     transition: 'background-color 0.25s ease',
     '&:hover': {
       backgroundColor: theme.palette.getAlphaColor('fullNatural', 'light', 0.2)
+    },
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      width: '130px',
+      height: '50px'
+    },
+
+    [MEDIA_SM_MODAL_PRODUCT]: {
+      width: '150px',
+      height: '60px',
     }
   }
 })

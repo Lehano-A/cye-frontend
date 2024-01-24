@@ -34,6 +34,7 @@ function FilterCategoriesContainer({ foundProducts, searchBy }) {
   const wasUsedFilter = useSelector((state) => state.filterCategories.wasUsedFilter)
 
 
+
   useEffect(() => {
     // определение коллекции имён кнопок для фильтра
     const collectionCategories = searchUniqueCategories(foundProducts)
@@ -60,7 +61,6 @@ function FilterCategoriesContainer({ foundProducts, searchBy }) {
         dispatch(setIsActiveButtonShowAllProducts(false))
       }
     }
-
     return () => { dispatch(setWasUsedFilter(false)) }
 
   }, [wasUsedFilter])

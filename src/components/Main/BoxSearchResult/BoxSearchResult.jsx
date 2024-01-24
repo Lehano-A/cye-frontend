@@ -13,6 +13,7 @@ import { selectApiFoundProductsAfterSubmit } from "../../../redux/reducers/selec
 import { selectArrForShowSearchResultProducts, selectIsLoadingIndicatorBoxSearchResult, selectSearchValueWithoutResult } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
 import { selectNameActiveButtonInFilter } from "../../../redux/reducers/selectors/filterCategoriesSelectors";
 import { selectIsDisplayedButtonPagination } from "../../../redux/reducers/selectors/paginationSelectors";
+import { MEDIA_XS_MODAL_PRODUCT } from "../../../utils/constants";
 
 
 const StyledBoxLoadingIndicator = styled(Box)(() => {
@@ -23,19 +24,25 @@ const StyledBoxLoadingIndicator = styled(Box)(() => {
   }
 })
 
+
 const StyledBoxFilter = styled(Box)(() => {
   return {
     display: 'flex',
     justifyContent: 'center',
-    margin: "30px 0 0 0",
+    margin: '31px 0 20px',
   }
 })
+
 
 const StyledBoxGridCardsProducts = styled(Stack)(({ params }) => {
   const { isDisplayedButtonPagination } = params
 
   return {
     margin: `80px 0 ${isDisplayedButtonPagination ? '38px' : '88px'} 0`,
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      margin: `40px 0 ${isDisplayedButtonPagination ? '38px' : '88px'} 0`,
+    }
   }
 })
 
@@ -50,7 +57,6 @@ function BoxSearchResult() {
   const searchValueWithoutResult = useSelector(selectSearchValueWithoutResult)
   const isDisplayedButtonPagination = useSelector(selectIsDisplayedButtonPagination)
   const isVisibleModalProduct = useSelector((state) => state.modalProduct.isVisibleModalProduct)
-
 
 
   return (
@@ -103,7 +109,7 @@ function BoxSearchResult() {
               {
                 isDisplayedButtonPagination &&
                 <Fade in={true}>
-                  <Box sx={{ margin: '0 0 50px' }}>
+                  <Box sx={{ margin: '30px 0 80px' }}>
                     <ButtonPagination />
                   </Box>
                 </Fade>

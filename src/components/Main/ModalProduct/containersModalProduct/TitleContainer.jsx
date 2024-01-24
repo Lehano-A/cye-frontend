@@ -1,15 +1,18 @@
 import React from "react";
 import { Typography } from "@mui/material";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
 
-const titleProps = {
-  variant: 'h4',
-  marginBottom: '10px',
-  fontSize: '16px',
-  fontWeight: 700,
-}
 
 const styleTitleProduct = {
-  marginBottom: '35px',
+  fontWeight: 700,
+
+  [MEDIA_XS_MODAL_PRODUCT]: {
+    fontSize: '15px',
+  },
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    fontSize: '16px',
+  }
 }
 
 
@@ -19,7 +22,7 @@ function TitleContainer({ title }) {
   return (
 
     <Typography
-      {...titleProps}
+      variant='h4'
       id="modal-title"
       sx={styleTitleProduct}
     >

@@ -1,10 +1,19 @@
 import React from "react";
 import { Typography } from "@mui/material";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
 
-const styleTitle =  {
+
+const styleTitle = {
+  fontWeight: 700,
+  textTransform: 'upperCase',
+
+  [MEDIA_XS_MODAL_PRODUCT]: {
+    fontSize: '14px'
+  },
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
     fontSize: '16px',
-    fontWeight: 700,
-    textTransform: 'upperCase',
+  }
 }
 
 
@@ -20,7 +29,12 @@ function NoteToComposition({ data }) {
         Примечание к составу
       </Typography>
 
-      <Typography sx={{ pt: 1 }} variant="body2">{data}</Typography>
+      <Typography
+        sx={{ pt: 1 }}
+        variant="body2"
+      >
+        {data}
+      </Typography>
     </>
   )
 }

@@ -10,7 +10,7 @@ import cardProductSlice from "./slices/cardProductSlice"
 import dropListPreSearchResultSlice from "./slices/dropListPreSearchResultSlice";
 import paginationSlice from "./slices/paginationSlice";
 import navigationSlice from "./slices/navigationSlice";
-
+import modalSlice from "./slices/modalSlice";
 
 const rootReducer = combineReducers({
   inputSearch: inputSearchSlice,
@@ -24,6 +24,7 @@ const rootReducer = combineReducers({
   dropListPreSearchResult: dropListPreSearchResultSlice,
   pagination: paginationSlice,
   navigation: navigationSlice,
+  modal: modalSlice,
 })
 
 export default rootReducer;

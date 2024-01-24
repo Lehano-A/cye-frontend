@@ -120,10 +120,12 @@ function saveSubmitValueToLocalStorage(keyStorage, dataForSave) {
 }
 
 
+
 // добавить элемент в начало истории
 function addSubmitValueToHistory(arr, value) {
   arr.unshift(value)
 }
+
 
 
 // удалить последний элемент из истории

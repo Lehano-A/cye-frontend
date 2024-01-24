@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Skeleton } from "@mui/material";
-import { styled } from "@mui/material/styles"
+import { styled, useTheme } from "@mui/material/styles"
 import { DELAY_SKELETON } from "../../../../../../../utils/constants";
 
-const StyledBoxImage = styled(Box)(() => {
 
+const StyledBoxImage = styled(Box)(() => {
   return {
-    width: '64px',
+    maxWidth: '64px',
+    minwidth: '52px',
+    width: '100%',
     marginRight: '5px',
     display: 'flex',
     alignItems: 'center',
@@ -14,13 +16,16 @@ const StyledBoxImage = styled(Box)(() => {
 })
 
 
+
 function WithImageOption({ option }) {
+
+  const theme = useTheme()
 
   const [isLoadedImage, setIsLoadedImage] = useState(null)
   const [isDisplayedSkeleton, setIsDisplayedSkeleton] = useState(null)
   const [timerIdSkeleton, setTimerIdSkeleton] = useState(null)
 
-
+  
   useEffect(() => {
     const timerId = setTimeout(() => {
       clearTimeout(timerIdSkeleton)
@@ -29,6 +34,7 @@ function WithImageOption({ option }) {
 
     setTimerIdSkeleton(timerId)
   }, [])
+
 
 
   useEffect(() => {
@@ -47,21 +53,18 @@ function WithImageOption({ option }) {
           src={option.imagesUrl}
           alt=""
           onLoad={() => { setIsLoadedImage(true) }}
-          sx={{
+          style={{
             visibility: isLoadedImage ? "visible" : "hidden",
-            width: isLoadedImage ? "100%" : "0"
           }}
         />
 
         {isDisplayedSkeleton && <Skeleton width="64px" height="64px" />}
 
       </StyledBoxImage>
-      <Typography sx={{
-        whiteSpace: "nowrap",
-        overflow: "hidden", textOverflow: "ellipsis"
-      }}>{option.title}</Typography>
+      <Typography sx={theme.customStyles.Autocomplete.textOption} >{option.title}</Typography>
     </>
   )
 }
 
 export default WithImageOption
+

@@ -12,17 +12,35 @@ import {
   selectInputValue,
   selectIsHistorySubmitDisplayed,
 } from "../../../../../redux/reducers/selectors/inputSearchSelectors";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../../utils/constants";
 
 
-const StyledListItem = styled(ListItem)(({ params }) => {
-  const { isHistorySubmitDisplayed } = params
+const StyledListItem = styled(ListItem, {
+  shouldForwardProp: (prop) => (prop !== 'isHistorySubmitDisplayed')
+})(({ isHistorySubmitDisplayed }) => {
 
   return {
-    height: '64px',
     maxWidth: "600px",
+    overflow: 'hidden',
+    display: '-webkit-box',
+    'WebkitBoxOrient': 'vertical',
+    wordBreak: 'break-word',
+
     '&.MuiAutocomplete-option': {
       display: "flex",
       justifyContent: isHistorySubmitDisplayed ? 'space-between' : 'flex-start',
+    },
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      height: '90px',
+    },
+
+    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+      height: '75px',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      height: '64px',
     }
   }
 })
@@ -34,8 +52,9 @@ function ItemDropList({ props, option }) {
   const inputValue = useSelector(selectInputValue)
   const isHistorySubmitDisplayed = useSelector(selectIsHistorySubmitDisplayed)
 
+
   return (
-    <StyledListItem {...props} params={{ isHistorySubmitDisplayed }}>
+    <StyledListItem  {...props} isHistorySubmitDisplayed={isHistorySubmitDisplayed}>
 
       {
         ((inputValue.length >= 2 && !isHistorySubmitDisplayed) && (option.brand || option.category)) &&

@@ -2,28 +2,35 @@ import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+
 const StyledMainBox = styled(Box)(() => {
   return {
     width: '100%',
-    minWidth: '300px',
+    minWidth: '250px',
     maxWidth: '500px',
   }
 })
+
 
 const StyledList = styled(List)(() => {
   return {
     display: 'flex',
     flexDirection: 'column',
     padding: '20px 0',
+
   }
 })
+
 
 const StyledListItem = styled(ListItem)(() => {
   return {
     display: 'flex',
     justifyContent: 'space-between',
+    paddingLeft: 0,
+    paddingRight: 0,
   }
 })
+
 
 const StyledTitle = styled(Typography)(() => {
   return {
@@ -44,9 +51,11 @@ const StyledTitle = styled(Typography)(() => {
   }
 })
 
+
 const StyledValue = styled(Typography)(() => {
   return {
     whiteSpace: 'nowrap',
+    fontSize: "14px",
   }
 })
 
@@ -60,6 +69,7 @@ function OtherInfo({ data }) {
   const { title } = brand
 
   const { typePackage, weight, shelfLife } = otherInfo
+
 
   return (
     <StyledMainBox>

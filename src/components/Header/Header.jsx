@@ -1,22 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Box, Paper } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { Box, Paper, Stack } from "@mui/material"
 import FormSearchContainer from "../../containers/FormSearchContainer";
 import logo from '../../images/logo/logo.svg'
-
-/* -------------------------------- selectors ------------------------------- */
-import { selectIsLoadingIndicatorBoxSearchResult } from "../../redux/reducers/selectors/boxSearchResultSelectors";
-import { selectIsFilterDisplayed } from "../../redux/reducers/selectors/filterCategoriesSelectors";
 
 /* --------------------------------- actions --------------------------------- */
 import { resetStatesApp } from "../../redux/reducers/actions/common/resetStatesApp";
 
 
-const styleBoxForm = {
+const styleBoxFormSearch = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  width: '100%'
 }
 
 
@@ -25,45 +22,36 @@ function Header() {
 
   const dispatch = useDispatch()
 
-  const isFilterDisplayed = useSelector(selectIsFilterDisplayed)
-  const isLoadingIndicatorBoxSearchResult = useSelector(selectIsLoadingIndicatorBoxSearchResult)
-  const pageWithError = useSelector((state) => state.navigation.pageWithError)
-
-
+  
   return (
     <Paper variant="header">
-      <Box
+      <Stack
         component="header"
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
           alignItems: "center",
-          minHeight: "240px",
+          minHeight: "250px",
           'backgroundColor': '#eef0f9',
-          padding: '0 0 80px',
-          margin: isFilterDisplayed || isLoadingIndicatorBoxSearchResult || pageWithError.status ? `0 0 80px 0` : `0 0 31px 0`,
         }}
       >
 
-        <Box sx={{ position: 'relative', height: "60px", display: "flex", flexDirection: "column", alignItems: "center", margin: "30px 0 50px " }}>
+        <Stack sx={{ position: 'relative', height: '60px', alignItems: 'center', maxWidth: '1280px', width: '100%' }}>
 
-          <Box sx={{ width: "150px" }}>
+          <Box sx={{ width: "150px", margin: '30px 0 50px' }}>
             <Link
               to="/"
               state={{ inputValue: "" }}
               onClick={() => { dispatch(resetStatesApp()) }}
             >
-              <img src={logo} sx={{ opacity: '100%' }} alt="Логотип сайта" />
+              <img src={logo} alt="Логотип сайта" />
             </Link>
           </Box>
 
-        </Box>
+          <Box sx={styleBoxFormSearch}>
+            <FormSearchContainer />
+          </Box>
 
-        <Box sx={styleBoxForm}>
-          <FormSearchContainer />
-        </Box>
-
-      </Box>
+        </Stack>
+      </Stack>
     </Paper>
   )
 }

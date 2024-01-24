@@ -3,19 +3,23 @@ import { Box, Typography } from "@mui/material";
 import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
 import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
 import { styled } from "@mui/material/styles";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+
 
 const StyledMainBox = styled(Box)(({ theme, color }) => {
   return {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '355px',
+    maxWidth: '355px',
     minHeight: '70px',
+    width: '100%',
     backgroundColor: theme.palette[`${color}`].light,
     borderRadius: '15px',
     marginBottom: '20px',
   }
 })
+
 
 const styleIconInforming = {
   width: '35px',
@@ -23,12 +27,22 @@ const styleIconInforming = {
   marginRight: '15px',
 }
 
+
 const StyledTilteIcon = styled(Typography)(({ theme, color }) => {
   return {
     color: theme.palette[`${color}`].main,
     fontWeight: 600,
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      fontSize: '15px'
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      fontSize: '16px'
+    }
   }
 })
+
 
 const StyledBoxTitleIngredients = styled(Box)(() => {
   return {
@@ -41,6 +55,7 @@ const StyledBoxTitleIngredients = styled(Box)(() => {
   }
 })
 
+
 const StyledIngredient = styled(Typography)(() => {
   return {
     fontSize: "14px",
@@ -50,7 +65,9 @@ const StyledIngredient = styled(Typography)(() => {
 })
 
 
+
 function FeaturesComposition({ data }) {
+
   return (
     <>
       {

@@ -14,10 +14,11 @@ import './styles.css';
 
 
 
-function SwiperSlider({ images }) {
+function SwiperSlider({ images, width, height, }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null)
   const [boxStatesLoadedInCarousel, setBoxStatesLoadedInCarousel] = useState([])
   const [isLoadedInCarousel, setIsLoadedInCarousel] = useState({})
+
 
   const [boxResolvedPromises, setBoxResolvedPromises] = useState([])
   const [boxWaitSort, setBoxWaitSort] = useState([])
@@ -167,45 +168,49 @@ function SwiperSlider({ images }) {
   }, [boxStatesLoadedInCarousel])
 
 
+
   return (
     <>
-      <Box>
-        <Swiper
-          // onSlideChange={(e) => { console.log('e', e); console.log('slide change') }}
-          // onSwiper={(swiper) => console.log('swiper', swiper)}
-          slidesPerView={1}
-          thumbs={{ swiper: thumbsSwiper }}
-          modules={[FreeMode, Navigation, Thumbs]}
-          className="mySwiper2"
-        >
+      <Swiper
+        // onSlideChange={(e) => { console.log('e', e); console.log('slide change') }}
+        // onSwiper={(swiper) => console.log('swiper', swiper)}
+        slidesPerView={1}
+        thumbs={{ swiper: thumbsSwiper }}
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="mySwiper2"
+        style={{ width: '100%' }}
+      >
 
-          {
-            mainImagesForShow.length > 0 &&
-            mainImagesForShow.map((item, id) => {
+        {
+          mainImagesForShow.length > 0 &&
+          mainImagesForShow.map((item, id) => {
 
-              return (
-                <SwiperSlide key={id}>
-                  {
-                    item.isLoaded &&
-                    <ZoomImage
-                      urlImage={item.url}
-                    />
-                  }
+            return (
+              <SwiperSlide key={id}>
+                {
+                  item.isLoaded &&
+                  <ZoomImage
+                    urlImage={item.url}
+                    width={width}
+                    height={height}
+                  />
+                }
 
-                  {
-                    (!item.isLoaded) &&
-                    <Skeleton width="350px" height="450px"
-                      sx={{
-                        visibility: isDisplayedSkeleton ? 'visible' : 'hidden',
-                      }}
-                    />
-                  }
-                </SwiperSlide>
-              )
-            })
-          }
-        </Swiper>
-      </Box>
+                {
+                  (!item.isLoaded) &&
+                  <Skeleton
+                    width={`${width}px`}
+                    height={`${height}px`}
+                    sx={{
+                      visibility: isDisplayedSkeleton ? 'visible' : 'hidden',
+                    }}
+                  />
+                }
+              </SwiperSlide>
+            )
+          })
+        }
+      </Swiper>
 
 
       {
@@ -226,8 +231,8 @@ function SwiperSlider({ images }) {
                     <img
                       style={{
                         visibility: isLoadedInCarousel[id] ? 'visible' : 'hidden',
-                        width: isLoadedInCarousel[id] ? '100px' : 0,
-                        height: "100px"
+                        width: isLoadedInCarousel[id] ? `${width / 4}px` : 0,
+                        height: `${height / 4}px`
                       }}
                       src={item.smallUrl}
                       alt="Изображение выбранного продукта"
@@ -242,7 +247,10 @@ function SwiperSlider({ images }) {
 
 
                   {
-                    (!isLoadedInCarousel[id] && isDisplayedSkeleton) && <Skeleton width="90px" height="100px" />
+                    (!isLoadedInCarousel[id] && isDisplayedSkeleton) && <Skeleton
+                      width={`${width / 4}px`}
+                      height={`${height / 4}px`}
+                    />
                   }
                 </SwiperSlide>
               })

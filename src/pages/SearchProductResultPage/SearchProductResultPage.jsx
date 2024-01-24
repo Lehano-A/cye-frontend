@@ -10,6 +10,7 @@ import { setIsRedirectionFromModalProductPage } from "../../redux/reducers/slice
 import { BRAND_AND_CATEGORY, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEARCH_PRODUCT_RESULT_PAGE } from "../../utils/constants"
 import BoxSearchResult from "../../components/Main/BoxSearchResult/BoxSearchResult"
 
+
 const log = loglevel.getLogger(SEARCH_PRODUCT_RESULT_PAGE)
 
 

@@ -1,7 +1,7 @@
 // Supports weights 300-700
 import '@fontsource-variable/comfortaa';
 import { createTheme } from "@mui/material/styles";
-import { regexAlphaNum } from "../utils/constants";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, regexAlphaNum } from "../utils/constants";
 
 
 const palette = {
@@ -66,11 +66,42 @@ const palette = {
 
 
 const theme = createTheme({
+
+  customStyles: {
+    Autocomplete: {
+      textOption: {
+
+        overflow: 'hidden',
+        display: '-webkit-box',
+        'WebkitBoxOrient': 'vertical',
+        wordBreak: 'break-word',
+
+        [MEDIA_XS_MODAL_PRODUCT]: {
+          fontSize: '14px',
+          'WebkitLineClamp': 4,
+        },
+
+        [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+          fontSize: '16px',
+          'WebkitLineClamp': 3,
+        },
+
+        [MEDIA_MD_MODAL_PRODUCT]: {
+          'WebkitLineClamp': 2,
+        }
+      },
+      textOptionBrandAndCategory: {
+
+      }
+    }
+  },
+
+
   overrides: {
     MuiCssBaseline: {
       '@global': {
         body: {
-          margin: 0,
+          margin: 0
         }
       }
     },
@@ -104,10 +135,6 @@ const theme = createTheme({
           '&.MuiAutocomplete-option.Mui-focused': {
             backgroundColor: palette.getAlphaColor("primary", "light", 0.1) // цвет фона элемента опции при наведении
           },
-
-        },
-        paper: {
-          padding: '10px 0',
         },
         listbox: {
           padding: 0
@@ -174,7 +201,7 @@ const theme = createTheme({
       },
     },
 
-    
+
     MuiToggleButtonGroup: {
       styleOverrides: {
         root: {

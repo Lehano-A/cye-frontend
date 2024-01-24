@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 
 import store from './redux/store'
 
@@ -7,13 +7,11 @@ import Root from './Root/Root'
 import { Provider } from 'react-redux'
 
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
+const root = createRoot(document.getElementById('root'))
 
 
 root.render(
-  <>
-    <Provider store={store}>
-      <Root />
-    </Provider>
-  </>
+  <Provider store={store}>
+    <Root />
+  </Provider>
 )

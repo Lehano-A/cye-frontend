@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useLocation, useNavigationType } from "react-router-dom";
-import { Stack, Dialog, DialogActions, Box, IconButton } from "@mui/material"
-import CloseIcon from '@mui/icons-material/Close';
+import { Stack, Box } from "@mui/material"
 import { styled } from "@mui/material/styles";
 import TableNutritionalValue from "./TableNutritionalValue/TableNutritionalValue";
 import SwiperSlider from "./SwiperSlider/SwiperSlider";
@@ -15,10 +14,10 @@ import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import loglevel from 'loglevel';
 import NotFoundProduct from "./NotFoundProduct/NotFoundProduct";
 import TitleContainer from "./containersModalProduct/TitleContainer";
-import { CLOSING_MODAL_PRODUCT, LOADING, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
+import { CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
 
 /* --------------------------------- slices --------------------------------- */
-import { changeVisibleModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
+import { changeVisibleModalProduct, setIsFullScreenModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
 import { resetStatesByDefaultCardProduct } from "../../../redux/reducers/slices/cardProductSlice";
 import { setValueInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
 import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../redux/reducers/slices/navigationSlice";
@@ -26,60 +25,76 @@ import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../r
 /* ---------------------------------- selectors --------------------------------- */
 import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
 
-
 /* ---------------------------------- hooks --------------------------------- */
 import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
+import useBreakpoints from "../../../hooks/useMediaQuery";
+import Modal from "../../Modal/Modal";
 
 
-
-/*
-  Особенности, которые нужно учитывать:
-    Для backdrop установлено правило pointer-events: none, чтобы была возможность
-    прокручивать страницу, если курсор находится вне модального окна, т.е. на backdrop.
-    Но при этом ещё и отключилась возможность закрывать модальное окно при нажатии на backdrop.
-    Поэтому было произведено делегирование события клика на родительский общий контейнер,
-    с последующим сравнением элементов, где произошёл клик: на кнопке закрытия или на backdrop.
-*/
-
-const styleIcon = (theme) => {
+const StyledWrapperTitle = styled(Box)(() => {
   return {
-    color: theme.palette.primary.light,
+    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
   }
-}
+})
 
-const styleSlotProps = {
-  backdrop: {
-    style: {
-      backgroundColor: 'rgba(0, 0, 0, 0.1)',
-      pointerEvents: 'none'
-    }
-  }
-}
 
 const StyledBoxTitle = styled(Box)(() => {
   return {
-    maxWidth: '420px',
+    display: 'flex',
+    wordBreak: 'break-word',
+    margin: '0 0 10px 0',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      display: 'flex',
+      width: '90%',
+      justifyContent: 'center',
+    },
   }
 })
+
 
 const StyledBoxSlider = styled(Stack)(() => {
   return {
     alignItems: 'center',
-    width: '420px',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      width: '300px',
+    },
+
+    [MEDIA_SM_MODAL_PRODUCT]: {
+      width: '450px',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      width: '450px',
+    },
+
+    [MEDIA_XL_MODAL_PRODUCT]: {
+      width: '450px',
+    },
   }
 })
 
-const StyledMainBox = styled(Box)(({ settings }) => {
-  const { status } = settings
 
+const StyledBoxTitleAndSlider = styled(Stack)(() => {
   return {
-    position: 'relative',
-    backgroundColor: 'background.paper',
-    borderRadius: 3,
-    margin: `${status === NOT_FOUND ? '0 auto' : '40px auto 0'}`
-    ,
+    display: 'flex',
+    alignItems: 'center',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      justifyContent: 'center',
+      margin: '0 0 50px 0',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      margin: '0 0 70px 0',
+    },
   }
 })
+
 
 const StyledCommonBox = styled(Stack)(() => {
   return {
@@ -88,62 +103,97 @@ const StyledCommonBox = styled(Stack)(() => {
   }
 })
 
+
 const StyledTopHalfCommonBox = styled(Stack)(() => {
   return {
-    padding: '0 110px 0 110px'
+    width: '100%',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      flexDirection: 'column',
+      margin: '0',
+      padding: '20px',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: '45px 30px 0',
+    },
+
+    [MEDIA_XL_MODAL_PRODUCT]: {
+      padding: '45px 60px 0',
+    },
   }
 })
 
-const StyledBoxSliderAndOtherInfo = styled(Box)(() => {
-  return {
-    display: 'flex',
 
-  }
-})
-
-const StyledBoxTitleAndSlider = styled(Stack)(() => {
+const StyledBottomHalfCommonBox = styled(Stack)(({ theme }) => {
   return {
+
+    width: '100%',
+    justifyContent: 'center',
+    backgroundColor: theme.palette.getAlphaColor('primaryTint', 100, 1),
+    margin: '50px 0 0',
     alignItems: 'center',
-    margin: ' 0 100px 70px 0',
-    display: 'flex'
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      padding: '0 20px',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      padding: '100px 0 0 0px ',
+    }
   }
 })
+
 
 const StyledBoxNoteToComposition = styled(Stack)(({ theme }) => {
   return {
     position: 'relative',
-    top: '-140px',
-    left: '-270px',
+    maxWidth: '440px',
     backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
     padding: '20px 20px 20px 25px',
-    maxWidth: '440px',
     borderRadius: '15px',
-    margin: '0 0 0 100px'
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      top: '-65px',
+      left: 0,
+      margin: '38px 0 0 0',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      top: '-140px',
+      left: '-270px',
+      margin: '0 0 0 100px',
+    }
   }
 })
 
-const StyledCommonBoxComposition = styled(Stack)(({ theme }) => {
-  return {
-    width: '100%',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.getAlphaColor('primaryTint', 100, 1),
-    padding: '100px 0 0 0px ',
-    margin: '50px 0 0',
-    alignItems: 'center',
-  }
-})
 
 const StyledBoxComposition = styled(Box)(() => {
   return {
-    position: 'relative', top: '-90px',
+    position: 'relative',
+    maxWidth: '500px',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      top: '-15px',
+    },
+
+    [MEDIA_MD_MODAL_PRODUCT]: {
+      top: '-90px',
+    }
   }
 })
 
-const StyledButtonClose = styled(IconButton)(() => {
+
+const StyledBoxLoadingIndicator = styled(Box)(() => {
   return {
-    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: '50%',
+    left: '50%'
   }
 })
+
 
 const log = loglevel.getLogger(MODAL_PRODUCT)
 
@@ -155,6 +205,7 @@ function ModalProduct() {
   const navigationType = useNavigationType()
   const dispatch = useDispatch()
   const actionsNavigation = useActionsNavigation()
+  const breakpoints = useBreakpoints()
 
   const selectedCard = useSelector(state => state.cardProduct.selectedCard)
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
@@ -162,7 +213,10 @@ function ModalProduct() {
   const savedPathDataBeforeOpeningModalProduct = useSelector(state => state.navigation.savedPathDataBeforeOpeningModalProduct)
   const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
-
+  const [sizeMainImage, setSizeMainImage] = useState({
+    height: null,
+    width: null
+  })
 
   const { data, status, message } = selectedCard || {}
   const { title, imagesUrl, featuresComposition, company, otherInfo, nutritionalValue, noteToComposition, composition } = data || {}
@@ -175,6 +229,51 @@ function ModalProduct() {
   }, [dispatch, isVisiblePopper, refSelectedIngredient])
 
 
+
+  useEffect(() => {
+    identifyBreakpoint()
+  }, [
+    breakpoints.XS,
+    breakpoints.MD,
+    breakpoints.MDPlus,
+    breakpoints.XL
+  ])
+
+
+
+  function identifyBreakpoint() {
+    if (breakpoints.XL) {
+      dispatch(setIsFullScreenModalProduct(false))
+      updateSizeMainImage(350, 450)
+    } else
+
+      if (breakpoints.MDPlus) {
+        dispatch(setIsFullScreenModalProduct(false))
+        updateSizeMainImage(350, 450)
+      } else
+
+        if (breakpoints.MD) {
+          dispatch(setIsFullScreenModalProduct(true))
+          updateSizeMainImage(350, 450)
+        } else
+
+          if (breakpoints.XS) {
+            dispatch(setIsFullScreenModalProduct(true))
+            updateSizeMainImage(250, 350)
+          }
+  }
+
+
+
+  function updateSizeMainImage(width, height) {
+    setSizeMainImage({
+      width,
+      height,
+    })
+  }
+
+
+
   function handleCloseModal() {
     log.debug(`
     Произошёл вызов: handleCloseModal
@@ -183,6 +282,7 @@ function ModalProduct() {
     navigationType: ${navigationType}
     location: `, location)
 
+    dispatch(changeVisibleModalProduct(false))
     dispatch(resetStatesByDefaultCardProduct())
     dispatch(changeVisibleModalProduct(false)) // закрывает модальное окно продукта
 
@@ -206,62 +306,47 @@ function ModalProduct() {
 
 
   return (
-    <Dialog
-      disableAutoFocus
-      disableRestoreFocus
-      maxWidth={'xl'}
-      scroll="body"
-      onClose={handleCloseModal}
-      aria-labelledby="modal-title"
-      //open={isVisibleModal}
-      open={true}
-      slotProps={styleSlotProps}
-    >
+    <>
+      <Modal
+        widthModal='1100px'
+        heightModal={status === LOADING && '100%'}
+        handleCloseModal={handleCloseModal}
+        positionButtonClose={data && 'fixed'}
+      >
 
-      <DialogActions sx={{ position: 'absolute', zIndex: 10, top: '15px', right: '15px' }}>
-        <StyledButtonClose color="primary" onClick={handleCloseModal}>
+        {
+          data && (
+            <StyledCommonBox>
 
-          <CloseIcon sx={styleIcon} />
-
-        </StyledButtonClose>
-      </DialogActions>
-
-
-      <StyledMainBox settings={{ status }}>
-        <StyledCommonBox>
-          {
-            data && (<>
               <StyledTopHalfCommonBox>
-                <StyledBoxSliderAndOtherInfo>
-                  <StyledBoxTitleAndSlider>
+                <StyledBoxTitleAndSlider>
 
+                  <StyledWrapperTitle>
                     <StyledBoxTitle>
-                      <TitleContainer
-                        title={title}
-                      />
+                      <TitleContainer title={title} />
                     </StyledBoxTitle>
+                  </StyledWrapperTitle>
+
+                  <StyledBoxSlider>
+                    <SwiperSlider
+                      images={imagesUrl}
+                      height={sizeMainImage.height}
+                      width={sizeMainImage.width}
+                    />
+                  </StyledBoxSlider>
+                </StyledBoxTitleAndSlider>
 
 
-                    <StyledBoxSlider>
-                      <SwiperSlider images={imagesUrl} />
-                    </StyledBoxSlider>
-                  </StyledBoxTitleAndSlider>
-
-
-                  <Box>
-                    <FeaturesComposition data={featuresComposition} />
-                    <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
-                    {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
-                  </Box>
-
-                </StyledBoxSliderAndOtherInfo>
+                <Stack sx={{ alignItems: 'center' }}>
+                  <FeaturesComposition data={featuresComposition} />
+                  <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
+                  {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
+                </Stack>
               </StyledTopHalfCommonBox>
 
 
 
-
-              <StyledCommonBoxComposition>
-
+              <StyledBottomHalfCommonBox>
                 {
                   noteToComposition &&
                   <StyledBoxNoteToComposition>
@@ -269,48 +354,46 @@ function ModalProduct() {
                   </StyledBoxNoteToComposition>
                 }
 
-
-                <Box sx={{ maxWidth: '500px' }}>
-                  <StyledBoxComposition>
-                    <Composition
-                      data={composition}
-                      setRefSelectedIngredient={setRefSelectedIngredient}
-                    />
-                  </StyledBoxComposition>
-                </Box>
-              </StyledCommonBoxComposition>
-
-            </>)}
+                <StyledBoxComposition>
+                  <Composition
+                    data={composition}
+                    setRefSelectedIngredient={setRefSelectedIngredient}
+                  />
+                </StyledBoxComposition>
+              </StyledBottomHalfCommonBox>
+            </StyledCommonBox>
+          )
+        }
 
 
-
-          {
-            status === NOT_FOUND && <Box sx={{
-              width: "800px", height: "50%", display: "flex",
-              justifyContent: "center", alignItems: "center"
-            }}><NotFoundProduct message={message} status={status} /></Box>
-          }
-
-
-          {
-            status === LOADING && <Box sx={{ width: "1100px", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <LoadingIndicator />
-            </Box>
-          }
-
-        </StyledCommonBox>
+        {
+          status === LOADING &&
+          <StyledBoxLoadingIndicator>
+            <LoadingIndicator />
+          </StyledBoxLoadingIndicator>
+        }
 
 
-        {refSelectedIngredient && (
-          <PopperInterpretation
-            refIngredient={refSelectedIngredient}
-            interpretationValue={interpretationValue}
-          />
-        )}
+        {
+          refSelectedIngredient && (
+            <PopperInterpretation
+              refIngredient={refSelectedIngredient}
+              interpretationValue={interpretationValue}
+            />
+          )
+        }
 
-      </StyledMainBox>
+      </Modal>
 
-    </Dialog>
+
+      {
+        status === NOT_FOUND &&
+        <Modal handleCloseModal={handleCloseModal} padding='32px'>
+          <NotFoundProduct message={message} status={status} />
+        </Modal>
+      }
+
+    </>
   )
 }
 

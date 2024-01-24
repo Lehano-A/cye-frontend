@@ -1,5 +1,6 @@
 import logLevel from "loglevel";
-import { BRAND, CATEGORY, CONSTRUCTION_LOCATION_CONFIG, PERMALINK, START_URN_SEARCH_PRODUCT, TEXT } from "../constants"
+import { BRAND, CATEGORY, CONSTRUCTION_LOCATION_CONFIG, PERMALINK, START_PATH_SEARCH_PRODUCT, TEXT } from "../constants"
+
 
 const log = logLevel.getLogger(CONSTRUCTION_LOCATION_CONFIG)
 
@@ -34,47 +35,47 @@ function createPathname(data) {
     links: titlePermalink = null,
   } = processedPathnameData
 
-  let resultURN
-  const startURN = START_URN_SEARCH_PRODUCT
-
+  let resultPath
+  const startPath = START_PATH_SEARCH_PRODUCT
 
   if (permalink) { // если есть permalink
     const { brand = null, category = null } = permalink;
 
     // для модала продукта
     if ((brand && category) || brokenURI) {
-      resultURN = startURN.concat(`brand/${brand}/category/${category}/`)
+
+      resultPath = startPath.concat(`brand/${brand}/category/${category}/`)
 
       if (titlePermalink && !brokenURI) { // если есть ещё и 'permalink названия продукта' (значит нужно создать ссылку для модала продукта)
-        resultURN = resultURN.concat(`${titlePermalink}/`)
+        resultPath = resultPath.concat(`${titlePermalink}/`)
       }
     } else
 
 
       // или для 'permalink.brand', или для 'permalink.category'
       if (brand || category) {
-        resultURN = startURN.concat(`${searchBy}/${permalink[searchBy]}/`)
+        resultPath = startPath.concat(`${searchBy}/${permalink[searchBy]}/`)
       } else
 
 
         // или для распарсенных параметров поисковой строки (permalink: 'kashi')
         // (когда модал продукта открывется по ссылке, и нужно создать путь, который будет ПОСЛЕ закрытия модала)
         if (searchBy === BRAND || searchBy === CATEGORY) {
-          resultURN = startURN.concat(`${searchBy}/${permalink}/`)
+          resultPath = startPath.concat(`${searchBy}/${permalink}/`)
         }
   }
 
   // для text
   if (searchBy === TEXT) {
-    resultURN = startURN.concat(`${searchBy}/`)
+    resultPath = startPath.concat(`${searchBy}/`)
   }
 
 
   log.debug(`
   Результат работы функции: createPathname
 
-  resultURN: `, resultURN)
-  return resultURN
+  resultPath: `, resultPath)
+  return resultPath
 }
 
 

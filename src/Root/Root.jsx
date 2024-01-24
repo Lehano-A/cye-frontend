@@ -27,8 +27,10 @@ function Root() {
       errorElement:
         <>
           <Header />
+          <Main />
           <ErrorPage />
-        </>,
+        </>
+      ,
 
       children: [
         {

@@ -5,6 +5,8 @@ class Api {
     this.baseUrl = 'https://чтояем.рф/api/'
   }
 
+
+
   // поиск по бренду, категории или тексту
   findProduct = (querySearchParams, segmentSearch) => {
     return fetch(`${this.baseUrl}search/products${segmentSearch ? `/${segmentSearch}` : '/'}?${querySearchParams}`, {
@@ -15,6 +17,7 @@ class Api {
     })
       .then((res) => { return this._getResponse(res) })
   }
+
 
 
   // "живой" поиск по подстроке
@@ -29,6 +32,7 @@ class Api {
   }
 
 
+
   // поиск по permalink названия продукта
   findProductByTitlePermalink = (querySearchParams) => {
     return fetch(`${this.baseUrl}search/products/permalink/?${querySearchParams}`, {
@@ -40,6 +44,7 @@ class Api {
     )
       .then((res) => { return this._getResponse(res) })
   }
+
 
 
   _getResponse(res) {

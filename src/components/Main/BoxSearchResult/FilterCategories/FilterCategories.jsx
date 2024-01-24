@@ -1,5 +1,54 @@
 import React from "react";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+import { MEDIA_SM_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+
+
+const styleToggleButtonGroup = {
+  display: 'flex',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
+  maxWidth: '1000px',
+}
+
+
+const StyledToggleButton = styled(ToggleButton)(() => {
+  return {
+    transition: 'all 0.25s ease',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      padding: '0 6px',
+
+      '&.MuiToggleButton-root': {
+        height: '40px',
+      },
+    },
+
+    [MEDIA_SM_MODAL_PRODUCT]: {
+      padding: '0 11px',
+
+      '&.MuiToggleButton-root': {
+        height: '45px',
+      },
+    }
+  }
+})
+
+
+const StyledMainToggleButton = styled(StyledToggleButton)(() => {
+  return {
+    margin: '5px 25px 15px 15px',
+  }
+})
+
+
+const StyledOtherToggleButton = styled(StyledToggleButton)(() => {
+  return {
+    margin: '5px 10px 5px',
+  }
+})
+
 
 
 function FilterCategories({
@@ -9,34 +58,32 @@ function FilterCategories({
   isActiveButtonShowAllProducts,
 }) {
 
-
   return (
     <>
       <ToggleButtonGroup
         exclusive
         onChange={handleOnChange}
         value={activeButtonFilter}
+        sx={styleToggleButtonGroup}
       >
 
         {uniqueCategories.length > 0 &&
-          <ToggleButton
+          <StyledMainToggleButton
             value="showAllProducts"
-            sx={{ marginRight: '40px', transition: 'all 0.25s ease' }}
             selected={isActiveButtonShowAllProducts}
           >
             Всё подряд
-          </ToggleButton>
+          </StyledMainToggleButton>
         }
 
         {uniqueCategories.length > 0 && uniqueCategories.map((category, id) => {
           return (
-            <ToggleButton
+            <StyledOtherToggleButton
               value={category}
               key={id}
-              sx={{ marginRight: '10px', transition: 'all 0.25s ease' }}
             >
               {category}
-            </ToggleButton>
+            </StyledOtherToggleButton>
           )
 
         })}

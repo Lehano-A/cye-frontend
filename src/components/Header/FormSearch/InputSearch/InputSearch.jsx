@@ -5,6 +5,13 @@ import Input from "./Input/Input";
 import DropListbox from "./DropListbox/DropListbox";
 
 
+const styleListboxProps = {
+  sx: {
+    maxHeight: '100%',
+  }
+}
+
+
 const styleMainBox = {
   display: 'flex',
   justifyContent: 'center',
@@ -16,7 +23,6 @@ const styleMainBox = {
 
 
 function InputSearch({
-
   value,
   inputValue,
   isOpenedDropList,
@@ -27,7 +33,6 @@ function InputSearch({
   handleOnOpen,
   handleMouseInsideListbox,
 }) {
-
 
   return (
     <Box sx={styleMainBox}>
@@ -63,8 +68,7 @@ function InputSearch({
             onMouseLeave: (e) => { handleMouseInsideListbox(e) },
           }
         }}
-        ListboxProps={{ sx: { maxHeight: '100%' } }
-        } // сам элемент - "выпадающее окно"
+        ListboxProps={styleListboxProps} // сам элемент - "выпадающее окно"
         renderOption={(props, option) => <ItemDropList key={props.key} props={props} option={option} />
         } // вызывается для каждой опции выпадающего окна
         renderInput={(params) => <Input params={params} />

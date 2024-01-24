@@ -8,8 +8,38 @@ const defaultPaginationData = {
 }
 
 const messages = {
-  notFoundPage: 'Сервер очень старался, но эту страницу найти не удалось'
+  notFoundPage: 'Сервер очень старался, но эту страницу ему найти не удалось'
 }
+
+const MIN_WIDTH_0 = '(min-width: 0)'
+
+const MIN_WIDTH_500 = '(min-width: 500px)'
+
+const MIN_WIDTH_700 = '(min-width: 700px)'
+
+const MIN_WIDTH_900 = '(min-width: 900px)'
+
+const MIN_WIDTH_1000 = '(min-width: 1000px)'
+
+const MIN_WIDTH_1100 = '(min-width: 1100px)'
+
+const MIN_WIDTH_1200 = '(min-width: 1200px)'
+
+
+const MEDIA_XS_MODAL_PRODUCT = `@media ${MIN_WIDTH_0}`
+
+const MEDIA_XSPLUS_MODAL_PRODUCT = `@media ${MIN_WIDTH_500}`
+
+const MEDIA_SM_MODAL_PRODUCT = `@media ${MIN_WIDTH_700}`
+
+const MEDIA_MD_MODAL_PRODUCT = `@media ${MIN_WIDTH_900}`
+
+const MEDIA_XL_MODAL_PRODUCT = `@media ${MIN_WIDTH_1000}`
+
+const MEDIA_XLPLUS_MODAL_PRODUCT = `@media ${MIN_WIDTH_1100}`
+
+const MEDIA_LG_MODAL_PRODUCT = `@media ${MIN_WIDTH_1200}`
+
 
 const DELAY_SKELETON = 0
 
@@ -19,7 +49,7 @@ const BASE_DOCTITLE = "ЧТО Я ЕМ"
 
 const PRESSED_BUTTON_PAGINATION = 'pressedButtonPagination'
 
-const START_URN_SEARCH_PRODUCT = '/search/products/'
+const START_PATH_SEARCH_PRODUCT = '/search/products/'
 
 const BEFORE_REQ_TO_API = 'beforeReqToApi'
 
@@ -77,6 +107,8 @@ const CREATE_REQ_CONFIG_SEARCH_PRODUCT = 'createReqConfigSearchProduct'
 
 const SEARCH_PRODUCT_RESULT_PAGE = 'SearchProductResultPage'
 
+const HISTORY_SUBMIT = 'HistorySubmit'
+
 
 // mode loggers
 const SILENT = 'silent'
@@ -92,11 +124,25 @@ export {
   defaultPaginationData,
   messages,
 
+  MIN_WIDTH_0,
+  MIN_WIDTH_500,
+  MIN_WIDTH_700,
+  MIN_WIDTH_900,
+  MIN_WIDTH_1000,
+
+  MEDIA_XS_MODAL_PRODUCT,
+  MEDIA_XSPLUS_MODAL_PRODUCT,
+  MEDIA_SM_MODAL_PRODUCT,
+  MEDIA_MD_MODAL_PRODUCT,
+  MEDIA_XL_MODAL_PRODUCT,
+  MEDIA_XLPLUS_MODAL_PRODUCT,
+  MEDIA_LG_MODAL_PRODUCT,
+
   DELAY_SKELETON,
   SIZE_ICON_AND_BUTTON_INFORMING,
   BASE_DOCTITLE,
   PRESSED_BUTTON_PAGINATION,
-  START_URN_SEARCH_PRODUCT,
+  START_PATH_SEARCH_PRODUCT,
   BEFORE_REQ_TO_API,
   AFTER_RES_FROM_API,
   OPENING_MODAL_PRODUCT_BY_LINK,
@@ -126,6 +172,7 @@ export {
   SEND_TO_API,
   CREATE_REQ_CONFIG_SEARCH_PRODUCT,
   SEARCH_PRODUCT_RESULT_PAGE,
+  HISTORY_SUBMIT,
 
   // mode loggers
   SILENT,

@@ -2,14 +2,39 @@ import React from "react"
 import { Box, Typography, Table, TableRow, TableCell, TableHead, TableBody } from '@mui/material'
 import { styled } from "@mui/material/styles";
 import { grey } from '@mui/material/colors';
+import { MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
 
-const StyledTableCell = styled(TableCell)(() => {
+
+const StyledTableCellHead = styled(TableCell)(() => {
   return {
     fontSize: '12px',
     fontWeight: 'bold',
     textTransform: 'uppercase',
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      padding: '8px'
+    },
+
+    [MEDIA_XL_MODAL_PRODUCT]: {
+      padding: '16px'
+    },
+
   }
 })
+
+
+const StyledTableCellBody = styled(TableCell)(() => {
+  return {
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      padding: '8px'
+    },
+
+    [MEDIA_XL_MODAL_PRODUCT]: {
+      padding: '16px'
+    }
+  }
+})
+
 
 const styleMainBox = {
   display: 'flex',
@@ -17,13 +42,16 @@ const styleMainBox = {
   justifyContent: 'center',
   alignItems: 'center',
   padding: '15px 0',
+  maxWidth: '350px'
 }
+
 
 const styleTextNutritionalValue = {
   margin: '10px 0 0 0',
   color: grey[400],
   fontSize: "13px",
 }
+
 
 
 function TableNutritionalValue({ data }) {
@@ -36,19 +64,19 @@ function TableNutritionalValue({ data }) {
       <Table>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Белки</StyledTableCell>
-            <StyledTableCell align="center">Жиры</StyledTableCell>
-            <StyledTableCell align="center">Углеводы</StyledTableCell>
-            <StyledTableCell align="center">Калорийность</StyledTableCell>
+            <StyledTableCellHead align="center">Белки</StyledTableCellHead>
+            <StyledTableCellHead align="center">Жиры</StyledTableCellHead>
+            <StyledTableCellHead align="center">Углеводы</StyledTableCellHead>
+            <StyledTableCellHead align="center">Калорийность</StyledTableCellHead>
           </TableRow>
         </TableHead>
 
         <TableBody>
           <TableRow>
-            <TableCell align="center">{protein} г</TableCell>
-            <TableCell align="center">{fats} г</TableCell>
-            <TableCell align="center">{carbs} г</TableCell>
-            <TableCell align="center">{calories} ккал</TableCell>
+            <StyledTableCellBody align="center">{protein} г</StyledTableCellBody>
+            <StyledTableCellBody align="center">{fats} г</StyledTableCellBody>
+            <StyledTableCellBody align="center">{carbs} г</StyledTableCellBody>
+            <StyledTableCellBody align="center">{calories} ккал</StyledTableCellBody>
           </TableRow>
         </TableBody>
       </Table>

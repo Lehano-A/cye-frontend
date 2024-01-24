@@ -22,6 +22,7 @@ import {
   OPENING_MODAL_PRODUCT_BY_LINK,
   CREATE_REQ_CONFIG_SEARCH_PRODUCT,
   SEARCH_PRODUCT_RESULT_PAGE,
+  HISTORY_SUBMIT,
 } from "../../utils/constants";
 
 
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV === 'development') {
   log.getLogger(OPENING_MODAL_PRODUCT_BY_LINK).setLevel(SILENT)
   log.getLogger(CREATE_REQ_CONFIG_SEARCH_PRODUCT).setLevel(SILENT)
   log.getLogger(SEARCH_PRODUCT_RESULT_PAGE).setLevel(SILENT)
+  log.getLogger(HISTORY_SUBMIT).setLevel(SILENT)
 } else {
   log.setLevel(SILENT)
 }
@@ -67,12 +69,14 @@ function App() {
   }, [])
 
 
+
   useEffect(() => {
     if (countPathname === 0) {
       dispatch(incrementCountPathnames())
     }
     changeDocTitle()
   }, [location.pathname, location.search, location.state?.store?.docTitle, selectedCard])
+
 
 
   useEffect(() => {

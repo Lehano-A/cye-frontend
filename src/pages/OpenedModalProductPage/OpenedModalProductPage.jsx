@@ -15,6 +15,7 @@ import useSendingReqToApi from "../../hooks/useSendingReqToApi"
 import Main from "../../components/Main/Main"
 import { selectArrForShowSearchResultProducts } from "../../redux/reducers/selectors/boxSearchResultSelectors"
 import BoxSearchResult from "../../components/Main/BoxSearchResult/BoxSearchResult"
+import { startLoadingIndicatorBoxSearchResult } from "../../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions"
 import {
   NOT_FOUND,
   OPENED_MODAL_PRODUCT_PAGE,
@@ -69,10 +70,12 @@ function OpenedModalProductPage() {
     // когда открывается модальное окно продукта по ссылке
     if (!selectedCard.data) {
       const { permalinkProductTitle } = params
+      dispatch(startLoadingIndicatorBoxSearchResult())
       sendReqToApiWhenFirstOpeneningModalProduct(permalinkProductTitle)
     }
 
     dispatch(changeVisibleModalProduct(true))
+
 
     return () => {
       dispatch(resetStatesByDefaultCardProduct())

@@ -13,8 +13,10 @@ function LoadingIndicator({ size, color, handleLoading = null }) {
     }
   }, [])
 
+
+  
   return (
-    <CircularProgress size={size} sx={{ color: color }} />
+    <CircularProgress size={size} sx={{ color: color, margin: 'auto 0' }} />
   )
 }
 
