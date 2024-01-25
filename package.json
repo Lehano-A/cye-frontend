@@ -1,7 +1,7 @@
 {
   "name": "cye-frontend",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "dependencies": {
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
@@ -25,8 +25,7 @@
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
     "styled-components": "^5.3.10",
-    "swiper": "^10.1.0",
-    "web-vitals": "^2.1.4"
+    "swiper": "^10.1.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -35,7 +34,6 @@
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",
     "build": "react-scripts build",
-    "deploy": "npm run build && scp -r ./build/* lehano@158.160.17.120:/home/cye-frontend",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
