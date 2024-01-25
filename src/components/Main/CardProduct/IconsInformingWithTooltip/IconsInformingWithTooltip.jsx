@@ -4,35 +4,39 @@ import { styled } from "@mui/material/styles";
 import { Box, IconButton, ClickAwayListener } from "@mui/material"
 import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
 import TooltipIcon from "./TooltipIconInforming/TooltipIconInforming";
-import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
 import { SIZE_ICON_AND_BUTTON_INFORMING } from "../../../../utils/constants";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectUserDevice } from "../../../../redux/reducers/selectors/checkUserDeviceSelectors";
+import IconInforming from "./IconInforming/IconInforming";
 
-const StyledBoxIconCard = styled(Box)`
-margin: 0 10px 4px 0;
 
-  &:hover {
-    cursor: pointer;
-  };
-`
+const StyledBoxIconCard = styled(Box)(() => {
+  return {
+    margin: '0 5px',
+
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  }
+})
+
 
 const StyledIconButton = styled(IconButton)(() => {
   return {
     width: SIZE_ICON_AND_BUTTON_INFORMING,
     height: SIZE_ICON_AND_BUTTON_INFORMING,
-    backgroundColor: '#fff',
   }
 })
 
 
-function IconsInforming({ feature }) {
+
+function IconsInformingWithTooltip({ feature }) {
+
+  const userDevice = useSelector(selectUserDevice)
 
   const [isOpenTooltip, setIsOpenTooltip] = useState(false)
   const [dataIcon, setDataIcon] = useState(null)
-
-  const userDevice = useSelector(selectUserDevice)
 
 
   useEffect(() => {
@@ -41,9 +45,11 @@ function IconsInforming({ feature }) {
   }, [])
 
 
+
   const handleTooltipClose = () => {
     setIsOpenTooltip(false)
   };
+
 
 
   const handleVisibilityTooltipByButton = () => {
@@ -54,48 +60,46 @@ function IconsInforming({ feature }) {
     }
   };
 
-  
+
 
   return (
     <>
       {(dataIcon && userDevice === 'mobile') &&
 
         (<ClickAwayListener onClickAway={handleTooltipClose}>
-          <div>
-            <TooltipIcon
-              value={dataIcon.title}
-              placement='top'
-              color={dataIcon.color}
-              handleTooltipClose={handleTooltipClose}
-              isOpenTooltip={isOpenTooltip}
-              PopperProps={{
-                disablePortal: true,
-              }}
-              isDisableFocusListener={true}
-              isDisableHoverListener={true}
-              isDisableTouchListener={true}
-            >
-              <StyledBoxIconCard>
+          <TooltipIcon
+            value={dataIcon.title}
+            placement='top'
+            color={dataIcon.color}
+            handleTooltipClose={handleTooltipClose}
+            isOpenTooltip={isOpenTooltip}
+            PopperProps={{
+              disablePortal: true,
+            }}
+            isDisableFocusListener={true}
+            isDisableHoverListener={true}
+            isDisableTouchListener={true}
+          >
+            <StyledBoxIconCard>
+              <StyledIconButton
+                onClick={handleVisibilityTooltipByButton}
+                disableRipple
+              >
 
-                <StyledIconButton
-                  onClick={handleVisibilityTooltipByButton}
-                  disableRipple
-                >
+                <IconInforming
+                  color={dataIcon.color}
+                  component={dataIcon.icon}
+                  inheritViewBox
+                  size={SIZE_ICON_AND_BUTTON_INFORMING}
+                />
 
-                  <StyledIconInforming
-                    color={dataIcon.color}
-                    component={dataIcon.icon}
-                    inheritViewBox
-                    size={SIZE_ICON_AND_BUTTON_INFORMING}
-                  />
+              </StyledIconButton>
+            </StyledBoxIconCard>
 
-                </StyledIconButton>
-
-              </StyledBoxIconCard>
-            </TooltipIcon>
-          </div>
+          </TooltipIcon>
         </ClickAwayListener>)
       }
+
 
 
       {(dataIcon && userDevice === 'desktop') &&
@@ -109,21 +113,18 @@ function IconsInforming({ feature }) {
           isDisableTouchListener={true}
         >
           <StyledBoxIconCard>
-
             <StyledIconButton
               disableRipple
             >
 
-              <StyledIconInforming
+              <IconInforming
+                inheritViewBox
                 color={dataIcon.color}
                 component={dataIcon.icon}
-                inheritViewBox
-                size={SIZE_ICON_AND_BUTTON_INFORMING}
               />
-
             </StyledIconButton>
-
           </StyledBoxIconCard>
+
         </TooltipIcon>
         )
       }
@@ -131,7 +132,7 @@ function IconsInforming({ feature }) {
   )
 }
 
-export default IconsInforming
+export default IconsInformingWithTooltip
 
 
 

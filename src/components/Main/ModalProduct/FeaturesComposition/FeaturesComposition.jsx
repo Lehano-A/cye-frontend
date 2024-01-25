@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
-import StyledIconInforming from "../../../shared/StyledIconInforming/StyledIconInforming";
+
 import { styled } from "@mui/material/styles";
 import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+import IconInforming from "../../CardProduct/IconsInformingWithTooltip/IconInforming/IconInforming";
 
 
 const StyledMainBox = styled(Box)(({ theme, color }) => {
@@ -92,7 +93,12 @@ function FeaturesComposition({ data }) {
               </StyledBoxTitleIngredients>
 
 
-              <StyledIconInforming color={dataIcon.color} sx={styleIconInforming} inheritViewBox component={dataIcon.icon} />
+              <IconInforming
+                inheritViewBox
+                component={dataIcon.icon}
+                color={dataIcon.color}
+                sx={styleIconInforming}
+              />
 
             </StyledMainBox>)
         })

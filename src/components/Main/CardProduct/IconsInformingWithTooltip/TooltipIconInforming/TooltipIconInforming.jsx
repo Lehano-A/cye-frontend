@@ -21,8 +21,8 @@ const StyledTooltip = styled(({ className, color, ...props }) => (
 });
 
 
-function TooltipIcon({ children, value, color, placement, isOpenTooltip, handleTooltipClose, isDisableFocusListener, isDisableHoverListener, isDisableTouchListener, userDevice }) {
 
+function TooltipIcon({ children, value, color, placement, isOpenTooltip, handleTooltipClose, isDisableFocusListener, isDisableHoverListener, isDisableTouchListener }) {
 
   return (
     <StyledTooltip

@@ -2,7 +2,8 @@ import { SvgIcon } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 
-const StyledIconInforming = styled(SvgIcon)(({ theme, color, size }) => {
+
+const IconInforming = styled(SvgIcon)(({ theme, color, size }) => {
   return {
     width: size,
     height: size,
@@ -10,5 +11,4 @@ const StyledIconInforming = styled(SvgIcon)(({ theme, color, size }) => {
   }
 })
 
-
-export default StyledIconInforming
+export default IconInforming

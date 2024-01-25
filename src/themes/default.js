@@ -90,9 +90,6 @@ const theme = createTheme({
           'WebkitLineClamp': 2,
         }
       },
-      textOptionBrandAndCategory: {
-
-      }
     }
   },
 
@@ -101,7 +98,7 @@ const theme = createTheme({
     MuiCssBaseline: {
       '@global': {
         body: {
-          margin: 0
+          margin: 0,
         }
       }
     },

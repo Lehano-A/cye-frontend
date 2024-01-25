@@ -22,7 +22,7 @@ function Header() {
 
   const dispatch = useDispatch()
 
-  
+
   return (
     <Paper variant="header">
       <Stack

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, Skeleton, Fade } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import IconsInforming from './IconInforming/IconInforming';
+import IconsInforming from './IconsInformingWithTooltip/IconsInformingWithTooltip';
 import queryString from 'query-string';
 import { DELAY_SKELETON, OPENING_MODAL_PRODUCT, SIZE_ICON_AND_BUTTON_INFORMING } from '../../../utils/constants';
 
@@ -57,6 +57,8 @@ const StyledCardMedia = styled(CardMedia)(({ params }) => {
     visibility: isLoadedImage ? 'visible' : 'hidden',
     width: isLoadedImage ? '100%' : 0,
     height: isLoadedImage ? '100%' : 0,
+    objectFit: 'contain',
+    margin: '15px 0 0'
   }
 })
 
@@ -81,12 +83,16 @@ const StyledCard = styled(Card)(() => {
 })
 
 
-const StyledIconsInforming = styled(Box)(() => {
+const StyledBoxIconsInforming = styled(Box)(() => {
   return {
     display: 'flex',
-    margin: '3px 0 0 4px',
     width: SIZE_ICON_AND_BUTTON_INFORMING,
     height: SIZE_ICON_AND_BUTTON_INFORMING,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    padding: '4px'
   }
 })
 
@@ -97,6 +103,7 @@ const StyledMainBox = styled(Box)(() => {
     flexDirection: 'column',
     height: '100%',
     justifyContent: 'stretch',
+    position: 'relative',
   }
 })
 
@@ -183,9 +190,10 @@ function CardProduct({ dataProduct }) {
     <>
       <Fade in={true}>
         <StyledMainBox>
+
           {
             featuresComposition?.length > 0 &&
-            <StyledIconsInforming>
+            <StyledBoxIconsInforming>
               {
                 featuresComposition.map((item, id) => {
                   return (
@@ -196,7 +204,7 @@ function CardProduct({ dataProduct }) {
                   )
                 })
               }
-            </StyledIconsInforming>
+            </StyledBoxIconsInforming>
           }
 
           <StyledCard variant='searchResult' onClick={handleCardClick}>
