@@ -79,6 +79,7 @@ function OpenedModalProductPage() {
 
     return () => {
       dispatch(resetStatesByDefaultCardProduct())
+      dispatch(changeVisibleModalProduct(false))
     }
   }, [])
 
