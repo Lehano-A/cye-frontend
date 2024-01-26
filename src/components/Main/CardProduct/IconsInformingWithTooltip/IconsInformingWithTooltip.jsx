@@ -67,36 +67,39 @@ function IconsInformingWithTooltip({ feature }) {
       {(dataIcon && userDevice === 'mobile') &&
 
         (<ClickAwayListener onClickAway={handleTooltipClose}>
-          <TooltipIcon
-            value={dataIcon.title}
-            placement='top'
-            color={dataIcon.color}
-            handleTooltipClose={handleTooltipClose}
-            isOpenTooltip={isOpenTooltip}
-            PopperProps={{
-              disablePortal: true,
-            }}
-            isDisableFocusListener={true}
-            isDisableHoverListener={true}
-            isDisableTouchListener={true}
-          >
-            <StyledBoxIconCard>
-              <StyledIconButton
-                onClick={handleVisibilityTooltipByButton}
-                disableRipple
-              >
+          <Box> {/* Box необходим для корректной работы ClickAwayListener */}
+            <TooltipIcon
+              value={dataIcon.title}
+              placement='top'
+              color={dataIcon.color}
+              handleTooltipClose={handleTooltipClose}
+              isOpenTooltip={isOpenTooltip}
+              PopperProps={{
+                disablePortal: true,
+              }}
+              isDisableFocusListener={true}
+              isDisableHoverListener={true}
+              isDisableTouchListener={true}
+              
+            >
+              <StyledBoxIconCard>
+                <StyledIconButton
+                  onClick={handleVisibilityTooltipByButton}
+                  disableRipple
+                >
 
-                <IconInforming
-                  color={dataIcon.color}
-                  component={dataIcon.icon}
-                  inheritViewBox
-                  size={SIZE_ICON_AND_BUTTON_INFORMING}
-                />
+                  <IconInforming
+                    color={dataIcon.color}
+                    component={dataIcon.icon}
+                    inheritViewBox
+                    size={SIZE_ICON_AND_BUTTON_INFORMING}
+                  />
 
-              </StyledIconButton>
-            </StyledBoxIconCard>
+                </StyledIconButton>
+              </StyledBoxIconCard>
 
-          </TooltipIcon>
+            </TooltipIcon>
+          </Box>
         </ClickAwayListener>)
       }
 
