@@ -14,7 +14,7 @@ import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import loglevel from 'loglevel';
 import NotFoundProduct from "./NotFoundProduct/NotFoundProduct";
 import TitleContainer from "./containersModalProduct/TitleContainer";
-import { CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
+import { CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
 
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModalProduct, setIsFullScreenModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
@@ -29,16 +29,6 @@ import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/se
 import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
 import useBreakpoints from "../../../hooks/useMediaQuery";
 import Modal from "../../Modal/Modal";
-
-
-const StyledWrapperTitle = styled(Box)(() => {
-  return {
-    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
-  }
-})
 
 
 const StyledBoxTitle = styled(Box)(() => {
@@ -321,11 +311,9 @@ function ModalProduct() {
               <StyledTopHalfCommonBox>
                 <StyledBoxTitleAndSlider>
 
-                  <StyledWrapperTitle>
-                    <StyledBoxTitle>
-                      <TitleContainer title={title} />
-                    </StyledBoxTitle>
-                  </StyledWrapperTitle>
+                  <StyledBoxTitle>
+                    <TitleContainer title={title} />
+                  </StyledBoxTitle>
 
                   <StyledBoxSlider>
                     <SwiperSlider
