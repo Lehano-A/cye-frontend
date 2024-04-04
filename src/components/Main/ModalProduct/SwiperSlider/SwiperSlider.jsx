@@ -190,7 +190,7 @@ function SwiperSlider({ images, width, height, }) {
                 {
                   item.isLoaded &&
                   <ZoomImage
-                    urlImage={item.url}
+                    uriImage={item.url}
                     width={width}
                     height={height}
                   />

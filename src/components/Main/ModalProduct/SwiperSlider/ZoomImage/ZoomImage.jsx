@@ -1,37 +1,68 @@
-import React, { useMemo, useRef } from "react";
-import Zoom from 'react-img-hover-zoom';
+import { Box } from "@mui/material";
+import React, { useRef } from "react";
+import { styled } from "@mui/material/styles";
+
+const StyledImage = styled('img')(() => {
+  return {
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
+    transition: '0.1s ease',
+  }
+})
 
 
 
-function ZoomImage({ urlImage, width = 0, height = 0 }) {
+function ZoomImage({ uriImage, width = 0, height = 0 }) {
 
-  const ref = useRef()
+  const imageRef = useRef()
 
-  const memoSizeMainImage = useMemo(() => {
-    if (ref.current) {
-      ref.current.imageRef.current.style.height = `${height}px`
-      ref.current.imageRef.current.style.width = `${width}px`
-    }
 
-    return {
-      height,
-      width
-    }
-  }, [width, height])
+
+  function handleMouseMove(e) {
+    const geometry = e.target.getBoundingClientRect()
+    const x = (e.clientX - geometry.left) / geometry.width * width
+    const y = (e.clientY - geometry.top) / geometry.height * height
+
+    requestAnimationFrame(() => {
+      imageRef.current.style.transformOrigin = `${x}px ${y}px`
+    })
+  }
+
+
+  function handleMouseEnter(e) {
+    const geometry = e.target.getBoundingClientRect()
+    const x = e.clientX - geometry.x
+    const y = e.clientY - geometry.y
+
+    requestAnimationFrame(() => {
+      imageRef.current.style.transformOrigin = `${x}px ${y}px`
+      imageRef.current.style.transform = `scale(2)`
+    })
+  }
+
+
+  function handleMouseLeave() {
+    requestAnimationFrame(() => { imageRef.current.style.transform = 'scale(1)'; });
+  }
 
 
 
   return (
-    <Zoom
-      ref={ref}
-      img={urlImage}
-      zoomScale={2}
-      width={memoSizeMainImage.width} // only number
-      height={memoSizeMainImage.height} // only number
-      style={{
-        backgroundSize: 'contain',
+    <Box
+      sx={{
+        width: `${width}px`,
+        height: `${height}px`,
       }}
-    />
+      onMouseLeave={handleMouseLeave}
+    >
+      <StyledImage
+        src={uriImage}
+        ref={imageRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+      />
+    </Box>
   )
 }
 
