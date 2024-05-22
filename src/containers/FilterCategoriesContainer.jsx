@@ -71,16 +71,13 @@ function FilterCategoriesContainer({ foundProducts, searchBy }) {
     const box = {}
 
     dataProducts.forEach((product) => {
-      if (searchBy !== "category") {
-        box[product.categories.main] = true
-      }
-
-      if (product.categories.sub) {
+      if (product.categories.sub.length > 0) {
         product.categories.sub.forEach((titleSub) => {
           box[titleSub] = true
         })
       }
     });
+
     return Object.keys(box)
   }
 
