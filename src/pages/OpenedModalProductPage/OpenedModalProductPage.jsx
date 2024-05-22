@@ -14,7 +14,6 @@ import constructLocationConfig from "../../utils/navigation/constructLocationCon
 import useSendingReqToApi from "../../hooks/useSendingReqToApi"
 import Main from "../../components/Main/Main"
 import { selectArrForShowSearchResultProducts } from "../../redux/reducers/selectors/boxSearchResultSelectors"
-import BoxSearchResult from "../../components/Main/BoxSearchResult/BoxSearchResult"
 import { startLoadingIndicatorBoxSearchResult } from "../../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions"
 import {
   NOT_FOUND,
@@ -160,10 +159,8 @@ function OpenedModalProductPage() {
   return (
     <>
       {
-        arrForShowSearchResultProducts.length === 0 && selectedCard.status === NOT_FOUND ?
-          <Main />
-          :
-          <BoxSearchResult />
+        arrForShowSearchResultProducts.length === 0 && selectedCard.status === NOT_FOUND &&
+        <Main />
       }
 
       <ModalProduct />

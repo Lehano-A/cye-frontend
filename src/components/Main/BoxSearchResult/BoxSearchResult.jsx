@@ -79,11 +79,11 @@ function BoxSearchResult() {
           (
             <>
               {
+
                 (apiFoundProductsAfterSubmit?.result?.length > 1 || activeButtonFilter) &&
                 <Fade in={true}>
                   <StyledBoxFilter>
                     <FilterCategoriesContainer
-                      apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit}
                       foundProducts={apiFoundProductsAfterSubmit.result}
                       searchBy={apiFoundProductsAfterSubmit?.searchBy}
                     />

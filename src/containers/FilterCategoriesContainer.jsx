@@ -25,7 +25,6 @@ import {
 
 
 function FilterCategoriesContainer({ foundProducts, searchBy }) {
-
   const dispatch = useDispatch()
 
   const uniqueCategories = useSelector(selectUniqueCategories)

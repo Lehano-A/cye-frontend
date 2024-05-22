@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import queryString from 'query-string'
 import loglevel from 'loglevel'
-import { createSearchParams, useLocation, useNavigationType, useParams } from "react-router-dom"
+import { Outlet, createSearchParams, useLocation, useNavigationType, useParams } from "react-router-dom"
 import useSendingReqToApi from "../../hooks/useSendingReqToApi"
 import { useDispatch, useSelector } from "react-redux"
 import { startLoadingIndicatorBoxSearchResult } from "../../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions"
@@ -63,7 +63,11 @@ function SearchProductResultPage() {
 
 
   return (
-    <BoxSearchResult />
+    <>
+      <BoxSearchResult />
+
+      <Outlet />
+    </>
   )
 }
 

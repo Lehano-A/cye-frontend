@@ -48,12 +48,11 @@ function Root() {
         {
           path: '/search/products/brand/:permalinkBrand/category/:permalinkCategory/',
           element: <SearchProductResultPageWithErrorPage />,
-        },
-
-
-        {
-          path: '/search/products/brand/:permalinkBrand/category/:permalinkCategory/:permalinkProductTitle/',
-          element: <OpenedModalProductPageWithErrorPage />,
+          children: [
+            {
+              path: ':permalinkProductTitle/',
+              element: <OpenedModalProductPageWithErrorPage />,
+            },]
         },
       ]
     }
