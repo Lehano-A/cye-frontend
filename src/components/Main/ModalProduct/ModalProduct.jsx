@@ -119,12 +119,11 @@ const StyledTopHalfCommonBox = styled(Stack)(() => {
 
 const StyledBottomHalfCommonBox = styled(Stack)(({ theme }) => {
   return {
-
-    width: '100%',
+    flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: theme.palette.getAlphaColor('primaryTint', 100, 1),
     margin: '50px 0 0',
-    alignItems: 'center',
 
     [MEDIA_XS_MODAL_PRODUCT]: {
       padding: '0 20px',
@@ -137,10 +136,20 @@ const StyledBottomHalfCommonBox = styled(Stack)(({ theme }) => {
 })
 
 
+const WrapperNoteCompositionAndComposition = styled(Box)(() => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '800px',
+  }
+})
+
+
 const StyledBoxNoteToComposition = styled(Stack)(({ theme }) => {
   return {
     position: 'relative',
-    maxWidth: '440px',
+
+    width: 'max-content',
     backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
     padding: '20px 20px 20px 25px',
     borderRadius: '15px',
@@ -148,13 +157,16 @@ const StyledBoxNoteToComposition = styled(Stack)(({ theme }) => {
     [MEDIA_XS_MODAL_PRODUCT]: {
       top: '-65px',
       left: 0,
+      maxWidth: '280px',
       margin: '38px 0 0 0',
     },
 
     [MEDIA_MD_MODAL_PRODUCT]: {
       top: '-140px',
-      left: '-270px',
-      margin: '0 0 0 100px',
+      left: '-70px',
+      alignSelf: 'start',
+      maxWidth: '440px',
+      margin: '0',
     }
   }
 })
@@ -335,19 +347,21 @@ function ModalProduct() {
 
 
               <StyledBottomHalfCommonBox>
-                {
-                  noteToComposition &&
-                  <StyledBoxNoteToComposition>
-                    <NoteToComposition data={noteToComposition} />
-                  </StyledBoxNoteToComposition>
-                }
+                <WrapperNoteCompositionAndComposition>
+                  {
+                    noteToComposition &&
+                    <StyledBoxNoteToComposition>
+                      <NoteToComposition data={noteToComposition} />
+                    </StyledBoxNoteToComposition>
+                  }
 
-                <StyledBoxComposition>
-                  <Composition
-                    data={composition}
-                    setRefSelectedIngredient={setRefSelectedIngredient}
-                  />
-                </StyledBoxComposition>
+                  <StyledBoxComposition>
+                    <Composition
+                      data={composition}
+                      setRefSelectedIngredient={setRefSelectedIngredient}
+                    />
+                  </StyledBoxComposition>
+                </WrapperNoteCompositionAndComposition>
               </StyledBottomHalfCommonBox>
             </StyledCommonBox>
           )

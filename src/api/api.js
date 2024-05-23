@@ -1,7 +1,7 @@
 class Api {
 
   constructor() {
-    // this.baseUrl = 'http://localhost:3000/api/'
+    // this.baseUrl = 'http://localhost:3000/'
     this.baseUrl = 'https://чтояем.рф/api/'
   }
 
