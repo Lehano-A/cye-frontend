@@ -28,6 +28,10 @@ const StyledListItem = styled(ListItem)(() => {
     paddingLeft: 0,
     paddingRight: 0,
 
+    '&:last-child': {
+       paddingBottom: '0',
+    },
+
     [MEDIA_XS_MODAL_PRODUCT]: {
       flexDirection: 'column',
       alignItems: 'end',
