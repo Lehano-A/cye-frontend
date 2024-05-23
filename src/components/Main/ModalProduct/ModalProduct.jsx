@@ -80,7 +80,7 @@ const StyledBoxTitleAndSlider = styled(Stack)(() => {
     },
 
     [MEDIA_MD_MODAL_PRODUCT]: {
-      margin: '0 0 70px 0',
+      margin: 0
     },
   }
 })
@@ -89,7 +89,6 @@ const StyledBoxTitleAndSlider = styled(Stack)(() => {
 const StyledCommonBox = styled(Stack)(() => {
   return {
     justifyContent: 'space-between',
-    gap: 5,
   }
 })
 
@@ -117,20 +116,22 @@ const StyledTopHalfCommonBox = styled(Stack)(() => {
 })
 
 
-const StyledBottomHalfCommonBox = styled(Stack)(({ theme }) => {
+const StyledBottomHalfCommonBox = styled(Stack, {
+  shouldForwardProp: (props) => props !== 'isDisplayedNoteComposition'
+})((props) => {
   return {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.palette.getAlphaColor('primaryTint', 100, 1),
-    margin: '50px 0 0',
+    backgroundColor: props.theme.palette.getAlphaColor('primaryTint', 100, 1),
 
     [MEDIA_XS_MODAL_PRODUCT]: {
       padding: '0 20px',
+      margin: `${props.isDisplayedNoteComposition ? '37px 0 0' : '0'}`,
     },
 
     [MEDIA_MD_MODAL_PRODUCT]: {
-      padding: '100px 0 0 0px ',
+      margin: `${props.isDisplayedNoteComposition ? '65px 0 0' : '35px 0 0'}`,
     }
   }
 })
@@ -148,44 +149,46 @@ const WrapperNoteCompositionAndComposition = styled(Box)(() => {
 const StyledBoxNoteToComposition = styled(Stack)(({ theme }) => {
   return {
     position: 'relative',
-
-    width: 'max-content',
     backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
     padding: '20px 20px 20px 25px',
     borderRadius: '15px',
 
     [MEDIA_XS_MODAL_PRODUCT]: {
-      top: '-65px',
+      top: '-75px',
       left: 0,
-      maxWidth: '280px',
+      minWidth: '280px',
+      maxWidth: '500px',
+      width: '100%',
       margin: '38px 0 0 0',
     },
 
     [MEDIA_MD_MODAL_PRODUCT]: {
-      top: '-140px',
+      top: '-40px',
       left: '-70px',
-      alignSelf: 'start',
       maxWidth: '440px',
+      width: 'max-content',
+      alignSelf: 'start',
       margin: '0',
     }
   }
 })
 
 
-const StyledBoxComposition = styled(Box)(() => {
-  return {
-    position: 'relative',
-    maxWidth: '500px',
+const StyledBoxComposition = styled(Box, { shouldForwardProp: (props) => props !== 'isDisplayedNoteComposition' })(
+  (props) => {
+    return {
+      maxWidth: '500px',
 
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      top: '-15px',
-    },
+      [MEDIA_XS_MODAL_PRODUCT]: {
+        margin: `${props.isDisplayedNoteComposition ? '-20px 0 45px' : '40px 0'}`,
+      },
 
-    [MEDIA_MD_MODAL_PRODUCT]: {
-      top: '-90px',
+      [MEDIA_MD_MODAL_PRODUCT]: {
+        margin: `${props.isDisplayedNoteComposition ? '10px 0 45px' : '40px 0'}`,
+      }
     }
   }
-})
+)
 
 
 const StyledBoxLoadingIndicator = styled(Box)(() => {
@@ -345,8 +348,7 @@ function ModalProduct() {
               </StyledTopHalfCommonBox>
 
 
-
-              <StyledBottomHalfCommonBox>
+              <StyledBottomHalfCommonBox isDisplayedNoteComposition={noteToComposition}>
                 <WrapperNoteCompositionAndComposition>
                   {
                     noteToComposition &&
@@ -355,7 +357,9 @@ function ModalProduct() {
                     </StyledBoxNoteToComposition>
                   }
 
-                  <StyledBoxComposition>
+                  <StyledBoxComposition
+                    isDisplayedNoteComposition={noteToComposition}
+                  >
                     <Composition
                       data={composition}
                       setRefSelectedIngredient={setRefSelectedIngredient}
