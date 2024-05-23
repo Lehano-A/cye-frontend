@@ -1,6 +1,7 @@
 import React from "react"
 import Ingredients from "../Ingredients/Ingredients"
 import { Typography, List, Box } from "@mui/material"
+import { styled } from "@mui/material/styles";
 import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants"
 
 
@@ -17,6 +18,12 @@ const styleTitle = {
   },
 }
 
+const StyledList = styled(List)(() => {
+  return {
+    padding: 0
+  }
+})
+
 
 
 function Composition({ data, setRefSelectedIngredient }) {
@@ -31,14 +38,14 @@ function Composition({ data, setRefSelectedIngredient }) {
         Состав
       </Typography>
 
-      <List>
+      <StyledList>
 
         <Ingredients
           data={data}
           setRefSelectedIngredient={setRefSelectedIngredient}
         />
 
-      </List>
+      </StyledList>
     </Box>
   )
 }
