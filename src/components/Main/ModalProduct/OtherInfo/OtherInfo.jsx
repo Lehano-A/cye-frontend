@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
 
 
 const StyledMainBox = styled(Box)(() => {
@@ -17,7 +18,6 @@ const StyledList = styled(List)(() => {
     display: 'flex',
     flexDirection: 'column',
     padding: '20px 0',
-
   }
 })
 
@@ -25,9 +25,18 @@ const StyledList = styled(List)(() => {
 const StyledListItem = styled(ListItem)(() => {
   return {
     display: 'flex',
-    justifyContent: 'space-between',
     paddingLeft: 0,
     paddingRight: 0,
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      flexDirection: 'column',
+      alignItems: 'end',
+    },
+
+    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
   }
 })
 
@@ -41,21 +50,37 @@ const StyledTitle = styled(Typography)(() => {
     textTransform: 'uppercase',
     whiteSpace: 'nowrap',
 
-    '&::after': {
-      content: "''",
-      display: 'inline',
-      width: '100%',
+    [MEDIA_XS_MODAL_PRODUCT]: {
       borderBottom: '1px dashed #d9d9d9',
-      margin: '0 10px 5px'
-    }
+    },
+
+    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+      borderBottom: 'none', /* бордер элемента */
+
+      '&::after': {
+        content: "''",
+        display: 'inline',
+        width: '100%',
+        borderBottom: '1px dashed #d9d9d9', /* бордер псевдоэлемента */
+        margin: '0 10px 5px'
+      },
+    },
+
   }
 })
 
 
 const StyledValue = styled(Typography)(() => {
   return {
-    whiteSpace: 'nowrap',
     fontSize: "14px",
+
+    [MEDIA_XS_MODAL_PRODUCT]: {
+      whiteSpace: 'wrap',
+    },
+
+    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+      whiteSpace: 'nowrap',
+    },
   }
 })
 
@@ -77,33 +102,33 @@ function OtherInfo({ data }) {
 
         <StyledListItem>
           <StyledTitle variant="h6">Бренд</StyledTitle>
-          <StyledValue variant="body2" >{title}</StyledValue>
+          <StyledValue variant="span" >{title}</StyledValue>
         </StyledListItem>
 
 
         <StyledListItem>
           <StyledTitle variant="h6" >Производитель</StyledTitle>
-          <StyledValue variant="body2" >{manufacture}</StyledValue>
+          <StyledValue variant="span" >{manufacture}</StyledValue>
         </StyledListItem>
 
         <StyledListItem>
           <StyledTitle variant="h6" >Страна производства</StyledTitle>
-          <StyledValue variant="body2">{countryManufacture}</StyledValue>
+          <StyledValue variant="span">{countryManufacture}</StyledValue>
         </StyledListItem>
 
         <StyledListItem>
           <StyledTitle variant="h6">Срок хранения</StyledTitle>
-          <StyledValue variant="body2">{shelfLife}</StyledValue>
+          <StyledValue variant="span">{shelfLife}</StyledValue>
         </StyledListItem>
 
         <StyledListItem>
           <StyledTitle variant="h6">Тип упаковки</StyledTitle>
-          <StyledValue variant="body2">{typePackage}</StyledValue>
+          <StyledValue variant="span">{typePackage}</StyledValue>
         </StyledListItem>
 
         <StyledListItem>
           <StyledTitle variant="h6">Вес</StyledTitle>
-          <StyledValue variant="body2">{weight}</StyledValue>
+          <StyledValue variant="span">{weight}</StyledValue>
         </StyledListItem>
 
       </StyledList>
