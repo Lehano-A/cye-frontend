@@ -85,7 +85,8 @@ function BoxSearchResult() {
                   <StyledBoxFilter>
                     <FilterCategoriesContainer
                       foundProducts={apiFoundProductsAfterSubmit.result}
-                      searchBy={apiFoundProductsAfterSubmit?.searchBy}
+                      searchBy={apiFoundProductsAfterSubmit.search.searchBy}
+                      categoryName={apiFoundProductsAfterSubmit.search.searchValue}
                     />
                   </StyledBoxFilter>
                 </Fade>

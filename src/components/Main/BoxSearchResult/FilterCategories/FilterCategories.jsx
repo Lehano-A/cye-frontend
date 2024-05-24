@@ -56,6 +56,8 @@ function FilterCategories({
   activeButtonFilter,
   uniqueCategories,
   isActiveButtonShowAllProducts,
+  searchBy,
+  categoryName,
 }) {
 
   return (
@@ -67,14 +69,16 @@ function FilterCategories({
         sx={styleToggleButtonGroup}
       >
 
-        {uniqueCategories.length > 0 &&
-          <StyledMainToggleButton
-            value="showAllProducts"
-            selected={isActiveButtonShowAllProducts}
-          >
-            Всё подряд
-          </StyledMainToggleButton>
-        }
+        <StyledMainToggleButton
+          value="showAllProducts"
+          selected={isActiveButtonShowAllProducts}
+        >
+          {
+            searchBy === 'category' && uniqueCategories.length === 0 ?
+              categoryName : 'Всё подряд'
+          }
+        </StyledMainToggleButton>
+
 
         {uniqueCategories.length > 0 && uniqueCategories.map((category, id) => {
           return (

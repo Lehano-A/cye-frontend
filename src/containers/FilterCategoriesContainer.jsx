@@ -24,7 +24,7 @@ import {
 
 
 
-function FilterCategoriesContainer({ foundProducts, searchBy }) {
+function FilterCategoriesContainer({ foundProducts, searchBy, categoryName }) {
   const dispatch = useDispatch()
 
   const uniqueCategories = useSelector(selectUniqueCategories)
@@ -71,6 +71,15 @@ function FilterCategoriesContainer({ foundProducts, searchBy }) {
     const box = {}
 
     dataProducts.forEach((product) => {
+      if (searchBy !== "category") {
+        box[product.categories.main] = true
+      }
+
+      /* если поиск по бренду или подстроке и есть подкатегории, а только основные категории */
+      if (searchBy === "brand" || searchBy === "text") {
+        return
+      }
+
       if (product.categories.sub.length > 0) {
         product.categories.sub.forEach((titleSub) => {
           box[titleSub] = true
@@ -112,6 +121,7 @@ function FilterCategoriesContainer({ foundProducts, searchBy }) {
         }
       }
 
+      // когда фильтрация происходит по кнопке фильтра подкатегории
       return product.categories?.sub.some((titleSubCategory) => {
         return nameButton === titleSubCategory
       })
@@ -128,6 +138,8 @@ function FilterCategoriesContainer({ foundProducts, searchBy }) {
       activeButtonFilter={activeButtonFilter}
       uniqueCategories={uniqueCategories}
       isActiveButtonShowAllProducts={isActiveButtonShowAllProducts}
+      searchBy={searchBy}
+      categoryName={categoryName}
     />
   )
 }
