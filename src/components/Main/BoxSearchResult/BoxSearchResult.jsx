@@ -14,6 +14,7 @@ import { selectArrForShowSearchResultProducts, selectIsLoadingIndicatorBoxSearch
 import { selectNameActiveButtonInFilter } from "../../../redux/reducers/selectors/filterCategoriesSelectors";
 import { selectIsDisplayedButtonPagination } from "../../../redux/reducers/selectors/paginationSelectors";
 import { MEDIA_XS_MODAL_PRODUCT } from "../../../utils/constants";
+import ApiTimeoutError from "../../../pages/ErrorPages/ApiTimeoutError";
 
 
 const StyledBoxLoadingIndicator = styled(Box)(() => {
@@ -57,29 +58,34 @@ function BoxSearchResult() {
   const searchValueWithoutResult = useSelector(selectSearchValueWithoutResult)
   const isDisplayedButtonPagination = useSelector(selectIsDisplayedButtonPagination)
   const isVisibleModalProduct = useSelector((state) => state.modalProduct.isVisibleModalProduct)
-
+  const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
 
   return (
     <Stack sx={{ alignItems: 'center', position: 'relative', zIndex: isVisibleModalProduct ? -1 : 0 }}>
 
-      {
-        isLoadingBoxSearchResult ?
 
-          (
-            <StyledBoxLoadingIndicator>
-              <LoadingIndicator />
-            </StyledBoxLoadingIndicator>
-          )
+      {
+
+        isLoadingBoxSearchResult ?
+          <StyledBoxLoadingIndicator>
+            <LoadingIndicator />
+          </StyledBoxLoadingIndicator>
 
           :
 
-          /*
-          если после сабмита в ответе от сервера продуктов > 1 или нажимается кнопка фильтра (тогда фильтр должен отображаться)
-          */
-          (
+          // если есть ошибка по таймауту и модал продукта закрыт
+          hasApiTimeoutError && !isVisibleModalProduct ?
+            <ApiTimeoutError />
+
+
+            :
+
+
             <>
               {
-
+                /*
+                  если после сабмита в ответе от сервера продуктов > 1 или нажимается кнопка фильтра (тогда фильтр должен отображаться)
+                */
                 (apiFoundProductsAfterSubmit?.result?.length > 1 || activeButtonFilter) &&
                 <Fade in={true}>
                   <StyledBoxFilter>
@@ -93,9 +99,8 @@ function BoxSearchResult() {
               }
 
 
-
               {
-                arrForShowSearchResultProducts.length > 0 &&
+                (arrForShowSearchResultProducts.length > 0) &&
                 <Fade in={true}>
                   <StyledBoxGridCardsProducts params={{ isDisplayedButtonPagination }}>
                     <GridCardsProductsContainer
@@ -104,7 +109,6 @@ function BoxSearchResult() {
                   </StyledBoxGridCardsProducts>
                 </Fade>
               }
-
 
 
               {
@@ -117,9 +121,8 @@ function BoxSearchResult() {
               }
 
 
-
               {
-                apiFoundProductsAfterSubmit?.result.length === 0 && !isLoadingBoxSearchResult &&
+                (apiFoundProductsAfterSubmit?.result.length === 0 && !isLoadingBoxSearchResult) &&
                 <Fade in={true}>
                   <Box>
                     <NoResultSearch
@@ -130,7 +133,6 @@ function BoxSearchResult() {
                 </Fade>
               }
             </>
-          )
       }
     </Stack>
   )

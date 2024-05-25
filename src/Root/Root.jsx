@@ -5,7 +5,7 @@ import theme from '../themes/default'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { CssBaseline } from '@mui/material'
 import Header from '../components/Header/Header'
-import ErrorPage from '../pages/ErrorPage/ErrorPage'
+import ErrorPage from '../pages/ErrorPages/ErrorPage'
 import Main from '../components/Main/Main'
 import '@fontsource/roboto'
 import OpenedModalProductPage from '../pages/OpenedModalProductPage/OpenedModalProductPage'

@@ -14,7 +14,7 @@ import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import loglevel from 'loglevel';
 import NotFoundProduct from "./NotFoundProduct/NotFoundProduct";
 import TitleContainer from "./containersModalProduct/TitleContainer";
-import { CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
+import { AFTER_API_TIMEOUT_ERROR_AND_CLOSING_MODAL_PRODUCT, CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
 
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModalProduct, setIsFullScreenModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
@@ -29,6 +29,8 @@ import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/se
 import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
 import useBreakpoints from "../../../hooks/useMediaQuery";
 import Modal from "../../Modal/Modal";
+import ApiTimeoutError from "../../../pages/ErrorPages/ApiTimeoutError";
+import { setHasApiTimeoutError } from "../../../redux/reducers/slices/searchRequestProductSlice";
 
 
 const StyledBoxTitle = styled(Box)(() => {
@@ -217,6 +219,7 @@ function ModalProduct() {
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
   const savedPathDataBeforeOpeningModalProduct = useSelector(state => state.navigation.savedPathDataBeforeOpeningModalProduct)
   const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
+  const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
   const [sizeMainImage, setSizeMainImage] = useState({
     height: null,
@@ -225,7 +228,6 @@ function ModalProduct() {
 
   const { data, status, message } = selectedCard || {}
   const { title, imagesUrl, featuresComposition, company, otherInfo, nutritionalValue, noteToComposition, composition } = data || {}
-
 
   useEffect(() => {
     if (!refSelectedIngredient) {
@@ -278,7 +280,6 @@ function ModalProduct() {
   }
 
 
-
   function handleCloseModal() {
     log.debug(`
     Произошёл вызов: handleCloseModal
@@ -293,19 +294,32 @@ function ModalProduct() {
 
     dispatch(resetByDefaultSavedPathDataBeforeOpeningModalProduct())
 
-    if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
-
-      actionsNavigation.replacePathname({
-        stage: CLOSING_MODAL_PRODUCT,
-        notFoundModalAndBGProducts: true
+    // если возникла ошибка таймаута ответа от сервера
+    if (hasApiTimeoutError) {
+      dispatch(setHasApiTimeoutError(false))
+      actionsNavigation.pushPathInHistory({
+        stage: AFTER_API_TIMEOUT_ERROR_AND_CLOSING_MODAL_PRODUCT,
+        pathData: {
+          pathname: "/"
+        }
       })
-    } else {
+    } else
 
-      actionsNavigation.replacePathname({
-        stage: CLOSING_MODAL_PRODUCT,
-        savedPathDataBeforeOpeningModalProduct
-      })
-    }
+      if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
+
+        actionsNavigation.replacePathname({
+          stage: CLOSING_MODAL_PRODUCT,
+          notFoundModalAndBGProducts: true
+        })
+      }
+
+      else {
+
+        actionsNavigation.replacePathname({
+          stage: CLOSING_MODAL_PRODUCT,
+          savedPathDataBeforeOpeningModalProduct
+        })
+      }
   }
 
 
@@ -389,6 +403,9 @@ function ModalProduct() {
           )
         }
 
+        {
+          hasApiTimeoutError && <ApiTimeoutError />
+        }
       </Modal>
 
 
@@ -398,6 +415,7 @@ function ModalProduct() {
           <NotFoundProduct message={message} status={status} />
         </Modal>
       }
+
 
     </>
   )

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import ErrorPage from "../../pages/ErrorPage/ErrorPage";
+import ErrorPage from "../../pages/ErrorPages/ErrorPage";
 
 
 

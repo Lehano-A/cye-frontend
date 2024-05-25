@@ -22,6 +22,7 @@ function constructLocationConfig(data) {
     dataForLocationState = null,
     withoutLocationState = null,
     withoutDocTitle = null,
+    withoutSearch = null,
     savedPathDataBeforeOpeningModalProduct: savedPathData = null,
   } = data || {}
 
@@ -41,6 +42,10 @@ function constructLocationConfig(data) {
     pathname: createPathname(dataForPathname),
     search: createQueryParams(dataForQueryParams),
     hash: '',
+  }
+
+  if (withoutSearch) {
+    locationData.search = ''
   }
 
   // если нет флага "без локального стэйта"

@@ -7,6 +7,7 @@ import api from "../api/api.js"
 import loglevel from 'loglevel'
 import useHandlers from "./useHandlers.js"
 import { AFTER_RES_FROM_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEND_TO_API } from "../utils/constants.js"
+import { setHasApiTimeoutError } from "../redux/reducers/slices/searchRequestProductSlice.js"
 
 
 const log = loglevel.getLogger(SEND_TO_API)
@@ -23,7 +24,7 @@ function useSendingReqToApi() {
 
 
   return {
-    
+
     async findProduct({ apiMethod, searchData, segmentSearch, stage = null }) {
       log.debug(`
       Вызвали хук: useSendingReqToApi
@@ -55,6 +56,12 @@ function useSendingReqToApi() {
           }
         })
         .catch((err) => {
+
+          if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+            dispatch(setHasApiTimeoutError(true))
+            return
+          }
+
           handler.pageNotFound(err)
         })
         .finally(() => {
@@ -95,6 +102,12 @@ function useSendingReqToApi() {
           saveDataAndUpdateState.afterResApiForModalProductOpenedByLink(response, pathDataBeforeOpeningModalProduct)
         })
         .catch((err) => {
+
+          if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+            dispatch(setHasApiTimeoutError(true))
+            return
+          }
+
           handler.pageNotFound(err)
         })
         .finally(() => {

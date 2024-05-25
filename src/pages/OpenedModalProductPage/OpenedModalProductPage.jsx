@@ -21,6 +21,7 @@ import {
   OPENING_MODAL_PRODUCT_BY_LINK,
   REDIRECTION_FROM_MODAL_PRODUCT_PAGE
 } from "../../utils/constants"
+import { setHasApiTimeoutError } from "../../redux/reducers/slices/searchRequestProductSlice"
 
 
 const log = loglevel.getLogger(OPENED_MODAL_PRODUCT_PAGE)
@@ -40,6 +41,7 @@ function OpenedModalProductPage() {
   const savedPathDataBeforeOpeningModalProduct = useSelector((state) => state.navigation.savedPathDataBeforeOpeningModalProduct)
   const countPathnames = useSelector((state) => state.navigation.countPathnames)
   const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
+  const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
 
 
   useEffect(() => {
@@ -154,7 +156,15 @@ function OpenedModalProductPage() {
     sendingReqToApi.findProductForModalOpenedByLink(querySearchParams, pathDataBeforeOpeningModalProduct)
   }
 
-
+  useEffect(() => {
+    if (hasApiTimeoutError) {
+      dispatch(setSelectedCard({
+        data: null,
+        status: null,
+        message: null,
+      }))
+    }
+  }, [hasApiTimeoutError])
 
   return (
     <>

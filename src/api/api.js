@@ -1,7 +1,6 @@
 class Api {
 
   constructor() {
-    // this.baseUrl = 'http://localhost:3000/'
     this.baseUrl = 'https://чтояем.рф/api/'
   }
 
@@ -48,7 +47,6 @@ class Api {
 
 
   _getResponse(res) {
-
     if (!res.ok) {
       return Promise.reject(res.json())
     }

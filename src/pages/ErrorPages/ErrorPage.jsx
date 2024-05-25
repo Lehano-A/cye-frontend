@@ -58,13 +58,11 @@ function ErrorPage() {
   }, [])
 
 
-
   function handleCloseModal() {
     navigate('/')
   }
 
 
-  
   return (
     <Modal handleCloseModal={handleCloseModal} padding='32px'>
       <StyledMainBox>

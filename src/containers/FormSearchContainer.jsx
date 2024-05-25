@@ -52,6 +52,7 @@ import { startLoadingIndicatorBoxSearchResult } from "../redux/reducers/actions/
 import useDelayStartLoadingIndicator from "../hooks/useDelayStartLoadingIndicator";
 import useSendingReqToApi from "../hooks/useSendingReqToApi.js";
 import useActionsNavigation from "../hooks/useActionsNavigation/useActionsNavigation.js";
+import { setHasApiTimeoutError } from "../redux/reducers/slices/searchRequestProductSlice.js";
 
 
 
@@ -82,6 +83,7 @@ function FormSearchContainer() {
     dispatch(setPaginationData(null))
     dispatch(resetStatesByDefaultButtonPagination())
     dispatch(setIsLoadingIndicator(true))
+    dispatch(setHasApiTimeoutError(false))
     forcedBlur() // если строка с пробелом в конце, тогда "выпадающий список" уже будет закрытым, поэтому обработчик handleCloseDropList, в котором находится необходимая логика, не сработает
 
     delayStartLoadingIndicatorBoxSearchResult.createTimer()
