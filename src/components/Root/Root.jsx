@@ -1,16 +1,16 @@
 import React from 'react'
-import App from '../components/App/App'
+import App from '../App/App'
 import { ThemeProvider } from '@mui/material/styles'
-import theme from '../themes/default'
+import theme from '../../themes/default'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { CssBaseline } from '@mui/material'
-import Header from '../components/Header/Header'
-import ErrorPage from '../pages/ErrorPages/ErrorPage'
-import Main from '../components/Main/Main'
+import Header from '../Header/Header'
+import ErrorPage from '../../pages/ErrorPages/ErrorPage'
+import Main from '../Main/Main'
 import '@fontsource/roboto'
-import OpenedModalProductPage from '../pages/OpenedModalProductPage/OpenedModalProductPage'
-import SearchProductResultPage from '../pages/SearchProductResultPage/SearchProductResultPage'
-import withErrorPage from '../components/HOC/withErrorPage'
+import OpenedModalProductPage from '../../pages/OpenedModalProductPage/OpenedModalProductPage'
+import SearchProductResultPage from '../../pages/SearchProductResultPage/SearchProductResultPage'
+import withErrorPage from '../HOC/withErrorPage'
 
 
 

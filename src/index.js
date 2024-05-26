@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import store from './redux/store'
 
-import Root from './Root/Root'
+import Root from './components/Root/Root'
 import { Provider } from 'react-redux'
 
 
