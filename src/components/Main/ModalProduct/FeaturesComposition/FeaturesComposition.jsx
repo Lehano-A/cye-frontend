@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
+import { handleDataIcon } from "../../../../helpers/IconsInformingUtils/handleDataIcon";
 
 import { styled } from "@mui/material/styles";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 import IconInforming from "../../CardProduct/IconsInformingWithTooltip/IconInforming/IconInforming";
 
 

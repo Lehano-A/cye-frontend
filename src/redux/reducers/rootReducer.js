@@ -11,6 +11,7 @@ import dropListPreSearchResultSlice from "./slices/dropListPreSearchResultSlice"
 import paginationSlice from "./slices/paginationSlice";
 import navigationSlice from "./slices/navigationSlice";
 import modalSlice from "./slices/modalSlice";
+import errorsAppSlice from "./slices/errorsAppSlice";
 
 const rootReducer = combineReducers({
   inputSearch: inputSearchSlice,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   pagination: paginationSlice,
   navigation: navigationSlice,
   modal: modalSlice,
+  errorsApp: errorsAppSlice,
 })
 
 export default rootReducer;

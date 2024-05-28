@@ -7,14 +7,14 @@ import FilterCategoriesContainer from "../../../containers/FilterCategoriesConta
 import GridCardsProductsContainer from "../../../containers/GridCardsProductsContainer";
 import ButtonPagination from "./ButtonPagination/ButtonPagination";
 import NoResultSearch from "./NoResultSearch/NoResultSearch";
+import withHandleErrors from "../../HOC/withHandleErrors";
+import { MEDIA_XS_MODAL_PRODUCT } from "../../../helpers/constants";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectApiFoundProductsAfterSubmit } from "../../../redux/reducers/selectors/searchRequestProductSelectors";
 import { selectArrForShowSearchResultProducts, selectIsLoadingIndicatorBoxSearchResult, selectSearchValueWithoutResult } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
 import { selectNameActiveButtonInFilter } from "../../../redux/reducers/selectors/filterCategoriesSelectors";
 import { selectIsDisplayedButtonPagination } from "../../../redux/reducers/selectors/paginationSelectors";
-import { MEDIA_XS_MODAL_PRODUCT } from "../../../utils/constants";
-import ApiTimeoutError from "../../../pages/ErrorPages/ApiTimeoutError";
 
 
 const StyledBoxLoadingIndicator = styled(Box)(() => {
@@ -58,14 +58,14 @@ function BoxSearchResult() {
   const searchValueWithoutResult = useSelector(selectSearchValueWithoutResult)
   const isDisplayedButtonPagination = useSelector(selectIsDisplayedButtonPagination)
   const isVisibleModalProduct = useSelector((state) => state.modalProduct.isVisibleModalProduct)
-  const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
+
+  const ButtonPaginationWithHandleErrors = withHandleErrors(ButtonPagination)
+
 
   return (
     <Stack sx={{ alignItems: 'center', position: 'relative', zIndex: isVisibleModalProduct ? -1 : 0 }}>
 
-
       {
-
         isLoadingBoxSearchResult ?
           <StyledBoxLoadingIndicator>
             <LoadingIndicator />
@@ -73,66 +73,58 @@ function BoxSearchResult() {
 
           :
 
-          // если есть ошибка по таймауту и модал продукта закрыт
-          hasApiTimeoutError && !isVisibleModalProduct ?
-            <ApiTimeoutError />
+          <>
+            {
+              /*
+                если после сабмита в ответе от сервера продуктов > 1 или нажимается кнопка фильтра (тогда фильтр должен отображаться)
+              */
+              (apiFoundProductsAfterSubmit?.result?.length > 1 || activeButtonFilter) &&
+              <Fade in={true}>
+                <StyledBoxFilter>
+                  <FilterCategoriesContainer
+                    foundProducts={apiFoundProductsAfterSubmit.result}
+                    searchBy={apiFoundProductsAfterSubmit.search.searchBy}
+                    categoryName={apiFoundProductsAfterSubmit.search.searchValue}
+                  />
+                </StyledBoxFilter>
+              </Fade>
+            }
 
 
-            :
+            {
+              (arrForShowSearchResultProducts.length > 0) &&
+              <Fade in={true}>
+                <StyledBoxGridCardsProducts params={{ isDisplayedButtonPagination }}>
+                  <GridCardsProductsContainer
+                    arrForShowSearchResultProducts={arrForShowSearchResultProducts}
+                  />
+                </StyledBoxGridCardsProducts>
+              </Fade>
+            }
 
 
-            <>
-              {
-                /*
-                  если после сабмита в ответе от сервера продуктов > 1 или нажимается кнопка фильтра (тогда фильтр должен отображаться)
-                */
-                (apiFoundProductsAfterSubmit?.result?.length > 1 || activeButtonFilter) &&
-                <Fade in={true}>
-                  <StyledBoxFilter>
-                    <FilterCategoriesContainer
-                      foundProducts={apiFoundProductsAfterSubmit.result}
-                      searchBy={apiFoundProductsAfterSubmit.search.searchBy}
-                      categoryName={apiFoundProductsAfterSubmit.search.searchValue}
-                    />
-                  </StyledBoxFilter>
-                </Fade>
-              }
+            {
+              isDisplayedButtonPagination &&
+              <Fade in={true}>
+                <Box sx={{ margin: '30px 0 80px' }}>
+                  <ButtonPaginationWithHandleErrors />
+                </Box>
+              </Fade>
+            }
 
 
-              {
-                (arrForShowSearchResultProducts.length > 0) &&
-                <Fade in={true}>
-                  <StyledBoxGridCardsProducts params={{ isDisplayedButtonPagination }}>
-                    <GridCardsProductsContainer
-                      arrForShowSearchResultProducts={arrForShowSearchResultProducts}
-                    />
-                  </StyledBoxGridCardsProducts>
-                </Fade>
-              }
-
-
-              {
-                isDisplayedButtonPagination &&
-                <Fade in={true}>
-                  <Box sx={{ margin: '30px 0 80px' }}>
-                    <ButtonPagination />
-                  </Box>
-                </Fade>
-              }
-
-
-              {
-                (apiFoundProductsAfterSubmit?.result.length === 0 && !isLoadingBoxSearchResult) &&
-                <Fade in={true}>
-                  <Box>
-                    <NoResultSearch
-                      searchValueWithoutResult={searchValueWithoutResult}
-                      apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit}
-                    />
-                  </Box>
-                </Fade>
-              }
-            </>
+            {
+              (apiFoundProductsAfterSubmit?.result.length === 0 && !isLoadingBoxSearchResult) &&
+              <Fade in={true}>
+                <Box>
+                  <NoResultSearch
+                    searchValueWithoutResult={searchValueWithoutResult}
+                    apiFoundProductsAfterSubmit={apiFoundProductsAfterSubmit}
+                  />
+                </Box>
+              </Fade>
+            }
+          </>
       }
     </Stack>
   )

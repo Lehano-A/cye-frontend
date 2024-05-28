@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Skeleton } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles"
-import { DELAY_SKELETON } from "../../../../../../../utils/constants";
+import { DELAY_SKELETON } from "../../../../../../../helpers/constants";
 
 
 const StyledBoxImage = styled(Box)(() => {
@@ -25,7 +25,7 @@ function WithImageOption({ option }) {
   const [isDisplayedSkeleton, setIsDisplayedSkeleton] = useState(null)
   const [timerIdSkeleton, setTimerIdSkeleton] = useState(null)
 
-  
+
   useEffect(() => {
     const timerId = setTimeout(() => {
       clearTimeout(timerIdSkeleton)

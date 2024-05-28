@@ -1,7 +1,7 @@
-import changeStateInLocationStore from "../../../../utils/navigation/changeStateInLocationStore"
-import constructLocationConfig from "../../../../utils/navigation/constructLocationConfig"
+import changeStateInLocationStore from "../../../../helpers/navigation/changeStateInLocationStore"
+import constructLocationConfig from "../../../../helpers/navigation/constructLocationConfig"
 import loglevel from 'loglevel'
-import { ACTIONS_NAVIGATION } from "../../../../utils/constants"
+import { ACTIONS_NAVIGATION } from "../../../../helpers/constants"
 
 const log = loglevel.getLogger(ACTIONS_NAVIGATION)
 

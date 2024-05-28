@@ -2,12 +2,12 @@ import React from "react"
 import { useSelector, useDispatch } from "react-redux";
 import log from 'loglevel'
 import FormSearch from "../components/Header/FormSearch/FormSearch"
-import { saveToHistorySubmit } from "../utils/localStorage/HistorySubmit/historySubmit"
-import forcedBlur from "../utils/forcedBlur";
+import { saveToHistorySubmit } from "../helpers/localStorage/HistorySubmit/historySubmit.js"
+import forcedBlur from "../helpers/forcedBlur.js";
 import { checkValidInputValue } from "../validation/formSearchValidation";
-import { getValueFromOption } from "../utils/containers/FormSearchContainer/getValueFromOption.js";
-import createReqConfigSearchProduct from "../utils/containers/FormSearchContainer/createConfigReqSearchProduct.js";
-import { AFTER_ERROR_PAGE, BEFORE_REQ_TO_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK } from "../utils/constants.js";
+import { getValueFromOption } from "../helpers/containers/FormSearchContainer/getValueFromOption.js";
+import createReqConfigSearchProduct from "../helpers/containers/FormSearchContainer/createConfigReqSearchProduct.js";
+import { AFTER_ERROR_PAGE, BEFORE_REQ_TO_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK } from "../helpers/constants.js";
 
 /* --------------------------------- slices --------------------------------- */
 import { resetStatesByDefaultButtonPagination, setIsDisplayedButtonPagination, setPaginationData } from "../redux/reducers/slices/paginationSlice.js";
@@ -33,6 +33,8 @@ import {
   resetByDefaultButtonsFilter,
 } from "../redux/reducers/slices/filterCategoriesSlice";
 
+import { resetStatesByDefaultErrorsApp } from "../redux/reducers/slices/errorsAppSlice.js";
+
 
 /* -------------------------------- selectors ------------------------------- */
 import {
@@ -52,7 +54,6 @@ import { startLoadingIndicatorBoxSearchResult } from "../redux/reducers/actions/
 import useDelayStartLoadingIndicator from "../hooks/useDelayStartLoadingIndicator";
 import useSendingReqToApi from "../hooks/useSendingReqToApi.js";
 import useActionsNavigation from "../hooks/useActionsNavigation/useActionsNavigation.js";
-import { setHasApiTimeoutError } from "../redux/reducers/slices/searchRequestProductSlice.js";
 
 
 
@@ -68,22 +69,22 @@ function FormSearchContainer() {
   const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
   const delayStartLoadingIndicatorBoxSearchResult = useDelayStartLoadingIndicator(startLoadingIndicatorBoxSearchResult, [apiFoundProductsAfterSubmit?.result], 300)
   const inputValueBeforeClear = useSelector((state) => state.inputSearch.inputValueBeforeClear)
-  const pageWithError = useSelector((state) => state.navigation.pageWithError)
+  const currentErrorApp = useSelector((state) => state.errorsApp.currentErrorApp)
 
 
   // изменение стэйтов перед запросом на сервер
   function changeStatesBeforeReqApi() {
     dispatch(setArrForShowSearchResultProducts([]))
     dispatch(clearUniqueCategories())
-    dispatch(resetByDefaultButtonsFilter())
     dispatch(setIsSubmitting(true))
     dispatch(setIsOpenedDropList(false))
     dispatch(setSaveboxDropListBeforeSubmit(null))
     dispatch(setIsDisplayedButtonPagination(false))
     dispatch(setPaginationData(null))
-    dispatch(resetStatesByDefaultButtonPagination())
     dispatch(setIsLoadingIndicator(true))
-    dispatch(setHasApiTimeoutError(false))
+    dispatch(resetByDefaultButtonsFilter())
+    dispatch(resetStatesByDefaultErrorsApp())
+    dispatch(resetStatesByDefaultButtonPagination())
     forcedBlur() // если строка с пробелом в конце, тогда "выпадающий список" уже будет закрытым, поэтому обработчик handleCloseDropList, в котором находится необходимая логика, не сработает
 
     delayStartLoadingIndicatorBoxSearchResult.createTimer()
@@ -127,7 +128,7 @@ function FormSearchContainer() {
     }
 
 
-    if (pageWithError.status === 404) {
+    if (currentErrorApp.status === 404) {
 
       actionsNavigation.pushPathInHistory({
         stage: AFTER_ERROR_PAGE,
@@ -150,7 +151,7 @@ function FormSearchContainer() {
     const { apiMethod, searchData, segmentSearch = null } = createReqConfigSearchProduct({ e, option, searchValuePagination: onlyValueTrim })
 
 
-    if (pageWithError.status === 404) {
+    if (currentErrorApp.status === 404) {
       sendingReqToApi.findProduct({ apiMethod, segmentSearch, searchData, stage: MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK })
 
     } else {

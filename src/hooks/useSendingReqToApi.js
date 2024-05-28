@@ -6,8 +6,8 @@ import useSaveDataAndUpdateState from "./useSaveDataAndUpdateState.js"
 import api from "../api/api.js"
 import loglevel from 'loglevel'
 import useHandlers from "./useHandlers.js"
-import { AFTER_RES_FROM_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEND_TO_API } from "../utils/constants.js"
-import { setHasApiTimeoutError } from "../redux/reducers/slices/searchRequestProductSlice.js"
+import { AFTER_RES_FROM_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEND_TO_API } from "../helpers/constants.js"
+import { setIsSubmitting } from "../redux/reducers/slices/inputSearchSlice.js"
 
 
 const log = loglevel.getLogger(SEND_TO_API)
@@ -56,16 +56,11 @@ function useSendingReqToApi() {
           }
         })
         .catch((err) => {
-
-          if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
-            dispatch(setHasApiTimeoutError(true))
-            return
-          }
-
-          handler.pageNotFound(err)
+          handler.handleError(err)
         })
         .finally(() => {
           dispatch(endLoadingIndicatorBoxSearchResult())
+          dispatch(setIsSubmitting(false))
         })
     },
 
@@ -86,7 +81,7 @@ function useSendingReqToApi() {
           saveDataAndUpdateState.afterResApiForPagination(response)
         })
         .catch((err) => {
-          handler.pageNotFound(err)
+          handler.handleError(err)
         })
         .finally(() => { dispatch(setIsPressedButtonPagination(false)) })
     },
@@ -102,13 +97,7 @@ function useSendingReqToApi() {
           saveDataAndUpdateState.afterResApiForModalProductOpenedByLink(response, pathDataBeforeOpeningModalProduct)
         })
         .catch((err) => {
-
-          if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
-            dispatch(setHasApiTimeoutError(true))
-            return
-          }
-
-          handler.pageNotFound(err)
+          handler.handleError(err)
         })
         .finally(() => {
           dispatch(endLoadingIndicatorBoxSearchResult())

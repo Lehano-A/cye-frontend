@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@mui/material";
-import { MIN_WIDTH_0, MIN_WIDTH_1000, MIN_WIDTH_500, MIN_WIDTH_700, MIN_WIDTH_900 } from "../utils/constants";
+import { MIN_WIDTH_0, MIN_WIDTH_1000, MIN_WIDTH_500, MIN_WIDTH_700, MIN_WIDTH_900 } from "../helpers/constants";
 
 
 

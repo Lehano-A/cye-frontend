@@ -1,4 +1,4 @@
-import constructLocationConfig from "../../../../utils/navigation/constructLocationConfig"
+import constructLocationConfig from "../../../../helpers/navigation/constructLocationConfig"
 
 
 

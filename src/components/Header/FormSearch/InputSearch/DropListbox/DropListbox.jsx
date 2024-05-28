@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectIsHistorySubmitDisplayed } from '../../../../../redux/reducers/selectors/inputSearchSelectors';
-import { MEDIA_XL_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from '../../../../../utils/constants';
+import { MEDIA_XL_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from '../../../../../helpers/constants';
 
 
 const StyledSubheader = styled('h5')(() => {

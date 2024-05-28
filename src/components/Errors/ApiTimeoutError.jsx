@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Typography, } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { MEDIA_XS_MODAL_PRODUCT } from "../../utils/constants";
+import { MEDIA_XS_MODAL_PRODUCT } from "../../helpers/constants";
 
 
 const StyledMainStack = styled(Stack)(() => {

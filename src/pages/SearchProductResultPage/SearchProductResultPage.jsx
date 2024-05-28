@@ -7,15 +7,15 @@ import { useDispatch, useSelector } from "react-redux"
 import { startLoadingIndicatorBoxSearchResult } from "../../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions"
 import api from "../../api/api"
 import { setIsRedirectionFromModalProductPage } from "../../redux/reducers/slices/navigationSlice"
-import { BRAND_AND_CATEGORY, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEARCH_PRODUCT_RESULT_PAGE } from "../../utils/constants"
 import BoxSearchResult from "../../components/Main/BoxSearchResult/BoxSearchResult"
+import { BRAND_AND_CATEGORY, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEARCH_PRODUCT_RESULT_PAGE } from "../../helpers/constants"
 
 
 const log = loglevel.getLogger(SEARCH_PRODUCT_RESULT_PAGE)
 
 
 
-function SearchProductResultPage() {
+function SearchProductResultPage({ ErrorComponent }) {
 
   const location = useLocation()
   const params = useParams()
@@ -24,7 +24,8 @@ function SearchProductResultPage() {
   const navigationType = useNavigationType()
 
   const isRedirectionFromModalProductPage = useSelector((state) => state.navigation.isRedirectionFromModalProductPage)
-
+  const isVisibleModalProduct = useSelector((state) => state.modalProduct.isVisibleModalProduct)
+  const apiFoundProductsAfterSubmit = useSelector((state) => state.searchRequestProduct.apiFoundProductsAfterSubmit)
 
   useEffect(() => {
     // когда произошло движение по истории НАЗАД или ВПЕРЁД, или ОБНОВИЛАСЬ страница, или страница ОТКРЫЛАСЬ ПО ССЫЛКЕ
@@ -64,9 +65,18 @@ function SearchProductResultPage() {
 
   return (
     <>
-      <BoxSearchResult />
+      {
+        ErrorComponent && apiFoundProductsAfterSubmit?.result.length === 0 && !isVisibleModalProduct ?
+          <ErrorComponent />
 
-      <Outlet />
+          :
+
+          <>
+            <BoxSearchResult />
+
+            <Outlet />
+          </>
+      }
     </>
   )
 }

@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   apiFoundProductsAfterSubmit: null,
   searchBy: null,
-  hasApiTimeoutError: null,
 }
 
 
@@ -15,8 +14,6 @@ const searchRequestProductSlice = createSlice({
 
     setSearchBy: (state, action) => { state.searchBy = action.payload },
 
-    setHasApiTimeoutError: (state, action) => { state.hasApiTimeoutError = action.payload },
-
     resetStatesByDefaultSearchRequestProduct: () => { return initialState },
   }
 })
@@ -25,7 +22,6 @@ const searchRequestProductSlice = createSlice({
 export const {
   setApiFoundProductsAfterSubmit,
   setSearchBy,
-  setHasApiTimeoutError,
   resetStatesByDefaultSearchRequestProduct,
 } = searchRequestProductSlice.actions
 

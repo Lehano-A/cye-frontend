@@ -12,9 +12,10 @@ import NoteToComposition from "./NoteToComposition/NoteToComposition";
 import OtherInfo from "./OtherInfo/OtherInfo";
 import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import loglevel from 'loglevel';
-import NotFoundProduct from "./NotFoundProduct/NotFoundProduct";
 import TitleContainer from "./containersModalProduct/TitleContainer";
-import { AFTER_API_TIMEOUT_ERROR_AND_CLOSING_MODAL_PRODUCT, CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../utils/constants";
+import StyledBoxAbsoluteCentered from "../../../styled/StyledBoxAbsoluteCentered";
+import Modal from "../../Modal/Modal";
+import { AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT, CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../helpers/constants";
 
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModalProduct, setIsFullScreenModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
@@ -22,15 +23,15 @@ import { resetStatesByDefaultCardProduct } from "../../../redux/reducers/slices/
 import { setValueInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
 import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../redux/reducers/slices/navigationSlice";
 
+
 /* ---------------------------------- selectors --------------------------------- */
 import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
 
 /* ---------------------------------- hooks --------------------------------- */
 import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
 import useBreakpoints from "../../../hooks/useMediaQuery";
-import Modal from "../../Modal/Modal";
-import ApiTimeoutError from "../../../pages/ErrorPages/ApiTimeoutError";
-import { setHasApiTimeoutError } from "../../../redux/reducers/slices/searchRequestProductSlice";
+import { resetStatesByDefaultErrorsApp } from "../../../redux/reducers/slices/errorsAppSlice";
+import { resetStatesApp } from "../../../redux/reducers/actions/common/resetStatesApp";
 
 
 const StyledBoxTitle = styled(Box)(() => {
@@ -193,20 +194,13 @@ const StyledBoxComposition = styled(Box, { shouldForwardProp: (props) => props !
 )
 
 
-const StyledBoxLoadingIndicator = styled(Box)(() => {
-  return {
-    position: 'absolute',
-    top: '50%',
-    left: '50%'
-  }
-})
-
+const StyledBoxLoadingIndicator = styled(StyledBoxAbsoluteCentered)(() => { })
+const StyledBoxError = styled(StyledBoxAbsoluteCentered)(() => ({ width: '100%' }))
 
 const log = loglevel.getLogger(MODAL_PRODUCT)
 
 
-
-function ModalProduct() {
+function ModalProduct({ ErrorComponent }) {
 
   const location = useLocation()
   const navigationType = useNavigationType()
@@ -219,14 +213,13 @@ function ModalProduct() {
   const interpretationValue = useSelector(state => state.popperInterpretation.value)
   const savedPathDataBeforeOpeningModalProduct = useSelector(state => state.navigation.savedPathDataBeforeOpeningModalProduct)
   const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
-  const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
   const [sizeMainImage, setSizeMainImage] = useState({
     height: null,
     width: null
   })
 
-  const { data, status, message } = selectedCard || {}
+  const { data, status } = selectedCard || {}
   const { title, imagesUrl, featuresComposition, company, otherInfo, nutritionalValue, noteToComposition, composition } = data || {}
 
   useEffect(() => {
@@ -288,22 +281,26 @@ function ModalProduct() {
     navigationType: ${navigationType}
     location: `, location)
 
-    dispatch(changeVisibleModalProduct(false))
-    dispatch(resetStatesByDefaultCardProduct())
-    dispatch(changeVisibleModalProduct(false)) // закрывает модальное окно продукта
 
+    dispatch(changeVisibleModalProduct(false)) // закрывает модальное окно продукта
+    dispatch(resetStatesByDefaultCardProduct())
     dispatch(resetByDefaultSavedPathDataBeforeOpeningModalProduct())
 
-    // если возникла ошибка таймаута ответа от сервера
-    if (hasApiTimeoutError) {
-      dispatch(setHasApiTimeoutError(false))
-      actionsNavigation.pushPathInHistory({
-        stage: AFTER_API_TIMEOUT_ERROR_AND_CLOSING_MODAL_PRODUCT,
-        pathData: {
-          pathname: "/"
-        }
-      })
-    } else
+    // если возникла ошибка таймаута ответа от сервера, отсутствие соединения с интернетом или какая-то другая при открытом модале продукта
+    if (ErrorComponent) {
+      dispatch(resetStatesByDefaultErrorsApp())
+
+      if (arrForShowSearchResultProducts.length === 0) { // если не было ничего найдено для бэкграунда (за модалом)
+        dispatch(resetStatesApp()) // тогда сбрасываем все стэйти
+
+        actionsNavigation.pushPathInHistory({ // и переходим на главную страницу
+          stage: AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT,
+          pathData: {
+            pathname: "/"
+          }
+        })
+      }
+    } 
 
       if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
 
@@ -323,104 +320,96 @@ function ModalProduct() {
   }
 
 
-
   return (
     <>
       <Modal
         widthModal='1100px'
-        heightModal={status === LOADING && '100%'}
+        heightModal={'100%'}
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
       >
 
         {
-          data && (
-            <StyledCommonBox>
+          ErrorComponent ?
+            <StyledBoxError>
+              <ErrorComponent />
+            </StyledBoxError>
 
-              <StyledTopHalfCommonBox>
-                <StyledBoxTitleAndSlider>
+            :
 
-                  <StyledBoxTitle>
-                    <TitleContainer title={title} />
-                  </StyledBoxTitle>
+            data ?
 
-                  <StyledBoxSlider>
-                    <SwiperSlider
-                      images={imagesUrl}
-                      height={sizeMainImage.height}
-                      width={sizeMainImage.width}
-                    />
-                  </StyledBoxSlider>
-                </StyledBoxTitleAndSlider>
+              <StyledCommonBox>
 
+                <StyledTopHalfCommonBox>
+                  <StyledBoxTitleAndSlider>
 
-                <Stack sx={{ alignItems: 'center' }}>
-                  <FeaturesComposition data={featuresComposition} />
-                  <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
-                  {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
-                </Stack>
-              </StyledTopHalfCommonBox>
+                    <StyledBoxTitle>
+                      <TitleContainer title={title} />
+                    </StyledBoxTitle>
 
-
-              <StyledBottomHalfCommonBox isDisplayedNoteComposition={noteToComposition}>
-                <WrapperNoteCompositionAndComposition>
-                  {
-                    noteToComposition &&
-                    <StyledBoxNoteToComposition>
-                      <NoteToComposition data={noteToComposition} />
-                    </StyledBoxNoteToComposition>
-                  }
-
-                  <StyledBoxComposition
-                    isDisplayedNoteComposition={noteToComposition}
-                  >
-                    <Composition
-                      data={composition}
-                      setRefSelectedIngredient={setRefSelectedIngredient}
-                    />
-                  </StyledBoxComposition>
-                </WrapperNoteCompositionAndComposition>
-              </StyledBottomHalfCommonBox>
-            </StyledCommonBox>
-          )
-        }
+                    <StyledBoxSlider>
+                      <SwiperSlider
+                        images={imagesUrl}
+                        height={sizeMainImage.height}
+                        width={sizeMainImage.width}
+                      />
+                    </StyledBoxSlider>
+                  </StyledBoxTitleAndSlider>
 
 
-        {
-          status === LOADING &&
-          <StyledBoxLoadingIndicator>
-            <LoadingIndicator />
-          </StyledBoxLoadingIndicator>
-        }
+                  <Stack sx={{ alignItems: 'center' }}>
+                    <FeaturesComposition data={featuresComposition} />
+                    <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
+                    {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
+                  </Stack>
+                </StyledTopHalfCommonBox>
 
 
-        {
-          refSelectedIngredient && (
-            <PopperInterpretation
-              refIngredient={refSelectedIngredient}
-              interpretationValue={interpretationValue}
-            />
-          )
-        }
+                <StyledBottomHalfCommonBox isDisplayedNoteComposition={noteToComposition}>
+                  <WrapperNoteCompositionAndComposition>
+                    {
+                      noteToComposition &&
+                      <StyledBoxNoteToComposition>
+                        <NoteToComposition data={noteToComposition} />
+                      </StyledBoxNoteToComposition>
+                    }
 
-        {
-          hasApiTimeoutError && <ApiTimeoutError />
+                    <StyledBoxComposition
+                      isDisplayedNoteComposition={noteToComposition}
+                    >
+                      <Composition
+                        data={composition}
+                        setRefSelectedIngredient={setRefSelectedIngredient}
+                      />
+                    </StyledBoxComposition>
+                  </WrapperNoteCompositionAndComposition>
+                </StyledBottomHalfCommonBox>
+              </StyledCommonBox>
+
+              :
+
+              <>
+                {
+                  status === LOADING &&
+                  <StyledBoxLoadingIndicator>
+                    <LoadingIndicator />
+                  </StyledBoxLoadingIndicator>
+                }
+
+
+                {
+                  refSelectedIngredient &&
+                  <PopperInterpretation
+                    refIngredient={refSelectedIngredient}
+                    interpretationValue={interpretationValue}
+                  />
+                }
+              </>
         }
       </Modal>
-
-
-      {
-        status === NOT_FOUND &&
-        <Modal handleCloseModal={handleCloseModal} padding='32px'>
-          <NotFoundProduct message={message} status={status} />
-        </Modal>
-      }
-
-
     </>
   )
 }
 
 export default ModalProduct
-
-

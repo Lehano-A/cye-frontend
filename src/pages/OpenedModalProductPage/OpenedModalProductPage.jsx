@@ -9,26 +9,22 @@ import { resetStatesByDefaultCardProduct, setSelectedCard } from "../../redux/re
 import { saveCurrentPathDataBeforeOpeningModalProduct } from "../../redux/reducers/actions/navigation/navigation"
 import useActionsNavigation from "../../hooks/useActionsNavigation/useActionsNavigation"
 import queryString from "query-string"
-import createQueryParams from "../../utils/navigation/createQueryParams"
-import constructLocationConfig from "../../utils/navigation/constructLocationConfig"
+import createQueryParams from "../../helpers/navigation/createQueryParams"
+import constructLocationConfig from "../../helpers/navigation/constructLocationConfig"
 import useSendingReqToApi from "../../hooks/useSendingReqToApi"
-import Main from "../../components/Main/Main"
-import { selectArrForShowSearchResultProducts } from "../../redux/reducers/selectors/boxSearchResultSelectors"
 import { startLoadingIndicatorBoxSearchResult } from "../../redux/reducers/actions/BoxSearchResult/loadingIndicatorActions"
 import {
-  NOT_FOUND,
   OPENED_MODAL_PRODUCT_PAGE,
   OPENING_MODAL_PRODUCT_BY_LINK,
   REDIRECTION_FROM_MODAL_PRODUCT_PAGE
-} from "../../utils/constants"
-import { setHasApiTimeoutError } from "../../redux/reducers/slices/searchRequestProductSlice"
+} from "../../helpers/constants"
 
 
 const log = loglevel.getLogger(OPENED_MODAL_PRODUCT_PAGE)
 
 
 
-function OpenedModalProductPage() {
+function OpenedModalProductPage({ ErrorComponent }) {
 
   const dispatch = useDispatch()
   const navigationType = useNavigationType()
@@ -40,7 +36,6 @@ function OpenedModalProductPage() {
   const selectedCard = useSelector((state) => state.cardProduct.selectedCard)
   const savedPathDataBeforeOpeningModalProduct = useSelector((state) => state.navigation.savedPathDataBeforeOpeningModalProduct)
   const countPathnames = useSelector((state) => state.navigation.countPathnames)
-  const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
   const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
 
 
@@ -166,16 +161,9 @@ function OpenedModalProductPage() {
     }
   }, [hasApiTimeoutError])
 
+
   return (
-    <>
-      {
-        arrForShowSearchResultProducts.length === 0 && selectedCard.status === NOT_FOUND &&
-        <Main />
-      }
-
-      <ModalProduct />
-    </>
-
+    <ModalProduct ErrorComponent={ErrorComponent} />
   )
 }
 

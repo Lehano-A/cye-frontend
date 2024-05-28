@@ -3,11 +3,10 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "../Header/Header";
 import log from 'loglevel';
 import useChangeDocTitle from "../../hooks/useChangeDocTitle";
-import checkUserDevice from "../../utils/checkUserDevice";
+import checkUserDevice from "../../helpers/checkUserDevice";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDevice } from "../../redux/reducers/slices/checkUserDeviceSlice";
-import { incrementCountPathnames, resetPageWithError } from "../../redux/reducers/slices/navigationSlice";
-import { selectIsLoadingIndicatorBoxSearchResult } from "../../redux/reducers/selectors/boxSearchResultSelectors";
+import { incrementCountPathnames } from "../../redux/reducers/slices/navigationSlice";
 import {
   ACTIONS_NAVIGATION,
   CHANGE_STATE_IN_LOCATION_STORE,
@@ -23,23 +22,25 @@ import {
   CREATE_REQ_CONFIG_SEARCH_PRODUCT,
   SEARCH_PRODUCT_RESULT_PAGE,
   HISTORY_SUBMIT,
-} from "../../utils/constants";
+} from "../../helpers/constants";
 
 
 /* trace, debug, info, warn, error, silent */
 if (process.env.NODE_ENV === 'development') {
-  log.getLogger(CONSTRUCTION_LOCATION_CONFIG).setLevel(SILENT)
-  log.getLogger(ACTIONS_NAVIGATION).setLevel(SILENT)
-  log.getLogger(CHANGE_STATE_IN_LOCATION_STORE).setLevel(SILENT)
-  log.getLogger(OPENED_MODAL_PRODUCT_PAGE).setLevel(SILENT)
-  log.getLogger(NAVIGATION).setLevel(SILENT)
-  log.getLogger(CHANGING_DOC_TITLE).setLevel(SILENT)
-  log.getLogger(SEND_TO_API).setLevel(SILENT)
-  log.getLogger(MODAL_PRODUCT).setLevel(SILENT)
-  log.getLogger(OPENING_MODAL_PRODUCT_BY_LINK).setLevel(SILENT)
-  log.getLogger(CREATE_REQ_CONFIG_SEARCH_PRODUCT).setLevel(SILENT)
-  log.getLogger(SEARCH_PRODUCT_RESULT_PAGE).setLevel(SILENT)
-  log.getLogger(HISTORY_SUBMIT).setLevel(SILENT)
+  const level = SILENT
+
+  log.getLogger(CONSTRUCTION_LOCATION_CONFIG).setLevel(level)
+  log.getLogger(ACTIONS_NAVIGATION).setLevel(level)
+  log.getLogger(CHANGE_STATE_IN_LOCATION_STORE).setLevel(level)
+  log.getLogger(OPENED_MODAL_PRODUCT_PAGE).setLevel(level)
+  log.getLogger(NAVIGATION).setLevel(level)
+  log.getLogger(CHANGING_DOC_TITLE).setLevel(level)
+  log.getLogger(SEND_TO_API).setLevel(level)
+  log.getLogger(MODAL_PRODUCT).setLevel(level)
+  log.getLogger(OPENING_MODAL_PRODUCT_BY_LINK).setLevel(level)
+  log.getLogger(CREATE_REQ_CONFIG_SEARCH_PRODUCT).setLevel(level)
+  log.getLogger(SEARCH_PRODUCT_RESULT_PAGE).setLevel(level)
+  log.getLogger(HISTORY_SUBMIT).setLevel(level)
 } else {
   log.setLevel(SILENT)
 }
@@ -59,8 +60,6 @@ function App() {
   const changeDocTitle = useChangeDocTitle()
   const selectedCard = useSelector((state) => state.cardProduct.selectedCard)
   const countPathname = useSelector((state) => state.navigation.countPathname)
-  const pageWithError = useSelector((state) => state.navigation.pageWithError)
-  const isLoadingIndicatorBoxSearchResult = useSelector(selectIsLoadingIndicatorBoxSearchResult)
 
 
   useEffect(() => {
@@ -76,15 +75,6 @@ function App() {
     }
     changeDocTitle()
   }, [location.pathname, location.search, location.state?.store?.docTitle, selectedCard])
-
-
-
-  useEffect(() => {
-    if (pageWithError.status) {
-      dispatch(resetPageWithError())
-    }
-  }, [location.pathname, location.search, isLoadingIndicatorBoxSearchResult])
-
 
 
   return (

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { getDataLocalStorage } from "../utils/localStorage/localStorage";
+import { getDataLocalStorage } from "../helpers/localStorage/localStorage";
 import logger from 'loglevel';
 
 /* --------------------------------- slices --------------------------------- */
@@ -8,7 +8,7 @@ import { setIsHistorySubmitDisplayed } from "../redux/reducers/slices/inputSearc
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectIsOpenedDropList } from "../redux/reducers/selectors/dropListPreSearchResultSelectors";
-import { HISTORY_SUBMIT } from "../utils/constants";
+import { HISTORY_SUBMIT } from "../helpers/constants";
 
 
 const log = logger.getLogger(HISTORY_SUBMIT)

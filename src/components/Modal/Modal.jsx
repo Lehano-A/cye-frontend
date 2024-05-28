@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
 import { setIsVisibleModal } from "../../redux/reducers/slices/modalSlice";
 import { selectUserDevice } from "../../redux/reducers/selectors/checkUserDeviceSelectors";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../utils/constants";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../helpers/constants";
 
 
 const StyledDialog = styled(Dialog, {

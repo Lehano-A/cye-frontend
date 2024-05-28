@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { Box, IconButton, ClickAwayListener } from "@mui/material"
-import { handleDataIcon } from "../../../../utils/IconsInformingUtils/handleDataIcon";
+import { handleDataIcon } from "../../../../helpers/IconsInformingUtils/handleDataIcon";
 import TooltipIcon from "./TooltipIconInforming/TooltipIconInforming";
-import { SIZE_ICON_AND_BUTTON_INFORMING } from "../../../../utils/constants";
+import IconInforming from "./IconInforming/IconInforming";
+import { SIZE_ICON_AND_BUTTON_INFORMING } from "../../../../helpers/constants";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectUserDevice } from "../../../../redux/reducers/selectors/checkUserDeviceSelectors";
-import IconInforming from "./IconInforming/IconInforming";
 
 
 const StyledBoxIconCard = styled(Box)(() => {
@@ -80,7 +80,7 @@ function IconsInformingWithTooltip({ feature }) {
               isDisableFocusListener={true}
               isDisableHoverListener={true}
               isDisableTouchListener={true}
-              
+
             >
               <StyledBoxIconCard>
                 <StyledIconButton

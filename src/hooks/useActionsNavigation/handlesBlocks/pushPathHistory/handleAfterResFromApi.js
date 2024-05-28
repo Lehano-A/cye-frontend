@@ -1,6 +1,6 @@
-import constructLocationConfig from "../../../../utils/navigation/constructLocationConfig"
+import constructLocationConfig from "../../../../helpers/navigation/constructLocationConfig"
 import loglevel from 'loglevel'
-import { ACTIONS_NAVIGATION, BRAND, BRAND_AND_CATEGORY, CATEGORY, PERMALINK, TEXT } from "../../../../utils/constants"
+import { ACTIONS_NAVIGATION, BRAND, BRAND_AND_CATEGORY, CATEGORY, PERMALINK, TEXT } from "../../../../helpers/constants"
 
 const log = loglevel.getLogger(ACTIONS_NAVIGATION)
 

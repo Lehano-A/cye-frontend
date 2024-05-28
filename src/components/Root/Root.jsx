@@ -5,19 +5,19 @@ import theme from '../../themes/default'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { CssBaseline } from '@mui/material'
 import Header from '../Header/Header'
-import ErrorPage from '../../pages/ErrorPages/ErrorPage'
+import NotFoundPageError from '../Errors/NotFoundPageError'
 import Main from '../Main/Main'
 import '@fontsource/roboto'
 import OpenedModalProductPage from '../../pages/OpenedModalProductPage/OpenedModalProductPage'
 import SearchProductResultPage from '../../pages/SearchProductResultPage/SearchProductResultPage'
-import withErrorPage from '../HOC/withErrorPage'
+import withHandleErrors from '../HOC/withHandleErrors'
 
 
 
 function Root() {
-
-  const SearchProductResultPageWithErrorPage = withErrorPage(SearchProductResultPage)
-  const OpenedModalProductPageWithErrorPage = withErrorPage(OpenedModalProductPage)
+  const MainWithHandleErrors = withHandleErrors(Main)
+  const SearchProductResultPageWithHandleErrors = withHandleErrors(SearchProductResultPage)
+  const OpenedModalProductPageWithHandleErrors = withHandleErrors(OpenedModalProductPage)
 
 
   const routes = createBrowserRouter([
@@ -28,30 +28,30 @@ function Root() {
         <>
           <Header />
           <Main />
-          <ErrorPage />
+          <NotFoundPageError />
         </>
       ,
 
       children: [
         {
           index: true,
-          element: <Main />,
+          element: <MainWithHandleErrors />,
         },
 
 
         {
           path: '/search/products/:searchBy/:permalink?/',
-          element: <SearchProductResultPageWithErrorPage />,
+          element: <SearchProductResultPageWithHandleErrors />,
         },
 
 
         {
           path: '/search/products/brand/:permalinkBrand/category/:permalinkCategory/',
-          element: <SearchProductResultPageWithErrorPage />,
+          element: <SearchProductResultPageWithHandleErrors />,
           children: [
             {
               path: ':permalinkProductTitle/',
-              element: <OpenedModalProductPageWithErrorPage />,
+              element: <OpenedModalProductPageWithHandleErrors />,
             },]
         },
       ]
@@ -62,7 +62,6 @@ function Root() {
 
 
   return (
-
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <RouterProvider router={routes} />

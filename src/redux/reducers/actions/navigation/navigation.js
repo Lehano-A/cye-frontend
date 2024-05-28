@@ -6,7 +6,7 @@ import { setPathDataBeforeOpeningModalProduct } from "../../slices/navigationSli
 import { setApiFoundProductsAfterSubmit } from "../../slices/searchRequestProductSlice";
 import updateStatePagination from "../pagination/updateStatePagination";
 import { getSlicesFromStore } from "../../../store";
-import { NAVIGATION, OPENING_MODAL_PRODUCT_BY_LINK } from "../../../../utils/constants";
+import { NAVIGATION, OPENING_MODAL_PRODUCT_BY_LINK } from "../../../../helpers/constants";
 
 const log = loglevel.getLogger(NAVIGATION)
 

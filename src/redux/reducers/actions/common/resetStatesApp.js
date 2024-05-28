@@ -6,6 +6,7 @@ import { resetStatesByDefaultFilterCategories } from "../../slices/filterCategor
 import { resetStatesByDefaultInputSearch } from "../../slices/inputSearchSlice";
 import { resetStatesByDefaultModalProduct } from "../../slices/modalProductSlice";
 import { resetStatesByDefaultSearchRequestProduct } from "../../slices/searchRequestProductSlice";
+import { resetStatesByDefaultErrorsApp } from "../../slices/errorsAppSlice";
 
 
 const resetStatesApp = () => (dispatch) => {
@@ -17,6 +18,7 @@ const resetStatesApp = () => (dispatch) => {
   dispatch(resetStatesByDefaultInputSearch())
   dispatch(resetStatesByDefaultSearchRequestProduct())
   dispatch(resetStatesByDefaultModalProduct())
+  dispatch(resetStatesByDefaultErrorsApp())
 }
 
 

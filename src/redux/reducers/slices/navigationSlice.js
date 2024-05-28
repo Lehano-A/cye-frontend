@@ -9,12 +9,6 @@ const initialState = {
   },
   isRedirectionFromModalProductPage: null,
   countPathnames: 0,
-  pageWithError: {
-    status: null,
-    name: null,
-    isError: null,
-    message: null,
-  }
 }
 
 
@@ -33,25 +27,6 @@ const navigationSlice = createSlice({
 
     incrementCountPathnames: (state) => { state.countPathnames = state.countPathnames + 1 },
 
-    setPageWithError: (state, action) => {
-      const updatedState = { ...state.pageWithError }
-      updatedState.status = action.payload.status
-      updatedState.name = action.payload.name
-      updatedState.isError = true
-      updatedState.message = action.payload.message
-
-      state.pageWithError = updatedState
-    },
-
-    resetPageWithError: (state) => {
-      state.pageWithError = {
-        status: null,
-        name: null,
-        isError: null,
-        message: null,
-      }
-    },
-
     resetStatesByDefaultNavigate: () => { return initialState },
   }
 })
@@ -63,8 +38,6 @@ export const {
   setIsRedirectionFromModalProductPage,
   incrementCountPathnames,
   decrementCountPathnames,
-  setPageWithError,
-  resetPageWithError,
   reseStatesByDefaultNavigate,
 } = navigationSlice.actions
 

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setInputValue } from "../../redux/reducers/slices/inputSearchSlice"
 import Modal from "../Modal/Modal"
-import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, messages } from "../../utils/constants"
+import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, messages } from "../../helpers/constants"
 
 
 const StyledMainBox = styled(Box)(() => {

@@ -11,7 +11,8 @@ import useActionsNavigation from "./useActionsNavigation/useActionsNavigation";
 import { selectPaginationData } from "../redux/reducers/selectors/paginationSelectors";
 import { selectApiFoundProductsAfterSubmit } from "../redux/reducers/selectors/searchRequestProductSelectors";
 import { updateStatesWhenPageOpenedByLink } from "../redux/reducers/actions/navigation/navigation";
-import { AFTER_RES_FROM_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, OPENING_MODAL_PRODUCT_BY_LINK } from "../utils/constants";
+import { AFTER_RES_FROM_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, OPENING_MODAL_PRODUCT_BY_LINK } from "../helpers/constants";
+import { setCurrentErrorApp } from "../redux/reducers/slices/errorsAppSlice";
 
 
 
@@ -43,8 +44,8 @@ function useSaveDataAndUpdateState() {
       dispatch(setInputValueAfterSubmit(response.search.searchValue))
 
       // если перешли по ссылке на модал продукта
-      if (response?.search?.foundProductForModal
-      ) {
+      if (response?.search?.foundProductForModal) {
+
         const { data, status, message } = response.search.foundProductForModal
         dispatch(setSelectedCard({
           data,
@@ -56,7 +57,6 @@ function useSaveDataAndUpdateState() {
 
       if (result.length === 0) {
         dispatch(setSearchValueWithoutResult(response.search.searchValue))
-        // return
       }
 
       dispatch(updateStatePagination(pagination))
@@ -100,6 +100,12 @@ function useSaveDataAndUpdateState() {
       const { search, pagination } = response
       const { foundProductForModal } = search
 
+      if (foundProductForModal.status === 'notFound') {
+        dispatch(setCurrentErrorApp({
+          name: foundProductForModal.status,
+          message: foundProductForModal.message
+        }))
+      }
 
       dispatch(setSelectedCard({
         data: foundProductForModal.data,

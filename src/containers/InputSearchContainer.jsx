@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import forcedBlur from '../utils/forcedBlur';
+import forcedBlur from '../helpers/forcedBlur';
 import InputSearch from '../components/Header/FormSearch/InputSearch/InputSearch';
 import api from "../api/api";
 import log from "loglevel";
-import { debounce as debounceInputChange } from "../utils/debounce";
+import { debounce as debounceInputChange } from "../helpers/debounce";
+import queryString from 'query-string';
 
 /* --------------------------------- slices --------------------------------- */
 import {
@@ -39,7 +40,6 @@ import {
 
 /* ---------------------------------- hooks --------------------------------- */
 import useHistorySubmit from "../hooks/useHistorySubmit";
-import queryString from 'query-string';
 
 
 
@@ -59,7 +59,7 @@ function InputSearchContainer({ handleOnChange }) {
 
   const { getAndSaveHistorySubmit, removeHistorySubmit } = useHistorySubmit()
 
-  const timeoutReqApiAfterInputLiveChange = useCallback(debounceInputChange(reqApiInputLiveChange, 120), [])
+  const timeoutReqApiAfterInputLiveChange = debounceInputChange(reqApiInputLiveChange, 120)
 
 
   useEffect(() => {

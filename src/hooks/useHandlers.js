@@ -1,19 +1,31 @@
 import { useDispatch } from "react-redux"
-import { setPageWithError } from "../redux/reducers/slices/navigationSlice"
-import handlePromiseError from "../utils/api/handlePromiseError"
+import handlePromiseError from "../helpers/api/handlePromiseError"
+import { setCurrentErrorApp } from "../redux/reducers/slices/errorsAppSlice"
 
 
 
 function useHandlers() {
   const dispatch = useDispatch()
 
-  return {
-    pageNotFound(err) {
 
+
+  return {
+    handleError(err) {
+      if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+        if (navigator.onLine) {
+          dispatch(setCurrentErrorApp({ name: "apiTimeout" }))
+          return
+        }
+
+        dispatch(setCurrentErrorApp({ name: "noInternetConnection" }))
+      }
+    },
+
+    pageNotFound(err) {
       handlePromiseError(err, (err) => {
 
         if (err.status === 404) {
-          dispatch(setPageWithError(err))
+          dispatch(setCurrentErrorApp(err))
           throw new Error(`${err.message} 404`)
         }
       })

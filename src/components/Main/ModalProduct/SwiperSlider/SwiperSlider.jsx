@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Box, Skeleton } from '@mui/material';
 import ZoomImage from './ZoomImage/ZoomImage';
-import { DELAY_SKELETON } from '../../../../utils/constants';
+import { DELAY_SKELETON } from '../../../../helpers/constants';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';

@@ -1,7 +1,7 @@
 // Supports weights 300-700
 import '@fontsource-variable/comfortaa';
 import { createTheme } from "@mui/material/styles";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, regexAlphaNum } from "../utils/constants";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, regexAlphaNum } from "../helpers/constants";
 
 
 const palette = {

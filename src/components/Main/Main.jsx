@@ -7,7 +7,7 @@ import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectWasFirstSubmit } from "../../redux/reducers/selectors/inputSearchSelectors";
-import ApiTimeoutError from "../../pages/ErrorPages/ApiTimeoutError";
+import { useLocation } from "react-router-dom";
 
 
 const StyledBoxLoadingIndicator = styled(Box)(() => {
@@ -20,28 +20,29 @@ const StyledBoxLoadingIndicator = styled(Box)(() => {
 
 
 
-function Main() {
+function Main({ ErrorComponent }) {
 
   const wasFirstSubmit = useSelector(selectWasFirstSubmit)
   const isLoadingBoxSearchResult = useSelector((state) => state.boxSearchResult.isLoadingIndicator)
-  const hasApiTimeoutError = useSelector((state) => state.searchRequestProduct.hasApiTimeoutError)
-  const isVisibleModalProduct = useSelector((state) => state.modalProduct.isVisibleModalProduct)
+  const location = useLocation()
+
 
   return (
-    <>
-      {!wasFirstSubmit && <Welcome />}
+    ErrorComponent && location.pathname === '/' ?
+      <ErrorComponent />
 
-      {
-        isLoadingBoxSearchResult &&
-        <StyledBoxLoadingIndicator>
-          <LoadingIndicator />
-        </StyledBoxLoadingIndicator>
-      }
+      :
 
-      {
-        (hasApiTimeoutError && !isVisibleModalProduct) && <ApiTimeoutError />
-      }
-    </>
+      <>
+        {!wasFirstSubmit && <Welcome />}
+
+        {
+          isLoadingBoxSearchResult &&
+          <StyledBoxLoadingIndicator>
+            <LoadingIndicator />
+          </StyledBoxLoadingIndicator>
+        }
+      </>
   )
 }
 

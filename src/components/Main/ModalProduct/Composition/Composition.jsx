@@ -2,7 +2,7 @@ import React from "react"
 import Ingredients from "../Ingredients/Ingredients"
 import { Typography, List, Box } from "@mui/material"
 import { styled } from "@mui/material/styles";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants"
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants"
 
 
 const styleTitle = {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 
 const StyledMainBox = styled(Box)(() => {

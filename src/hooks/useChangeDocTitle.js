@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigationType, useParams } from "react-router-dom";
 import loglevel from 'loglevel'
-import changeDocTitle from "../utils/changeDocTitle";
+import changeDocTitle from "../helpers/changeDocTitle";
 import { resetStatesApp } from "../redux/reducers/actions/common/resetStatesApp";
-import { CHANGING_DOC_TITLE } from "../utils/constants";
+import { CHANGING_DOC_TITLE } from "../helpers/constants";
 
 const log = loglevel.getLogger(CHANGING_DOC_TITLE)
 

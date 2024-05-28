@@ -20,8 +20,8 @@ import {
   REDIRECTION_FROM_MODAL_PRODUCT_PAGE,
   ACTIONS_NAVIGATION,
   AFTER_ERROR_PAGE,
-  AFTER_API_TIMEOUT_ERROR_AND_CLOSING_MODAL_PRODUCT,
-} from "../../utils/constants"
+  AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT,
+} from "../../helpers/constants"
 
 const log = loglevel.getLogger(ACTIONS_NAVIGATION)
 
@@ -64,9 +64,10 @@ function useActionsNavigation() {
 
 
             // если возникла ошибка таймаута ответа от сервера и закрывается модал продукта
-            if (stage === AFTER_API_TIMEOUT_ERROR_AND_CLOSING_MODAL_PRODUCT) {
+            if (stage === AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT) {
+
               locationData = handleAfterClosingModalProduct({
-                apiTimeoutError: true,
+                errorAppHasOccurred: true,
                 pathData
               })
             }

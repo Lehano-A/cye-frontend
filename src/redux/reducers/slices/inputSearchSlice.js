@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   inputValue: '',
   inputValueAfterSubmit: null, // для useActionsPagination.
-  isSubmitting: false,
+  isSubmitting: false, // срабатывает в том числе и при выборе варианта из выпадающего списка
   wasFirstSubmit: false,
   hasResFromServerAfterLiveChange: null,
   isHistorySubmitDisplayed: null,

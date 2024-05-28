@@ -1,15 +1,17 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles"
 import LoadingIndicator from "../../../LoadingIndicator/LoadingIndicator";
 import { useLocation, useParams } from "react-router-dom";
-import createReqConfigSearchProduct from "../../../../utils/containers/FormSearchContainer/createConfigReqSearchProduct";
-import createOptionForPagination from "../../../../utils/containers/FormSearchContainer/createOptionForPagination";
+import createReqConfigSearchProduct from "../../../../helpers/containers/FormSearchContainer/createConfigReqSearchProduct";
+import createOptionForPagination from "../../../../helpers/containers/FormSearchContainer/createOptionForPagination";
+import { MEDIA_SM_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 /* --------------------------------- slices --------------------------------- */
 import { setIsPressedButtonPagination } from "../../../../redux/reducers/slices/paginationSlice";
 import { resetByDefaultButtonsFilter } from "../../../../redux/reducers/slices/filterCategoriesSlice";
+import { resetStatesByDefaultErrorsApp } from "../../../../redux/reducers/slices/errorsAppSlice";
 
 /* -------------------------------- selectors ------------------------------- */
 import { selectPaginationData } from "../../../../redux/reducers/selectors/paginationSelectors";
@@ -17,8 +19,15 @@ import { selectApiFoundProductsAfterSubmit } from "../../../../redux/reducers/se
 
 /* -------------------------------- hooks ------------------------------- */
 import useSendingReqToApi from "../../../../hooks/useSendingReqToApi";
-import { MEDIA_SM_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
 
+
+
+const CommonBox = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+}))
 
 const StyledButton = styled(Button)(({ theme }) => {
   return {
@@ -44,7 +53,7 @@ const StyledButton = styled(Button)(({ theme }) => {
 
 
 
-function ButtonPagination() {
+function ButtonPagination({ ErrorComponent }) {
 
   const dispatch = useDispatch()
   const sendReqToApi = useSendingReqToApi()
@@ -54,6 +63,8 @@ function ButtonPagination() {
   const paginationData = useSelector(selectPaginationData)
   const isPressedButtonPagination = useSelector((state) => state.pagination.isPressedButtonPagination)
   const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
+  const arrForShowSearchResultProducts = useSelector((state => state.boxSearchResult.arrForShowSearchResultProducts))
+  const isVisibleModalProduct = useSelector((state => state.modalProduct.isVisibleModalProduct))
 
 
   function handleOnClick() {
@@ -62,6 +73,7 @@ function ButtonPagination() {
 
     dispatch(setIsPressedButtonPagination(true))
     dispatch(resetByDefaultButtonsFilter())
+    dispatch(resetStatesByDefaultErrorsApp())
 
     const dataForOption = createOptionForPagination(
       apiFoundProductsAfterSubmit,
@@ -78,22 +90,31 @@ function ButtonPagination() {
   }
 
 
-
   return (
-    <StyledButton
-      onClick={handleOnClick}
-      disabled={isPressedButtonPagination}
-    >
+    <CommonBox>
+      <StyledButton
+        onClick={handleOnClick}
+        disabled={isPressedButtonPagination}
+      >
+        {
+          isPressedButtonPagination ?
+            <LoadingIndicator
+              color={(theme) => { return theme.palette.fullNatural.main }}
+            />
+            :
+            "Показать ещё"
+        }
+      </StyledButton>
+
+
       {
-        isPressedButtonPagination ?
-          <LoadingIndicator
-            color={(theme) => { return theme.palette.fullNatural.main }}
-          />
-          :
-          "Показать ещё"
+        ErrorComponent && arrForShowSearchResultProducts.length > 0 && !isVisibleModalProduct &&
+        <ErrorComponent />
       }
-    </StyledButton>
+
+    </CommonBox>
   )
 }
 
 export default ButtonPagination
+

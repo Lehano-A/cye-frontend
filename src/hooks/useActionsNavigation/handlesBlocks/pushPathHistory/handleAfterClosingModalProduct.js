@@ -1,6 +1,6 @@
-import constructLocationConfig from "../../../../utils/navigation/constructLocationConfig"
+import constructLocationConfig from "../../../../helpers/navigation/constructLocationConfig"
 import loglevel from 'loglevel'
-import { ACTIONS_NAVIGATION } from "../../../../utils/constants"
+import { ACTIONS_NAVIGATION } from "../../../../helpers/constants"
 
 const log = loglevel.getLogger(ACTIONS_NAVIGATION)
 
@@ -13,8 +13,8 @@ function handleAfterClosingModalProduct(data) {
 
   data: `, data)
 
-  // если возникла ошибка таймаута ответа от сервера при открытом модале окна продукта
-  if (data.apiTimeoutError) {
+  // если возникла ошибка (таймаут ответа от сервера, отсутствие интернета и т.п.) при открытом модале окна продукта
+  if (data.errorAppHasOccurred) {
     return constructLocationConfig({
       dataForPathname: data.pathData.pathname,
       withoutSearch: true

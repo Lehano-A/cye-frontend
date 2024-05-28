@@ -1,8 +1,8 @@
-import constructLocationConfig from "../../../../utils/navigation/constructLocationConfig"
+import constructLocationConfig from "../../../../helpers/navigation/constructLocationConfig"
 import loglevel from 'loglevel'
 import { saveCurrentPathDataBeforeOpeningModalProduct } from "../../../../redux/reducers/actions/navigation/navigation"
-import createPathname from "../../../../utils/navigation/createPathname"
-import { ACTIONS_NAVIGATION, NOT_FOUND, OPENING_MODAL_PRODUCT_BY_LINK } from "../../../../utils/constants"
+import createPathname from "../../../../helpers/navigation/createPathname"
+import { ACTIONS_NAVIGATION, NOT_FOUND, OPENING_MODAL_PRODUCT_BY_LINK } from "../../../../helpers/constants"
 
 const log = loglevel.getLogger(ACTIONS_NAVIGATION)
 

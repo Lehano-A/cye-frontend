@@ -5,11 +5,12 @@ import { Box, Card, CardActionArea, CardMedia, CardContent, Typography, Skeleton
 import { styled } from '@mui/material/styles';
 import IconsInforming from './IconsInformingWithTooltip/IconsInformingWithTooltip';
 import queryString from 'query-string';
-import { DELAY_SKELETON, OPENING_MODAL_PRODUCT, SIZE_ICON_AND_BUTTON_INFORMING } from '../../../utils/constants';
+import { DELAY_SKELETON, OPENING_MODAL_PRODUCT, SIZE_ICON_AND_BUTTON_INFORMING } from '../../../helpers/constants';
 
 /* --------------------------------- slices --------------------------------- */
 import { setSelectedCard } from '../../../redux/reducers/slices/cardProductSlice';
 import { changeVisibleModalProduct } from '../../../redux/reducers/slices/modalProductSlice';
+import { resetStatesByDefaultErrorsApp } from '../../../redux/reducers/slices/errorsAppSlice';
 
 /* --------------------------------- selectors -------------------------------- */
 import { selectApiFoundProductsAfterSubmit } from '../../../redux/reducers/selectors/searchRequestProductSelectors';
@@ -146,6 +147,8 @@ function CardProduct({ dataProduct }) {
 
   function handleCardClick() {
     const { searchValue } = apiFoundProductsAfterSubmit.search
+
+    dispatch(resetStatesByDefaultErrorsApp())
 
     // сохраняем данные выбранной карточки
     dispatch(setSelectedCard({

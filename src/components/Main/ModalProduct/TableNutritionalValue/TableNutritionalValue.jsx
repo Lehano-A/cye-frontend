@@ -2,7 +2,7 @@ import React from "react"
 import { Box, Typography, Table, TableRow, TableCell, TableHead, TableBody } from '@mui/material'
 import { styled } from "@mui/material/styles";
 import { grey } from '@mui/material/colors';
-import { MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../utils/constants";
+import { MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 
 const StyledTableCellHead = styled(TableCell)(() => {
