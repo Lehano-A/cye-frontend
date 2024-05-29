@@ -300,25 +300,24 @@ function ModalProduct({ ErrorComponent }) {
           }
         })
       }
-    } 
+    }
 
-      if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
+    if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
 
-        actionsNavigation.replacePathname({
-          stage: CLOSING_MODAL_PRODUCT,
-          notFoundModalAndBGProducts: true
-        })
-      }
+      actionsNavigation.replacePathname({
+        stage: CLOSING_MODAL_PRODUCT,
+        notFoundModalAndBGProducts: true
+      })
+    }
 
-      else {
+    else {
 
-        actionsNavigation.replacePathname({
-          stage: CLOSING_MODAL_PRODUCT,
-          savedPathDataBeforeOpeningModalProduct
-        })
-      }
+      actionsNavigation.replacePathname({
+        stage: CLOSING_MODAL_PRODUCT,
+        savedPathDataBeforeOpeningModalProduct
+      })
+    }
   }
-
 
   return (
     <>
@@ -338,65 +337,54 @@ function ModalProduct({ ErrorComponent }) {
             :
 
             data ?
-
-              <StyledCommonBox>
-
-                <StyledTopHalfCommonBox>
-                  <StyledBoxTitleAndSlider>
-
-                    <StyledBoxTitle>
-                      <TitleContainer title={title} />
-                    </StyledBoxTitle>
-
-                    <StyledBoxSlider>
-                      <SwiperSlider
-                        images={imagesUrl}
-                        height={sizeMainImage.height}
-                        width={sizeMainImage.width}
-                      />
-                    </StyledBoxSlider>
-                  </StyledBoxTitleAndSlider>
-
-
-                  <Stack sx={{ alignItems: 'center' }}>
-                    <FeaturesComposition data={featuresComposition} />
-                    <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
-                    {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
-                  </Stack>
-                </StyledTopHalfCommonBox>
-
-
-                <StyledBottomHalfCommonBox isDisplayedNoteComposition={noteToComposition}>
-                  <WrapperNoteCompositionAndComposition>
-                    {
-                      noteToComposition &&
-                      <StyledBoxNoteToComposition>
-                        <NoteToComposition data={noteToComposition} />
-                      </StyledBoxNoteToComposition>
-                    }
-
-                    <StyledBoxComposition
-                      isDisplayedNoteComposition={noteToComposition}
-                    >
-                      <Composition
-                        data={composition}
-                        setRefSelectedIngredient={setRefSelectedIngredient}
-                      />
-                    </StyledBoxComposition>
-                  </WrapperNoteCompositionAndComposition>
-                </StyledBottomHalfCommonBox>
-              </StyledCommonBox>
-
-              :
-
               <>
-                {
-                  status === LOADING &&
-                  <StyledBoxLoadingIndicator>
-                    <LoadingIndicator />
-                  </StyledBoxLoadingIndicator>
-                }
+                <StyledCommonBox>
 
+                  <StyledTopHalfCommonBox>
+                    <StyledBoxTitleAndSlider>
+
+                      <StyledBoxTitle>
+                        <TitleContainer title={title} />
+                      </StyledBoxTitle>
+
+                      <StyledBoxSlider>
+                        <SwiperSlider
+                          images={imagesUrl}
+                          height={sizeMainImage.height}
+                          width={sizeMainImage.width}
+                        />
+                      </StyledBoxSlider>
+                    </StyledBoxTitleAndSlider>
+
+
+                    <Stack sx={{ alignItems: 'center' }}>
+                      <FeaturesComposition data={featuresComposition} />
+                      <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
+                      {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
+                    </Stack>
+                  </StyledTopHalfCommonBox>
+
+
+                  <StyledBottomHalfCommonBox isDisplayedNoteComposition={noteToComposition}>
+                    <WrapperNoteCompositionAndComposition>
+                      {
+                        noteToComposition &&
+                        <StyledBoxNoteToComposition>
+                          <NoteToComposition data={noteToComposition} />
+                        </StyledBoxNoteToComposition>
+                      }
+
+                      <StyledBoxComposition
+                        isDisplayedNoteComposition={noteToComposition}
+                      >
+                        <Composition
+                          data={composition}
+                          setRefSelectedIngredient={setRefSelectedIngredient}
+                        />
+                      </StyledBoxComposition>
+                    </WrapperNoteCompositionAndComposition>
+                  </StyledBottomHalfCommonBox>
+                </StyledCommonBox>
 
                 {
                   refSelectedIngredient &&
@@ -404,6 +392,19 @@ function ModalProduct({ ErrorComponent }) {
                     refIngredient={refSelectedIngredient}
                     interpretationValue={interpretationValue}
                   />
+                }
+              </>
+
+
+              :
+
+
+              <>
+                {
+                  status === LOADING &&
+                  <StyledBoxLoadingIndicator>
+                    <LoadingIndicator />
+                  </StyledBoxLoadingIndicator>
                 }
               </>
         }
