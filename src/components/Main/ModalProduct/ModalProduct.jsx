@@ -90,7 +90,7 @@ const StyledBoxTitleAndSlider = styled(Stack)(() => {
 
 const StyledCommonBox = styled(Stack)(() => {
   return {
-    justifyContent: 'space-between',
+    height: '100%',
   }
 })
 
@@ -122,8 +122,8 @@ const StyledBottomHalfCommonBox = styled(Stack, {
   shouldForwardProp: (props) => props !== 'isDisplayedNoteComposition'
 })((props) => {
   return {
+    height: '100%',
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: props.theme.palette.getAlphaColor('primaryTint', 100, 1),
 
