@@ -23,7 +23,6 @@ import { resetStatesByDefaultCardProduct } from "../../../redux/reducers/slices/
 import { setValueInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
 import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../redux/reducers/slices/navigationSlice";
 
-
 /* ---------------------------------- selectors --------------------------------- */
 import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
 
@@ -323,7 +322,7 @@ function ModalProduct({ ErrorComponent }) {
     <>
       <Modal
         widthModal='1100px'
-        heightModal={'100%'}
+        heightModal='100%'
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
       >

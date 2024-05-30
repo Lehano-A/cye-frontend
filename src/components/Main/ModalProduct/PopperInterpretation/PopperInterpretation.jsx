@@ -136,6 +136,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
       placement="bottom-start"
       open={isVisible}
       anchorEl={refIngredient}
+      disablePortal={true}
       modifiers={[
         {
           name: 'flip',
