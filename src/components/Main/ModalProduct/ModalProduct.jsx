@@ -322,7 +322,6 @@ function ModalProduct({ ErrorComponent }) {
     <>
       <Modal
         widthModal='1100px'
-        heightModal='100%'
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
       >
