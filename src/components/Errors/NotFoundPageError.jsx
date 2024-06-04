@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setInputValue } from "../../redux/reducers/slices/inputSearchSlice"
-import Modal from "../Modal/Modal"
+import Modal from "../ModalWindow/ModalWindow"
 import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, messages } from "../../helpers/constants"
 
 

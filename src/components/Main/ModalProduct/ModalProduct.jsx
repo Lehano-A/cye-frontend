@@ -14,7 +14,7 @@ import LoadingIndicator from "../../LoadingIndicator/LoadingIndicator";
 import loglevel from 'loglevel';
 import TitleContainer from "./containersModalProduct/TitleContainer";
 import StyledBoxAbsoluteCentered from "../../../styled/StyledBoxAbsoluteCentered";
-import Modal from "../../Modal/Modal";
+import ModalWindow from "../../ModalWindow/ModalWindow";
 import { AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT, CLOSING_MODAL_PRODUCT, LOADING, MEDIA_MD_MODAL_PRODUCT, MEDIA_SM_MODAL_PRODUCT, MEDIA_XL_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, MODAL_PRODUCT, NOT_FOUND } from "../../../helpers/constants";
 
 /* --------------------------------- slices --------------------------------- */
@@ -325,7 +325,7 @@ function ModalProduct({ ErrorComponent }) {
 
   return (
     <>
-      <Modal
+      <ModalWindow
         widthModal='1100px'
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
@@ -412,7 +412,7 @@ function ModalProduct({ ErrorComponent }) {
                 }
               </>
         }
-      </Modal>
+      </ModalWindow>
     </>
   )
 }

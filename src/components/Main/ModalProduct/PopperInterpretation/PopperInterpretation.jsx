@@ -3,7 +3,7 @@ import { Box, Popper, Fade, Paper } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import Interpretation from "./Interpretation/Interpretation";
 import { styled } from "@mui/material/styles";
-import Modal from "../../../Modal/Modal";
+import ModalWindow from "../../../ModalWindow/ModalWindow";
 import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 /* --------------------------------- slices --------------------------------- */
@@ -149,13 +149,13 @@ function PopperInterpretation({ refIngredient, dataInterpretation }) {
       {
         !breakpoints.MD ?
 
-          <Modal
+          <ModalWindow
             setVisible={toggleVisiblePopper}
             isVisible={isVisiblePopper}
             positionButtonClose='fixed'
           >
             <Interpretation data={dataInterpretation} />
-          </Modal>
+          </ModalWindow>
 
 
           :

@@ -69,7 +69,7 @@ const styleIcon = (theme) => {
 
 
 
-function Modal(props) {
+function ModalWindow(props) {
   const {
     children,
     handleCloseModal: callbackHandleClose,
@@ -133,4 +133,4 @@ function Modal(props) {
   )
 }
 
-export default Modal
+export default ModalWindow
