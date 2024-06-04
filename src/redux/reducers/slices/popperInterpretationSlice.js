@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   visible: false,
-  value: ''
+  data: ''
 }
 
 
@@ -12,14 +12,15 @@ const popperInterpretationSlice = createSlice({
   reducers: {
     toggleVisiblePopper: (state) => { state.visible = !state.visible },
 
-    setValueInterpretation: (state, action) => { state.value = action.payload }
+    setVisiblePopper: (state, action) => { state.value = action.payload },
+    setDataInterpretation: (state, action) => { state.value = action.payload }
   }
 })
 
 export const {
   toggleVisiblePopper,
-  setValueInterpretation
+  setVisiblePopper,
+  setDataInterpretation
 } = popperInterpretationSlice.actions
 
 export default popperInterpretationSlice.reducer
-

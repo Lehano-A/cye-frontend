@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import { grey } from '@mui/material/colors';
 
 /* --------------------------------- slices --------------------------------- */
-import { toggleVisiblePopper, setValueInterpretation } from "../../../../../redux/reducers/slices/popperInterpretationSlice";
+import { toggleVisiblePopper, setDataInterpretation } from "../../../../../redux/reducers/slices/popperInterpretationSlice";
 
 
 const StyledValueWithDefinition = styled(Typography)(({ color, interpretation, theme }) => {
@@ -42,10 +42,10 @@ function Ingredient({ data, setRefSelectedIngredient }) {
 
   const dispatch = useDispatch()
 
-  const handleClickIngredient = (e, value) => {
+  const handleClickIngredient = (e, data) => {
     setRefSelectedIngredient(e.currentTarget)
 
-    dispatch(setValueInterpretation(value))
+    dispatch(setDataInterpretation(data))
     dispatch(toggleVisiblePopper())
   }
 
@@ -62,7 +62,7 @@ function Ingredient({ data, setRefSelectedIngredient }) {
         data.ingredient ? // если строка с определением
 
           <StyledValueWithDefinition
-            onClick={(e) => data.ingredient.interpretation && handleClickIngredient(e, data.ingredient.interpretation)}
+            onClick={(e) => data.ingredient.interpretation && handleClickIngredient(e, data.ingredient)}
             variant="body2"
             interpretation={data.ingredient.interpretation}
             color={data.ingredient.type}

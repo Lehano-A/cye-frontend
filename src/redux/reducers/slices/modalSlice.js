@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isVisibleModal: true,
+  isVisibleModalInterpretation: false,
 }
 
 
@@ -15,6 +16,10 @@ const modalSlice = createSlice({
       state.isVisibleModal = action.payload
     },
 
+    setIsVisibleModalInterpretation: (state, action) => {
+      state.isVisibleModalInterpretation = action.payload
+    },
+
     resetStatesByDefaultModal: () => {
       return initialState
     }
@@ -24,8 +29,8 @@ const modalSlice = createSlice({
 
 export const {
   setIsVisibleModal,
+  setIsVisibleModalInterpretation,
   resetStatesByDefaultModal
 } = modalSlice.actions
 
 export default modalSlice.reducer
-

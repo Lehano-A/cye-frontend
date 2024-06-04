@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Popper, Typography, Fade } from "@mui/material";
+import { Box, Popper, Fade, Paper } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
+import Interpretation from "./Interpretation/Interpretation";
 import { styled } from "@mui/material/styles";
+import Modal from "../../../Modal/Modal";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 /* --------------------------------- slices --------------------------------- */
-import { toggleVisiblePopper, setValueInterpretation } from "../../../../redux/reducers/slices/popperInterpretationSlice";
+import { toggleVisiblePopper, setDataInterpretation } from "../../../../redux/reducers/slices/popperInterpretationSlice";
+
+/* --------------------------------- hooks --------------------------------- */
+import useBreakpoints from "../../../../hooks/useMediaQuery";
+
 
 const StyledPopper = styled(Popper, {
   shouldForwardProp: (prop) => prop !== 'arrow',
@@ -38,7 +45,7 @@ const StyledPopper = styled(Popper, {
     '& .MuiPopper-arrow': {
       bottom: 0,
       left: 0,
-      marginBottom: '-15px',
+      marginBottom: '-16px',
       width: '3em',
       height: '1em',
       '&::before': {
@@ -95,18 +102,25 @@ const StyledArrow = styled('div')(() => {
 })
 
 const stylePopperContent = {
-  maxWidth: '450px',
-  border: '1px dashed #000',
+  maxWidth: '750px',
   borderRadius: '4px',
-  backgroundColor: 'background.paper',
+
+  [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+    maxWidth: '600px',
+  },
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    maxWidth: '750px',
+  },
 }
 
 
 
-function PopperInterpretation({ refIngredient, interpretationValue }) {
+function PopperInterpretation({ refIngredient, dataInterpretation }) {
 
+  const breakpoints = useBreakpoints();
   const dispatch = useDispatch()
-  const isVisible = useSelector(state => state.popperInterpretation.visible)
+  const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const popperRef = useRef(null);
   const [arrowRef, setArrowRef] = useState(null)
 
@@ -117,7 +131,7 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
       // если есть реф Popper и текущая цель события - не Popper и не элемент Ingredient
       if (popperRef.current && !popperRef.current.contains(event.target) && event.target !== refIngredient) {
         dispatch(toggleVisiblePopper())
-        dispatch(setValueInterpretation(''))
+        dispatch(setDataInterpretation([]))
       }
     };
 
@@ -130,51 +144,80 @@ function PopperInterpretation({ refIngredient, interpretationValue }) {
 
 
   return (
-    <StyledPopper
-      ref={popperRef}
-      transition
-      placement="bottom-start"
-      open={isVisible}
-      anchorEl={refIngredient}
-      disablePortal={true}
-      modifiers={[
-        {
-          name: 'flip',
-          enabled: true,
-          options: {
-            altBoundary: true,
-            rootBoundary: 'document',
-            padding: 8,
-          },
-        },
-        {
-          name: 'arrow',
-          enabled: true,
-          options: {
-            element: arrowRef,
-          },
-        },
-      ]}
-    >
+    isVisiblePopper &&
+    <>
+      {
+        !breakpoints.MD ?
+
+          <Modal
+            setVisible={toggleVisiblePopper}
+            isVisible={isVisiblePopper}
+            positionButtonClose='fixed'
+          >
+            <Interpretation data={dataInterpretation} />
+          </Modal>
 
 
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={{ enter: 200, exit: 0 }}>
-          <Box>
+          :
 
-            <StyledArrow className="MuiPopper-arrow" ref={setArrowRef} />
 
-            <Box sx={stylePopperContent}>
-              <Typography sx={{ padding: '15px', fontSize: '14px' }}>
-                {interpretationValue}
-              </Typography>
-            </Box>
+          <StyledPopper
+            ref={popperRef}
+            transition
+            placement="auto-start"
+            open={isVisiblePopper}
+            anchorEl={refIngredient}
+            disablePortal={true}
+            modifiers={[
+              {
+                name: 'flip',
+                enabled: true,
+                options: {
+                  altBoundary: true,
+                  rootBoundary: 'viewport',
+                  padding: 8,
+                },
+              },
+              {
+                name: 'preventOverflow',
+                enabled: true,
+                options: {
+                  altAxis: true,
+                  altBoundary: true,
+                  tether: true,
+                  rootBoundary: 'viewport',
+                  padding: 15,
+                },
+              },
 
-          </Box>
-        </Fade>
-      )
+              {
+                name: 'arrow',
+                enabled: true,
+                options: {
+                  element: arrowRef,
+                },
+              },
+            ]}
+          >
+
+
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={{ enter: 200, exit: 0 }}>
+                <Box>
+
+                  <StyledArrow className="MuiPopper-arrow" ref={setArrowRef} />
+
+                  <Paper elevation={24} sx={stylePopperContent}>
+                    <Interpretation data={dataInterpretation} />
+                  </Paper>
+
+                </Box>
+              </Fade>
+            )
+            }
+          </StyledPopper>
       }
-    </StyledPopper>
+    </>
   )
 }
 

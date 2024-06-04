@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Dialog, DialogActions, GlobalStyles, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from "react-redux";
-import { setIsVisibleModal } from "../../redux/reducers/slices/modalSlice";
-import { selectUserDevice } from "../../redux/reducers/selectors/checkUserDeviceSelectors";
 import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../helpers/constants";
+
+/* -------------------------------- selector -------------------------------- */
+import { selectUserDevice } from "../../redux/reducers/selectors/checkUserDeviceSelectors";
 
 
 const StyledDialog = styled(Dialog, {
@@ -27,7 +28,6 @@ const StyledDialog = styled(Dialog, {
     },
   }
 })
-
 
 const StyledDialogActions = styled(DialogActions, {
   shouldForwardProp: (prop) => prop !== 'position' && prop !== 'userDevice'
@@ -77,28 +77,20 @@ function Modal(props) {
     padding = 0,
     widthModal,
     heightModal,
+    isVisible,
+    setVisible,
   } = props
 
   const dispatch = useDispatch()
 
   const isFullScreenModalProduct = useSelector((state) => state.modalProduct.isFullScreenModalProduct)
-  const isVisibleModal = useSelector((state) => state.modal.isVisibleModal)
   const userDevice = useSelector(selectUserDevice)
   const bodyGlobalStyle = <GlobalStyles styles={{ body: { padding: 0, overflow: 'hidden' } }} /> // необходим, иначе на маленьких разрешениях компонентом MUI вносится ненужное инлайновое 'padding-right: 17px' в элемент <body>
 
 
-  useEffect(() => {
-    dispatch(setIsVisibleModal(true))
-
-    return () => {
-      dispatch(setIsVisibleModal(false))
-    }
-  }, [])
-
-
-
   function handleClose() {
-    dispatch(setIsVisibleModal(false))
+
+    setVisible && dispatch(setVisible(false))
 
     if (callbackHandleClose) {
       callbackHandleClose()
@@ -118,7 +110,7 @@ function Modal(props) {
       scroll="body"
       onClose={handleClose}
       aria-labelledby="modal-title"
-      open={isVisibleModal}
+      open={isVisible}
       fullScreen={isFullScreenModalProduct ? true : false}
     >
 

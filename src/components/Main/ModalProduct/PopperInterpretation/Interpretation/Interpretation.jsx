@@ -40,8 +40,8 @@ const Title = styled(Typography)(() => ({
   marginBottom: "5px"
 }))
 
-const TextListItem = styled(ListItem)(() => ({
-  listStyle: "disc",
+const TextListItem = styled(ListItem)(({ data }) => ({
+  listStyle: data.length > 1 ? "disc" : "none",
   display: 'list-item',
   fontSize: "14px",
   padding: 0,
@@ -56,20 +56,33 @@ const StyledList = styled(List)(() => ({
 
 
 function Interpretation({ data }) {
-  const { category, whyUsed, whereUsed, origin, possibleConsequences, danger, withCaution, allergy, } = data?.interpretation || {}
 
-  function showData(data) {
-    return data.map((item, id) => <TextListItem key={id}>{item}</TextListItem>)
+  const {
+    category,
+    whyUsed,
+    whereUsed,
+    origin,
+    possibleConsequences,
+    danger,
+    withCaution,
+    allergy,
+  } = data.interpretation || {}
 
-  }
 
+  // создать контент элемента списка
   function createContentListItem(title, content) {
     return (
       <Box>
         <Title variant="h3">{title}</Title>
-        <StyledList>{showData(content)}</StyledList>
+        <StyledList>{fillDataListItems(content)}</StyledList>
       </Box>
     )
+  }
+
+
+  // заполнить данными элементами списка
+  function fillDataListItems(data) {
+    return data.map((item, id) => <TextListItem data={data} key={id}>{item}</TextListItem>)
   }
 
 
@@ -81,7 +94,7 @@ function Interpretation({ data }) {
           {
             category.length > 0 &&
             <StyledListItem>
-              {createContentListItem('Категория', category)}
+              {createContentListItem('Что это', category)}
             </StyledListItem>
           }
 

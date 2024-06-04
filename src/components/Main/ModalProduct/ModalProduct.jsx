@@ -20,8 +20,12 @@ import { AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT, CLOSING_MODAL_P
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModalProduct, setIsFullScreenModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
 import { resetStatesByDefaultCardProduct } from "../../../redux/reducers/slices/cardProductSlice";
-import { setValueInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
+import { setDataInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
 import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../redux/reducers/slices/navigationSlice";
+import { resetStatesByDefaultErrorsApp } from "../../../redux/reducers/slices/errorsAppSlice";
+
+/* --------------------------------- actions --------------------------------- */
+import { resetStatesApp } from "../../../redux/reducers/actions/common/resetStatesApp";
 
 /* ---------------------------------- selectors --------------------------------- */
 import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/selectors/boxSearchResultSelectors";
@@ -29,8 +33,8 @@ import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/se
 /* ---------------------------------- hooks --------------------------------- */
 import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
 import useBreakpoints from "../../../hooks/useMediaQuery";
-import { resetStatesByDefaultErrorsApp } from "../../../redux/reducers/slices/errorsAppSlice";
-import { resetStatesApp } from "../../../redux/reducers/actions/common/resetStatesApp";
+
+
 
 
 const StyledBoxTitle = styled(Box)(() => {
@@ -208,8 +212,9 @@ function ModalProduct({ ErrorComponent }) {
   const breakpoints = useBreakpoints()
 
   const selectedCard = useSelector(state => state.cardProduct.selectedCard)
+  const isVisibleModal = useSelector(state => state.modal.isVisibleModal)
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
-  const interpretationValue = useSelector(state => state.popperInterpretation.value)
+  const dataInterpretation = useSelector(state => state.popperInterpretation.value)
   const savedPathDataBeforeOpeningModalProduct = useSelector(state => state.navigation.savedPathDataBeforeOpeningModalProduct)
   const arrForShowSearchResultProducts = useSelector(selectArrForShowSearchResultProducts)
   const [refSelectedIngredient, setRefSelectedIngredient] = useState(null)
@@ -223,7 +228,7 @@ function ModalProduct({ ErrorComponent }) {
 
   useEffect(() => {
     if (!refSelectedIngredient) {
-      dispatch(setValueInterpretation(''))
+      dispatch(setDataInterpretation(''))
     }
   }, [dispatch, isVisiblePopper, refSelectedIngredient])
 
@@ -324,6 +329,7 @@ function ModalProduct({ ErrorComponent }) {
         widthModal='1100px'
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
+        isVisible={isVisibleModal}
       >
 
         {
@@ -388,7 +394,7 @@ function ModalProduct({ ErrorComponent }) {
                   refSelectedIngredient &&
                   <PopperInterpretation
                     refIngredient={refSelectedIngredient}
-                    interpretationValue={interpretationValue}
+                    dataInterpretation={dataInterpretation}
                   />
                 }
               </>
