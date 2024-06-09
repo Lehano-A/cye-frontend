@@ -296,7 +296,6 @@ function ModalProduct({ ErrorComponent }) {
 
       if (arrForShowSearchResultProducts.length === 0) { // если не было ничего найдено для бэкграунда (за модалом)
         dispatch(resetStatesApp()) // тогда сбрасываем все стэйти
-
         actionsNavigation.pushPathInHistory({ // и переходим на главную страницу
           stage: AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT,
           pathData: {
@@ -304,29 +303,30 @@ function ModalProduct({ ErrorComponent }) {
           }
         })
       }
-    }
+    } else
 
-    if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
+      if (selectedCard.status === NOT_FOUND && arrForShowSearchResultProducts.length === 0) {
 
-      actionsNavigation.replacePathname({
-        stage: CLOSING_MODAL_PRODUCT,
-        notFoundModalAndBGProducts: true
-      })
-    }
+        actionsNavigation.replacePathname({
+          stage: CLOSING_MODAL_PRODUCT,
+          notFoundModalAndBGProducts: true
+        })
+      }
 
-    else {
+      else {
 
-      actionsNavigation.replacePathname({
-        stage: CLOSING_MODAL_PRODUCT,
-        savedPathDataBeforeOpeningModalProduct
-      })
-    }
+        actionsNavigation.replacePathname({
+          stage: CLOSING_MODAL_PRODUCT,
+          savedPathDataBeforeOpeningModalProduct
+        })
+      }
   }
 
   return (
     <>
       <ModalWindow
         widthModal='1100px'
+        heightModal={!data && '100%'}
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
         isVisible={isVisibleModal}

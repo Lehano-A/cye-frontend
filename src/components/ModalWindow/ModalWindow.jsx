@@ -115,6 +115,7 @@ function ModalWindow(props) {
     >
 
       {bodyGlobalStyle}
+      {children}
 
       <StyledDialogActions
         position={positionButtonClose}
@@ -126,8 +127,6 @@ function ModalWindow(props) {
 
         </StyledButtonClose>
       </StyledDialogActions>
-
-      {children}
 
     </StyledDialog>
   )
