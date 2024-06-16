@@ -12,7 +12,7 @@ const popperInterpretationSlice = createSlice({
   reducers: {
     toggleVisiblePopper: (state) => { state.visible = !state.visible },
 
-    setVisiblePopper: (state, action) => { state.value = action.payload },
+    setVisiblePopper: (state, action) => { state.visible = action.payload },
     setDataInterpretation: (state, action) => { state.value = action.payload }
   }
 })
