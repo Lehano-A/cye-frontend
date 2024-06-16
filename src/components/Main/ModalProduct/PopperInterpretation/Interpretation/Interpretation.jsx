@@ -1,10 +1,10 @@
-import { Typography, Box, List, ListItem } from "@mui/material"
+import { Typography, Box, List, ListItem, Paper } from "@mui/material"
 import { styled } from "@mui/material/styles";
 import { MEDIA_SM_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../../helpers/constants";
 
 const CommonBox = styled(Box)(() => ({
   display: 'flex',
-  padding: '15px 25px 15px 15px',
+  padding: '15px',
   gap: 25,
 
   [MEDIA_XS_MODAL_PRODUCT]: {
@@ -15,29 +15,54 @@ const CommonBox = styled(Box)(() => ({
   },
 }))
 
-const BoxMainInfo = styled(Box)(() => ({}))
-const BoxDangerousInfo = styled(Box)(() => ({}))
 
 const StyledListItem = styled(ListItem)(() => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "start",
+  minHeight: '75px'
+}))
+
+const StyledListItemNameIndex = styled(StyledListItem)(() => ({
+  justifyContent: 'center',
+  alignItems: "center"
+}))
+
+
+const PaperListItem = styled(Paper)(() => ({
+  width: '100%',
   padding: "15px 25px",
 }))
 
-const StyledListItemDanger = styled(StyledListItem)(({ theme }) => ({
-  backgroundColor: theme.palette.error.light,
-  borderRadius: "15px"
-
+const NameIndex = styled(Typography)(() => ({
+  display: 'block',
+  fontSize: '30px',
+  fontWeight: 700,
 }))
+
+
+const PaperListItemPotencialHarm = styled(PaperListItem)(({ theme }) => ({
+  backgroundColor: theme.palette.withCaution.main,
+  color: '#fff',
+  borderColor: '#fff'
+}))
+
+
+
+const PaperListItemDanger = styled(PaperListItem)(({ theme }) => ({
+  backgroundColor: theme.palette.dangerous.main,
+  color: '#fff',
+  borderColor: '#fff'
+}))
+
 
 const Title = styled(Typography)(() => ({
   display: 'inline-block',
   alignSelf: "center",
   fontSize: '16px',
   fontWeight: 700,
-  borderBottom: '1px solid black',
-  marginBottom: "5px"
+  marginBottom: '5px',
+  letterSpacing: '0.5px'
 }))
 
 const TextListItem = styled(ListItem)(({ data }) => ({
@@ -45,27 +70,44 @@ const TextListItem = styled(ListItem)(({ data }) => ({
   display: 'list-item',
   fontSize: "14px",
   padding: 0,
-
 }))
 
 const StyledList = styled(List)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
   padding: 0,
-  listStyleType: 'none'
+  listStyleType: 'none',
+  justifyContent: 'space-between'
 }))
 
+
+const BoxLeftSide = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: 'calc(100% / 3)',
+  gap: '25px',
+}))
+
+const BoxRightSide = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: 'calc(100% / 3 * 2)',
+  gap: '25px',
+}))
+
+const elevation = 5;
 
 
 function Interpretation({ data }) {
 
   const {
+    names,
     category,
     whyUsed,
     whereUsed,
     origin,
-    possibleConsequences,
+    potencialHarm,
     danger,
-    withCaution,
-    allergy,
   } = data.interpretation || {}
 
 
@@ -87,73 +129,107 @@ function Interpretation({ data }) {
 
 
   return (
-    <CommonBox>
-      <BoxMainInfo>
+    <CommonBox >
+
+      <BoxLeftSide hasDangerElement={danger.length}>
         <StyledList>
+
+          {
+            names.index
+            &&
+            <StyledListItemNameIndex>
+              <NameIndex variant="h3" >
+                {names.index}
+              </NameIndex>
+            </StyledListItemNameIndex>
+          }
+
+
+          {
+            names.synonyms.length > 0 &&
+            <StyledListItem>
+              <PaperListItem elevation={elevation}>
+                {createContentListItem('Другие названия', names.synonyms)}
+              </PaperListItem>
+            </StyledListItem>
+          }
+
 
           {
             category.length > 0 &&
             <StyledListItem>
-              {createContentListItem('Что это', category)}
+              <PaperListItem elevation={elevation}>
+                {createContentListItem('Что это', category)}
+              </PaperListItem>
             </StyledListItem>
           }
 
           {
-            whyUsed.length > 0 &&
+            (whereUsed.length > 0 && (danger.length > 0 || potencialHarm.length > 0)) &&
             <StyledListItem>
-              {createContentListItem('Для чего', whyUsed)}
-            </StyledListItem>
-          }
-
-          {
-            whereUsed.length > 0 &&
-            <StyledListItem>
-              {createContentListItem('Где применяется', whereUsed)}
+              <PaperListItem elevation={elevation}>
+                {createContentListItem('Где применяется', whereUsed)}
+              </PaperListItem>
             </StyledListItem>
           }
 
           {
             origin.length > 0 &&
             <StyledListItem>
-              {createContentListItem('Происхождение', origin)}
+              <PaperListItem elevation={elevation}>
+                {createContentListItem('Происхождение', origin)}
+              </PaperListItem>
             </StyledListItem>
           }
+
 
         </StyledList>
-      </BoxMainInfo>
+      </BoxLeftSide>
 
-      <BoxDangerousInfo>
-        <StyledList>
-          {
-            possibleConsequences.length > 0 &&
-            <StyledListItem>
-              {createContentListItem('Возможные последствия', possibleConsequences)}
-            </StyledListItem>
-          }
 
-          {
-            danger.length > 0 &&
-            <StyledListItemDanger>
-              {createContentListItem('Опасность', danger)}
-            </StyledListItemDanger>
-          }
+      {
+        <BoxRightSide>
+          <StyledList>
+            {
+              potencialHarm.length > 0 &&
+              <StyledListItem>
+                <PaperListItemPotencialHarm elevation={elevation}>
+                  {createContentListItem('Потенциальный вред', potencialHarm)}
+                </PaperListItemPotencialHarm>
+              </StyledListItem>
+            }
 
-          {
-            withCaution.length > 0 &&
-            <StyledListItem>
-              {createContentListItem('С осторожностью', withCaution)}
-            </StyledListItem>
-          }
+            {
+              danger.length > 0 &&
+              <StyledListItem>
+                <PaperListItemDanger elevation={elevation}>
+                  {createContentListItem('Опасность', danger)}
+                </PaperListItemDanger>
+              </StyledListItem>
+            }
 
-          {
-            allergy.length > 0 &&
-            <StyledListItem>
-              {createContentListItem('Аллергия', allergy)}
-            </StyledListItem>
-          }
 
-        </StyledList>
-      </BoxDangerousInfo>
+            {
+              whyUsed.length > 0 &&
+              <StyledListItem>
+                <PaperListItem elevation={elevation}>
+                  {createContentListItem('Для чего', whyUsed)}
+                </PaperListItem>
+              </StyledListItem>
+            }
+
+            {
+              (whereUsed.length > 0 && (danger.length === 0 && potencialHarm.length === 0)) &&
+              <StyledListItem>
+                <PaperListItem elevation={elevation}>
+                  {createContentListItem('Где применяется', whereUsed)}
+                </PaperListItem>
+              </StyledListItem>
+            }
+
+          </StyledList>
+        </BoxRightSide>
+      }
 
     </CommonBox>
   )
