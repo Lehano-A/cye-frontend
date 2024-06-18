@@ -1,58 +1,108 @@
 import { Typography, Box, List, ListItem, Paper } from "@mui/material"
 import { styled } from "@mui/material/styles";
-import { MEDIA_SM_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../../helpers/constants";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../../helpers/constants";
+
+/* ---------------------------------- hooks --------------------------------- */
+import useBreakpoints from "../../../../../hooks/useMediaQuery";
 
 const CommonBox = styled(Box)(() => ({
   display: 'flex',
-  padding: '15px',
-  gap: 25,
 
   [MEDIA_XS_MODAL_PRODUCT]: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '15px 0',
   },
-  [MEDIA_SM_MODAL_PRODUCT]: {
-    flexDirection: 'row'
+
+  [MEDIA_XSPLUS_MODAL_PRODUCT]: {
+    padding: '15px 30px',
+  },
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    flexDirection: 'row',
+    alignItems: 'start',
+    gap: 25,
   },
 }))
 
+const BaseBoxSide = styled(Box)(() => ({
+  display: 'flex',
+  gap: '25px',
+  width: '100%',
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    flexDirection: 'column',
+  }
+}))
+
+const BoxLeftSide = styled(BaseBoxSide)(() => ({
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    width: 'calc(100% / 3)',
+  },
+}))
+
+const BoxRightSide = styled(BaseBoxSide)(() => ({
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    width: 'calc(100% / 3 * 2)',
+  }
+}))
+
+const BaseList = styled(List)(() => ({
+  display: 'flex',
+  padding: 0,
+  listStyleType: 'none',
+  width: '100%',
+}))
+
+const OuterList = styled(BaseList)(() => ({
+  [MEDIA_XS_MODAL_PRODUCT]: {
+    flexDirection: 'column',
+  },
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+}))
+
+const InnerList = styled(BaseList)(() => ({
+  [MEDIA_XS_MODAL_PRODUCT]: {
+    flexDirection: 'column',
+  },
+}))
 
 const StyledListItem = styled(ListItem)(() => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "start",
-  minHeight: '75px'
+  minHeight: '75px',
+  width: '100%',
+
 }))
 
-const StyledListItemNameIndex = styled(StyledListItem)(() => ({
+const ListItemOuterList = styled(StyledListItem)(() => ({
+  width: '100%',
+}))
+
+const StyledListItemOuterListNameIndex = styled(StyledListItem)(() => ({
   justifyContent: 'center',
   alignItems: "center"
 }))
 
-
-const PaperListItem = styled(Paper)(() => ({
-  width: '100%',
+const StyledPaper = styled(Paper)(() => ({
   padding: "15px 25px",
+  width: '100%',
 }))
 
-const NameIndex = styled(Typography)(() => ({
-  display: 'block',
-  fontSize: '30px',
-  fontWeight: 700,
+const ColoredPaper = styled(StyledPaper)(() => ({
+  color: '#fff',
+  borderColor: '#fff',
 }))
 
-
-const PaperListItemPotencialHarm = styled(PaperListItem)(({ theme }) => ({
+const PaperPotencialHarm = styled(ColoredPaper)(({ theme }) => ({
   backgroundColor: theme.palette.withCaution.main,
-  color: '#fff',
-  borderColor: '#fff'
 }))
 
-
-
-const PaperListItemDanger = styled(PaperListItem)(({ theme }) => ({
+const PaperDanger = styled(ColoredPaper)(({ theme }) => ({
   backgroundColor: theme.palette.dangerous.main,
-  color: '#fff',
-  borderColor: '#fff'
 }))
 
 
@@ -65,41 +115,32 @@ const Title = styled(Typography)(() => ({
   letterSpacing: '0.5px'
 }))
 
-const TextListItem = styled(ListItem)(({ data }) => ({
+const NameIndex = styled(Typography)(() => ({
+  fontSize: '30px',
+  fontWeight: 700,
+}))
+
+const ListItemContent = styled(ListItem, {
+  shouldForwardProp: (prop) => prop !== 'isNaturalFoodAddition'
+})(({ data, isNaturalFoodAddition, theme }) => ({
   listStyle: data.length > 1 ? "disc" : "none",
-  display: 'list-item',
-  fontSize: "14px",
+  display: isNaturalFoodAddition ? 'block' : 'list-item', // 'block' - чтобы не отображался маркер напротив - "Натуральное"
   padding: 0,
-}))
-
-const StyledList = styled(List)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  padding: 0,
-  listStyleType: 'none',
-  justifyContent: 'space-between'
+  margin: '0 0 5px 0',
 }))
 
 
-const BoxLeftSide = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  width: 'calc(100% / 3)',
-  gap: '25px',
+const StyledSpan = styled('span')(({ theme }) => ({
+  backgroundColor: theme.palette.fullNatural.main,
+  color: '#fff',
+  padding: '2px 5px',
+  borderRadius: '5px',
 }))
 
-const BoxRightSide = styled(Box)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  width: 'calc(100% / 3 * 2)',
-  gap: '25px',
-}))
-
-const elevation = 5;
+const ELEVATION = 3;
 
 
 function Interpretation({ data }) {
-
   const {
     names,
     category,
@@ -110,124 +151,150 @@ function Interpretation({ data }) {
     danger,
   } = data.interpretation || {}
 
+  const breakpoints = useBreakpoints()
+
 
   // создать контент элемента списка
   function createContentListItem(title, content) {
     return (
-      <Box>
+      <>
         <Title variant="h3">{title}</Title>
-        <StyledList>{fillDataListItems(content)}</StyledList>
-      </Box>
+        <InnerList>{fillDataListItems(content)}</InnerList>
+      </>
     )
   }
 
-
   // заполнить данными элементами списка
   function fillDataListItems(data) {
-    return data.map((item, id) => <TextListItem data={data} key={id}>{item}</TextListItem>)
+    return data.map((item, id) =>
+      <ListItemContent
+        data={data}
+        isNaturalFoodAddition={item.toLowerCase() === 'натуральное' && id === 0}
+        key={id}
+      >
+        {
+          item.toLowerCase() === 'натуральное' && id === 0 ?
+            <>
+              <StyledSpan>
+                {item}
+              </StyledSpan>
+            </>
+            :
+            <>
+              {item}
+            </>
+        }
+      </ListItemContent>)
   }
 
 
   return (
-    <CommonBox >
+    <CommonBox>
 
-      <BoxLeftSide hasDangerElement={danger.length}>
-        <StyledList>
+      <BoxLeftSide>
+        <OuterList>
 
           {
             names.index
             &&
-            <StyledListItemNameIndex>
+            <StyledListItemOuterListNameIndex>
               <NameIndex variant="h3" >
                 {names.index}
               </NameIndex>
-            </StyledListItemNameIndex>
+            </StyledListItemOuterListNameIndex>
           }
 
 
           {
             names.synonyms.length > 0 &&
-            <StyledListItem>
-              <PaperListItem elevation={elevation}>
+            <ListItemOuterList>
+              <StyledPaper elevation={ELEVATION}>
                 {createContentListItem('Другие названия', names.synonyms)}
-              </PaperListItem>
-            </StyledListItem>
+              </StyledPaper>
+            </ListItemOuterList>
           }
 
 
           {
             category.length > 0 &&
-            <StyledListItem>
-              <PaperListItem elevation={elevation}>
+            <ListItemOuterList>
+              <StyledPaper elevation={ELEVATION}>
                 {createContentListItem('Что это', category)}
-              </PaperListItem>
-            </StyledListItem>
-          }
-
-          {
-            (whereUsed.length > 0 && (danger.length > 0 || potencialHarm.length > 0)) &&
-            <StyledListItem>
-              <PaperListItem elevation={elevation}>
-                {createContentListItem('Где применяется', whereUsed)}
-              </PaperListItem>
-            </StyledListItem>
+              </StyledPaper>
+            </ListItemOuterList>
           }
 
           {
             origin.length > 0 &&
-            <StyledListItem>
-              <PaperListItem elevation={elevation}>
+            <ListItemOuterList>
+              <StyledPaper elevation={ELEVATION}>
                 {createContentListItem('Происхождение', origin)}
-              </PaperListItem>
-            </StyledListItem>
+              </StyledPaper>
+            </ListItemOuterList>
           }
 
+          {
+            whyUsed.length > 0 && (!breakpoints.XSPlus) &&
+            <ListItemOuterList>
+              <StyledPaper elevation={ELEVATION}>
+                {createContentListItem('Для чего', whyUsed)}
+              </StyledPaper>
+            </ListItemOuterList>
+          }
 
-        </StyledList>
+          {
+            whereUsed.length > 0 && ((danger.length > 0 || potencialHarm.length > 0) || (!breakpoints.XSPlus)) &&
+            <ListItemOuterList>
+              <StyledPaper elevation={ELEVATION}>
+                {createContentListItem('Где применяется', whereUsed)}
+              </StyledPaper>
+            </ListItemOuterList>
+          }
+        </OuterList>
       </BoxLeftSide>
 
 
       {
         <BoxRightSide>
-          <StyledList>
+          <OuterList>
             {
               potencialHarm.length > 0 &&
-              <StyledListItem>
-                <PaperListItemPotencialHarm elevation={elevation}>
+              <ListItemOuterList>
+                <PaperPotencialHarm elevation={ELEVATION}>
                   {createContentListItem('Потенциальный вред', potencialHarm)}
-                </PaperListItemPotencialHarm>
-              </StyledListItem>
+                </PaperPotencialHarm>
+              </ListItemOuterList>
             }
 
             {
               danger.length > 0 &&
-              <StyledListItem>
-                <PaperListItemDanger elevation={elevation}>
+              <ListItemOuterList>
+                <PaperDanger elevation={ELEVATION}>
                   {createContentListItem('Опасность', danger)}
-                </PaperListItemDanger>
-              </StyledListItem>
+                </PaperDanger>
+              </ListItemOuterList>
             }
 
 
             {
-              whyUsed.length > 0 &&
-              <StyledListItem>
-                <PaperListItem elevation={elevation}>
+              whyUsed.length > 0 && (breakpoints.MD) &&
+              <ListItemOuterList>
+                <StyledPaper elevation={ELEVATION}>
                   {createContentListItem('Для чего', whyUsed)}
-                </PaperListItem>
-              </StyledListItem>
+                </StyledPaper>
+              </ListItemOuterList>
             }
 
             {
-              (whereUsed.length > 0 && (danger.length === 0 && potencialHarm.length === 0)) &&
-              <StyledListItem>
-                <PaperListItem elevation={elevation}>
+              whereUsed.length > 0 && ((danger.length === 0 && potencialHarm.length === 0 && (breakpoints.MD))) &&
+              <ListItemOuterList>
+                <StyledPaper elevation={ELEVATION}>
                   {createContentListItem('Где применяется', whereUsed)}
-                </PaperListItem>
-              </StyledListItem>
+                </StyledPaper>
+              </ListItemOuterList>
             }
 
-          </StyledList>
+          </OuterList>
         </BoxRightSide>
       }
 
