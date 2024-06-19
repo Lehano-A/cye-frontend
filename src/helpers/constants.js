@@ -11,6 +11,7 @@ const messages = {
   notFoundPage: 'Сервер очень старался, но эту страницу ему найти не удалось'
 }
 
+// breakpoints
 const MIN_WIDTH_0 = '(min-width: 0)'
 
 const MIN_WIDTH_500 = '(min-width: 500px)'
@@ -26,6 +27,7 @@ const MIN_WIDTH_1100 = '(min-width: 1100px)'
 const MIN_WIDTH_1200 = '(min-width: 1200px)'
 
 
+// media queries
 const MEDIA_XS_MODAL_PRODUCT = `@media ${MIN_WIDTH_0}`
 
 const MEDIA_XSPLUS_MODAL_PRODUCT = `@media ${MIN_WIDTH_500}`
@@ -39,6 +41,7 @@ const MEDIA_XL_MODAL_PRODUCT = `@media ${MIN_WIDTH_1000}`
 const MEDIA_XLPLUS_MODAL_PRODUCT = `@media ${MIN_WIDTH_1100}`
 
 const MEDIA_LG_MODAL_PRODUCT = `@media ${MIN_WIDTH_1200}`
+
 
 
 const DELAY_SKELETON = 0
@@ -114,9 +117,35 @@ const HISTORY_SUBMIT = 'HistorySubmit'
 
 // mode loggers
 const SILENT = 'silent'
-
 const TRACE = 'trace'
 
+
+// attentionIcons
+const DANGEROUS_TYPE_ATTENTION_ICON = 'dangerous';
+
+const WITH_CAUTION_TYPE_ATTENTION_ICON = 'withCaution';
+
+const FULL_NATURAL_TYPE_ATTENTION_ICON = 'fullNatural';
+
+const PRESERVING_AGENTS_TYPE_ATTENTION_ICON = 'preservingAgents';
+
+const FORBIDDEN_FOR_CHILDREN_PREGNANCY_AND_LACTATING_TYPE_ATTENTION_ICON = 'forbiddenForChildrenPregnancyAndLactating';
+
+
+// title in Interpetation
+const SYNONYMS = 'Другие название';
+
+const WHAT_IS_IT = 'Что это';
+
+const ORIGIN = 'Происхождение';
+
+const WHY_USED = 'Для чего';
+
+const WHERE_USED = 'Где применяется';
+
+const WITH_CAUTION = 'Потенциальный вред';
+
+const DANGEROUS = 'Опасность';
 
 
 
@@ -126,12 +155,14 @@ export {
   defaultPaginationData,
   messages,
 
+  // breakpoints
   MIN_WIDTH_0,
   MIN_WIDTH_500,
   MIN_WIDTH_700,
   MIN_WIDTH_900,
   MIN_WIDTH_1000,
 
+  // media queries
   MEDIA_XS_MODAL_PRODUCT,
   MEDIA_XSPLUS_MODAL_PRODUCT,
   MEDIA_SM_MODAL_PRODUCT,
@@ -180,4 +211,20 @@ export {
   // mode loggers
   SILENT,
   TRACE,
+
+  // attentionIcons
+  DANGEROUS_TYPE_ATTENTION_ICON,
+  WITH_CAUTION_TYPE_ATTENTION_ICON,
+  FULL_NATURAL_TYPE_ATTENTION_ICON,
+  PRESERVING_AGENTS_TYPE_ATTENTION_ICON,
+  FORBIDDEN_FOR_CHILDREN_PREGNANCY_AND_LACTATING_TYPE_ATTENTION_ICON,
+
+  // title in Interpetation
+  SYNONYMS,
+  WHAT_IS_IT,
+  ORIGIN,
+  WHY_USED,
+  WHERE_USED,
+  WITH_CAUTION,
+  DANGEROUS,
 }
