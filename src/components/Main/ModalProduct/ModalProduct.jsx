@@ -20,7 +20,7 @@ import { AFTER_ERROR_APP_HAS_OCCURRED_AND_CLOSING_MODAL_PRODUCT, CLOSING_MODAL_P
 /* --------------------------------- slices --------------------------------- */
 import { changeVisibleModalProduct, setIsFullScreenModalProduct } from "../../../redux/reducers/slices/modalProductSlice";
 import { resetStatesByDefaultCardProduct } from "../../../redux/reducers/slices/cardProductSlice";
-import { setDataInterpretation } from "../../../redux/reducers/slices/popperInterpretationSlice";
+import { setDataInterpretation, setVisiblePopper } from "../../../redux/reducers/slices/popperInterpretationSlice";
 import { resetByDefaultSavedPathDataBeforeOpeningModalProduct } from "../../../redux/reducers/slices/navigationSlice";
 import { resetStatesByDefaultErrorsApp } from "../../../redux/reducers/slices/errorsAppSlice";
 
@@ -33,8 +33,6 @@ import { selectArrForShowSearchResultProducts } from "../../../redux/reducers/se
 /* ---------------------------------- hooks --------------------------------- */
 import useActionsNavigation from "../../../hooks/useActionsNavigation/useActionsNavigation";
 import useBreakpoints from "../../../hooks/useMediaQuery";
-
-
 
 
 const StyledBoxTitle = styled(Box)(() => {
@@ -152,34 +150,6 @@ const WrapperNoteCompositionAndComposition = styled(Box)(() => {
 })
 
 
-const StyledBoxNoteToComposition = styled(Stack)(({ theme }) => {
-  return {
-    position: 'relative',
-    backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
-    padding: '20px 20px 20px 25px',
-    borderRadius: '15px',
-
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      top: '-75px',
-      left: 0,
-      minWidth: '280px',
-      maxWidth: '500px',
-      width: '100%',
-      margin: '38px 0 0 0',
-    },
-
-    [MEDIA_MD_MODAL_PRODUCT]: {
-      top: '-40px',
-      left: '-70px',
-      maxWidth: '440px',
-      width: 'max-content',
-      alignSelf: 'start',
-      margin: '0',
-    }
-  }
-})
-
-
 const StyledBoxComposition = styled(Box, { shouldForwardProp: (props) => props !== 'isDisplayedNoteComposition' })(
   (props) => {
     return {
@@ -212,7 +182,6 @@ function ModalProduct({ ErrorComponent }) {
   const breakpoints = useBreakpoints()
 
   const selectedCard = useSelector(state => state.cardProduct.selectedCard)
-  const isVisibleModal = useSelector(state => state.modal.isVisibleModal)
   const isVisiblePopper = useSelector(state => state.popperInterpretation.visible)
   const dataInterpretation = useSelector(state => state.popperInterpretation.value)
   const savedPathDataBeforeOpeningModalProduct = useSelector(state => state.navigation.savedPathDataBeforeOpeningModalProduct)
@@ -225,6 +194,7 @@ function ModalProduct({ ErrorComponent }) {
 
   const { data, status } = selectedCard || {}
   const { title, imagesUrl, featuresComposition, company, otherInfo, nutritionalValue, noteToComposition, composition } = data || {}
+
 
   useEffect(() => {
     if (!refSelectedIngredient) {
@@ -285,6 +255,10 @@ function ModalProduct({ ErrorComponent }) {
     navigationType: ${navigationType}
     location: `, location)
 
+    if (isVisiblePopper) {
+      dispatch(setVisiblePopper(false))
+      return
+    }
 
     dispatch(changeVisibleModalProduct(false)) // закрывает модальное окно продукта
     dispatch(resetStatesByDefaultCardProduct())
@@ -329,7 +303,8 @@ function ModalProduct({ ErrorComponent }) {
         heightModal={!data && '100%'}
         handleCloseModal={handleCloseModal}
         positionButtonClose={data && 'fixed'}
-        isVisible={isVisibleModal}
+        isVisiblePopperInterpretation={isVisiblePopper}
+        breakpoints={breakpoints}
       >
 
         {
@@ -371,11 +346,9 @@ function ModalProduct({ ErrorComponent }) {
 
                   <StyledBottomHalfCommonBox isDisplayedNoteComposition={noteToComposition}>
                     <WrapperNoteCompositionAndComposition>
+
                       {
-                        noteToComposition &&
-                        <StyledBoxNoteToComposition>
-                          <NoteToComposition data={noteToComposition} />
-                        </StyledBoxNoteToComposition>
+                        noteToComposition && <NoteToComposition data={noteToComposition} />
                       }
 
                       <StyledBoxComposition
@@ -391,9 +364,8 @@ function ModalProduct({ ErrorComponent }) {
                 </StyledCommonBox>
 
                 {
-                  refSelectedIngredient &&
+                  isVisiblePopper &&
                   <PopperInterpretation
-                    refIngredient={refSelectedIngredient}
                     dataInterpretation={dataInterpretation}
                   />
                 }

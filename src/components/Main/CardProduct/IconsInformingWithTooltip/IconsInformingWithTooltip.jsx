@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/material/styles";
 import { Box, IconButton, ClickAwayListener } from "@mui/material"
-import { handleDataIcon } from "../../../../helpers/IconsInformingUtils/handleDataIcon";
+import { handleDataAttentionIcon } from "../../../../helpers/AttentionIconsUtils/handleDataAttentionIcon";
 import TooltipIcon from "./TooltipIconInforming/TooltipIconInforming";
 import IconInforming from "./IconInforming/IconInforming";
 import { SIZE_ICON_AND_BUTTON_INFORMING } from "../../../../helpers/constants";
@@ -11,9 +11,11 @@ import { SIZE_ICON_AND_BUTTON_INFORMING } from "../../../../helpers/constants";
 import { selectUserDevice } from "../../../../redux/reducers/selectors/checkUserDeviceSelectors";
 
 
-const StyledBoxIconCard = styled(Box)(() => {
+const StyledBoxIconCard = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'margin',
+})(({ margin }) => {
   return {
-    margin: '0 5px',
+    margin: `${margin ? margin : '0 5px'}`,
 
     '&:hover': {
       cursor: 'pointer'
@@ -22,17 +24,19 @@ const StyledBoxIconCard = styled(Box)(() => {
 })
 
 
-const StyledIconButton = styled(IconButton)(() => {
+const StyledIconButton = styled(IconButton, {
+  shouldForwardProp: (prop) => prop !== 'iconSize',
+})(({ iconSize }) => {
+
   return {
-    width: SIZE_ICON_AND_BUTTON_INFORMING,
-    height: SIZE_ICON_AND_BUTTON_INFORMING,
+    width: iconSize ? iconSize.width : SIZE_ICON_AND_BUTTON_INFORMING,
+    height: iconSize ? iconSize.height : SIZE_ICON_AND_BUTTON_INFORMING,
   }
 })
 
 
 
-function IconsInformingWithTooltip({ feature }) {
-
+function IconsInformingWithTooltip({ feature, iconSize, margin }) {
   const userDevice = useSelector(selectUserDevice)
 
   const [isOpenTooltip, setIsOpenTooltip] = useState(false)
@@ -40,7 +44,7 @@ function IconsInformingWithTooltip({ feature }) {
 
 
   useEffect(() => {
-    const data = handleDataIcon(feature)
+    const data = handleDataAttentionIcon(feature)
     setDataIcon(data)
   }, [])
 
@@ -59,8 +63,6 @@ function IconsInformingWithTooltip({ feature }) {
       setIsOpenTooltip(true)
     }
   };
-
-
 
   return (
     <>
@@ -86,13 +88,14 @@ function IconsInformingWithTooltip({ feature }) {
                 <StyledIconButton
                   onClick={handleVisibilityTooltipByButton}
                   disableRipple
+                  iconSize={iconSize}
                 >
 
                   <IconInforming
                     color={dataIcon.color}
                     component={dataIcon.icon}
                     inheritViewBox
-                    size={SIZE_ICON_AND_BUTTON_INFORMING}
+                    iconSize={iconSize}
                   />
 
                 </StyledIconButton>
@@ -115,15 +118,16 @@ function IconsInformingWithTooltip({ feature }) {
           isDisableHoverListener={false}
           isDisableTouchListener={true}
         >
-          <StyledBoxIconCard>
+          <StyledBoxIconCard margin={margin}>
             <StyledIconButton
               disableRipple
+              iconSize={iconSize}
             >
-
               <IconInforming
                 inheritViewBox
                 color={dataIcon.color}
                 component={dataIcon.icon}
+                iconSize={iconSize}
               />
             </StyledIconButton>
           </StyledBoxIconCard>

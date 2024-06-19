@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Typography } from "@mui/material"
+import { Box, Paper, Typography } from "@mui/material"
 import Ingredient from "../Ingredient/Ingredient"
 import { styled } from "@mui/material/styles";
 
-const StyledMainBox = styled(Box)(() => {
+const StyledMainBox = styled(Paper)(() => {
   return {
     backgroundColor: 'rgba(0, 0, 0, 0.03)',
     margin: '15px 0',
@@ -23,11 +23,10 @@ const StyledTitle = styled(Typography)(() => {
 
 
 
-
 function CompositeIngredient({ data, setRefSelectedIngredient }) {
 
   return (
-    <StyledMainBox>
+    <StyledMainBox elevation={1}>
       <StyledTitle variant="body2">
         {data.title + ':'}
       </StyledTitle>

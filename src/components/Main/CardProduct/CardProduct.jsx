@@ -33,6 +33,7 @@ const
   font-size: 15px;
 `
 
+
 const StyledBoxImageSkeleton = styled(Box)(() => {
   return {
     width: '100%',

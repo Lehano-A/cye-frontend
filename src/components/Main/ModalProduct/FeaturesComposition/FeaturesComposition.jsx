@@ -1,23 +1,46 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
-import { handleDataIcon } from "../../../../helpers/IconsInformingUtils/handleDataIcon";
-
+import { Box, Paper, Typography } from "@mui/material";
+import { handleDataAttentionIcon } from "../../../../helpers/AttentionIconsUtils/handleDataAttentionIcon";
 import { styled } from "@mui/material/styles";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 import IconInforming from "../../CardProduct/IconsInformingWithTooltip/IconInforming/IconInforming";
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 
-const StyledMainBox = styled(Box)(({ theme, color }) => {
+const CommonBox = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+
+  [MEDIA_XS_MODAL_PRODUCT]: {
+    marginBottom: '15px'
+  },
+
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    marginBottom: 0
+  },
+}))
+
+
+const BoxTitleAndIcon = styled(Box)(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '&:nth-of-type(1n):not(:last-of-type)': {
+    marginBottom: '10px'
+  }
+}))
+
+
+const BoxTitle = styled(Paper)(({ theme, color }) => {
   return {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     maxWidth: '355px',
-    minHeight: '70px',
     width: '100%',
-    backgroundColor: theme.palette[`${color}`].light,
-    borderRadius: '15px',
-    marginBottom: '20px',
+    backgroundColor: theme.palette[`${color}`].main,
+    borderRadius: '10px',
+    marginRight: '5px',
   }
 })
 
@@ -25,14 +48,13 @@ const StyledMainBox = styled(Box)(({ theme, color }) => {
 const styleIconInforming = {
   width: '35px',
   height: '35px',
-  marginRight: '15px',
 }
 
 
-const StyledTilteIcon = styled(Typography)(({ theme, color }) => {
+const Title = styled(Typography)(({ theme, color }) => {
   return {
-    color: theme.palette[`${color}`].main,
-    fontWeight: 600,
+    color: theme.palette[`${color}`].contrastText,
+    letterSpacing: 0.5,
 
     [MEDIA_XS_MODAL_PRODUCT]: {
       fontSize: '15px'
@@ -50,47 +72,30 @@ const StyledBoxTitleIngredients = styled(Box)(() => {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    maxWidth: '290px',
-    marginLeft: '25px',
-    padding: '10px 0',
-  }
-})
-
-
-const StyledIngredient = styled(Typography)(() => {
-  return {
-    fontSize: "14px",
-    '&:nth-of-type(2)': { marginTop: '15px' },
-    '&:last-of-type': { marginBottom: '5px' }
+    padding: '10px 20px',
   }
 })
 
 
 
 function FeaturesComposition({ data }) {
-
   return (
-    <>
+    <CommonBox>
       {
-        data.map((feature, id) => {
+        data.map((item, id) => {
 
-          const dataIcon = handleDataIcon(feature.feature)
+          const dataIcon = handleDataAttentionIcon(item.feature)
 
           return (
-            <StyledMainBox key={id} color={dataIcon.color}>
+            <BoxTitleAndIcon key={id}>
+              <BoxTitle color={dataIcon.color} elevation={3}>
 
-              <StyledBoxTitleIngredients>
-                <StyledTilteIcon color={dataIcon.color}>
-                  {dataIcon.title}
-                </StyledTilteIcon>
-
-                {feature.ingredients.map((ingredient, id) => {
-                  return <StyledIngredient key={id}>
-                    {ingredient}
-                  </StyledIngredient>
-                })}
-
-              </StyledBoxTitleIngredients>
+                <StyledBoxTitleIngredients>
+                  <Title color={dataIcon.color}>
+                    {dataIcon.title}
+                  </Title>
+                </StyledBoxTitleIngredients>
+              </BoxTitle>
 
 
               <IconInforming
@@ -99,11 +104,11 @@ function FeaturesComposition({ data }) {
                 color={dataIcon.color}
                 sx={styleIconInforming}
               />
-
-            </StyledMainBox>)
+            </BoxTitleAndIcon>
+          )
         })
       }
-    </>
+    </CommonBox>
   )
 }
 
