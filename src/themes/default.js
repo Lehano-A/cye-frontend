@@ -5,6 +5,7 @@ import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PROD
 
 
 const palette = {
+  text: { primary: '#363636' },
   primary: {
     light: 'rgba(160, 171, 223, 1)',
     main: '#5c70c8',
@@ -25,40 +26,43 @@ const palette = {
 
   warning: {
     light: '#ffb74d',
-    main: '#FFA500',
+    main: '#ffa500',
     dark: '#f57c00',
   },
 
   fullNatural: {
     light: 'rgba(32, 163, 95, 0.33)',
     main: '#20a35f',
+    contrastText: '#fff',
   },
 
   preservingAgents: {
     light: 'rgba(255, 173, 173, 0.5)',
-    main: '#D74141',
+    main: '#d74141',
   },
 
-  undesirableIngredients: {
+  withCaution: {
     light: 'rgba(255, 188, 64, 0.5)',
-    main: '#F69027',
+    main: '#f69027',
+    contrastText: '#fff',
   },
 
-  forbiddenForChildren: {
-    light: 'rgba(133, 148, 214, 0.5)',
-    main: '#5c70c8',
-    dark: '#3F51A8',
-
+  dangerous: {
+    light: 'rgba(192, 0, 81, 0.5)',
+    main: '#c00051',
+    contrastText: '#fff',
   },
 
-  forbiddenForPregnancy: {
-    light: 'rgba(195, 132, 199, 0.5)',
-    main: '#82008C',
+  forbiddenForChildrenPregnancyAndLactating: {
+    light: 'rgba(206, 112, 206, 0.5)',
+    main: '#ce70ce',
+    contrastText: '#fff',
   },
+
 
   getAlphaColor: function (name, contrast, value) {
     return this[name][contrast].replace(regexAlphaNum, value)
-  }
+  },
 }
 
 
@@ -99,6 +103,7 @@ const theme = createTheme({
       '@global': {
         body: {
           margin: 0,
+
         }
       }
     },
