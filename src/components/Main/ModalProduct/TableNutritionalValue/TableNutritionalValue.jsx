@@ -18,20 +18,13 @@ const StyledTableCellHead = styled(TableCell)(() => {
     [MEDIA_XL_MODAL_PRODUCT]: {
       padding: '16px'
     },
-
   }
 })
 
 
 const StyledTableCellBody = styled(TableCell)(() => {
   return {
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      padding: '8px'
-    },
-
-    [MEDIA_XL_MODAL_PRODUCT]: {
-      padding: '16px'
-    }
+    padding: '8px'
   }
 })
 
