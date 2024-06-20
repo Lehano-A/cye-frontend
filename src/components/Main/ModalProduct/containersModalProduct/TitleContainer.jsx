@@ -1,24 +1,18 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 
 const styleTitleProduct = {
   fontWeight: 700,
-
-  [MEDIA_XS_MODAL_PRODUCT]: {
-    fontSize: '15px',
-  },
-
-  [MEDIA_MD_MODAL_PRODUCT]: {
-    fontSize: '16px',
-  }
+  fontSize: '16px',
+  display: 'inline-block',
+  marginBottom: '30px',
+  maxWidth: '450px',
+  wordBreak: 'break-word',
 }
 
 
-
 function TitleContainer({ title }) {
-
   return (
 
     <Typography
