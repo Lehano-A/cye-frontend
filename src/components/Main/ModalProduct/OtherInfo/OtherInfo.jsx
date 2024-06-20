@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Typography, List, ListItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants";
 
 
 const StyledMainBox = styled(Box)(() => {
@@ -25,21 +24,13 @@ const StyledList = styled(List)(() => {
 const StyledListItem = styled(ListItem)(() => {
   return {
     display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'end',
     paddingLeft: 0,
     paddingRight: 0,
 
     '&:last-child': {
-       paddingBottom: '0',
-    },
-
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      flexDirection: 'column',
-      alignItems: 'end',
-    },
-
-    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      paddingBottom: 0,
     },
   }
 })
@@ -47,29 +38,13 @@ const StyledListItem = styled(ListItem)(() => {
 
 const StyledTitle = styled(Typography)(() => {
   return {
-    display: 'inline-flex',
+    display: 'flex',
     width: '100%',
     fontSize: "12px",
     fontWeight: 700,
     textTransform: 'uppercase',
     whiteSpace: 'nowrap',
-
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      borderBottom: '1px dashed #d9d9d9',
-    },
-
-    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
-      borderBottom: 'none', /* бордер элемента */
-
-      '&::after': {
-        content: "''",
-        display: 'inline',
-        width: '100%',
-        borderBottom: '1px dashed #d9d9d9', /* бордер псевдоэлемента */
-        margin: '0 10px 5px'
-      },
-    },
-
+    borderBottom: '1px dashed #d9d9d9',
   }
 })
 
@@ -77,14 +52,12 @@ const StyledTitle = styled(Typography)(() => {
 const StyledValue = styled(Typography)(() => {
   return {
     fontSize: "14px",
-
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      whiteSpace: 'wrap',
-    },
-
-    [MEDIA_XSPLUS_MODAL_PRODUCT]: {
-      whiteSpace: 'nowrap',
-    },
+    display: 'inline-block',
+    textAlign: 'right',
+    whiteSpace: 'normal',
+    maxWidth: '58%',
+    width: '100%',
+    wordBreak: 'break-word',
   }
 })
 
