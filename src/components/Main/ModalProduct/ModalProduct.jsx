@@ -35,38 +35,15 @@ import useActionsNavigation from "../../../hooks/useActionsNavigation/useActions
 import useBreakpoints from "../../../hooks/useMediaQuery";
 
 
-const StyledBoxTitle = styled(Box)(() => {
-  return {
-    display: 'flex',
-    wordBreak: 'break-word',
-    margin: '0 0 10px 0',
-
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      display: 'flex',
-      width: '90%',
-      justifyContent: 'center',
-    },
-  }
-})
-
-
 const StyledBoxSlider = styled(Stack)(() => {
   return {
     alignItems: 'center',
-
+    justifyContent: 'space-between',
     [MEDIA_XS_MODAL_PRODUCT]: {
       width: '300px',
     },
 
     [MEDIA_SM_MODAL_PRODUCT]: {
-      width: '450px',
-    },
-
-    [MEDIA_MD_MODAL_PRODUCT]: {
-      width: '450px',
-    },
-
-    [MEDIA_XL_MODAL_PRODUCT]: {
       width: '450px',
     },
   }
@@ -80,10 +57,11 @@ const StyledBoxTitleAndSlider = styled(Stack)(() => {
 
     [MEDIA_XS_MODAL_PRODUCT]: {
       justifyContent: 'center',
-      margin: '0 0 50px 0',
+      margin: '15px 0 43px 0',
     },
 
     [MEDIA_MD_MODAL_PRODUCT]: {
+      justifyContent: 'start',
       margin: 0
     },
   }
@@ -166,9 +144,6 @@ const StyledBoxComposition = styled(Box, { shouldForwardProp: (props) => props !
   }
 )
 
-
-const StyledBoxLoadingIndicator = styled(StyledBoxAbsoluteCentered)(() => { })
-const StyledBoxError = styled(StyledBoxAbsoluteCentered)(() => ({ width: '100%' }))
 
 const log = loglevel.getLogger(MODAL_PRODUCT)
 
@@ -305,13 +280,14 @@ function ModalProduct({ ErrorComponent }) {
         positionButtonClose={data && 'fixed'}
         isVisiblePopperInterpretation={isVisiblePopper}
         breakpoints={breakpoints}
+        scroll={breakpoints.MDPlus ? 'body' : 'paper'}
       >
 
         {
           ErrorComponent ?
-            <StyledBoxError>
+            <StyledBoxAbsoluteCentered>
               <ErrorComponent />
-            </StyledBoxError>
+            </StyledBoxAbsoluteCentered>
 
             :
 
@@ -322,9 +298,7 @@ function ModalProduct({ ErrorComponent }) {
                   <StyledTopHalfCommonBox>
                     <StyledBoxTitleAndSlider>
 
-                      <StyledBoxTitle>
-                        <TitleContainer title={title} />
-                      </StyledBoxTitle>
+                      <TitleContainer title={title} />
 
                       <StyledBoxSlider>
                         <SwiperSlider
@@ -378,13 +352,13 @@ function ModalProduct({ ErrorComponent }) {
               <>
                 {
                   status === LOADING &&
-                  <StyledBoxLoadingIndicator>
+                  <StyledBoxAbsoluteCentered>
                     <LoadingIndicator />
-                  </StyledBoxLoadingIndicator>
+                  </StyledBoxAbsoluteCentered>
                 }
               </>
         }
-      </ModalWindow>
+      </ModalWindow >
     </>
   )
 }
