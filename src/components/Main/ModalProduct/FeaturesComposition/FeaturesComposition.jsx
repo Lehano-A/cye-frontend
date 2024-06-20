@@ -10,7 +10,8 @@ const CommonBox = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
-
+  wordBreak: 'break-word',
+  
   [MEDIA_XS_MODAL_PRODUCT]: {
     marginBottom: '15px',
     justifyContent: 'center',
@@ -52,14 +53,7 @@ const Title = styled(Typography)(({ theme, color }) => {
   return {
     color: theme.palette[`${color}`].contrastText,
     letterSpacing: 0.5,
-
-    [MEDIA_XS_MODAL_PRODUCT]: {
-      fontSize: '15px'
-    },
-
-    [MEDIA_MD_MODAL_PRODUCT]: {
-      fontSize: '16px'
-    }
+    fontSize: '15px'
   }
 })
 
