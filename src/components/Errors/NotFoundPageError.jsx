@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setInputValue } from "../../redux/reducers/slices/inputSearchSlice"
 import ModalWindow from "../ModalWindow/ModalWindow"
-import { MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, messages } from "../../helpers/constants"
+import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XSPLUS_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT, messages } from "../../helpers/constants"
 
 
 const StyledMainBox = styled(Box)(() => {
@@ -40,6 +40,33 @@ const StyledIcon = styled('span')(() => {
 })
 
 
+const BoxText = styled(Stack)(() => ({
+  alignItems: 'center'
+}))
+
+
+const MessageText = styled(Typography)(() => ({
+  textAlign: 'center'
+}))
+
+
+const TextWithLink = styled(Typography)(() => ({
+  fontWeight: "600",
+  marginTop: '30px',
+  textAlign: 'center',
+}))
+
+
+const Span = styled('span')(() => ({
+  [MEDIA_XS_MODAL_PRODUCT]: {
+    display: 'block'
+  },
+  [MEDIA_MD_MODAL_PRODUCT]: {
+    display: 'inline'
+  },
+}))
+
+
 
 function NotFoundPageError() {
 
@@ -56,30 +83,29 @@ function NotFoundPageError() {
     navigate('/')
   }
 
-
   return (
     <ModalWindow
       handleCloseModal={handleCloseModal}
       padding='32px'
+      scroll='paper'
+      centeredContent={true}
     >
       <StyledMainBox>
 
         <StyledIcon>🥺</StyledIcon>
 
 
-        <Stack sx={{ alignItems: 'center' }}>
-          <Typography variant="body1" sx={{
-
-            textAlign: 'center'
-          }}>
+        <BoxText>
+          <MessageText variant="body1">
             {messages.notFoundPage}
-          </Typography>
+          </MessageText>
 
-          <Typography variant="body1" sx={{ fontWeight: "600", marginTop: '30px', textAlign: 'center' }}>
-            Давайте попробуем начать с <Link to='/'>главной страницы</Link>
-          </Typography>
+          <TextWithLink variant="body1">
+            Давайте попробуем начать
+            <Span>с <Link to='/'>главной страницы</Link></Span>
+          </TextWithLink>
 
-        </Stack>
+        </BoxText>
       </StyledMainBox>
     </ModalWindow>
   )
