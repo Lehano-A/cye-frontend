@@ -8,6 +8,7 @@ const BoxPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.getAlphaColor('primaryTint', '200', 1),
   padding: '20px 20px 20px 25px',
   borderRadius: '15px',
+  wordBreak: 'break-word',
 
   [MEDIA_XS_MODAL_PRODUCT]: {
     top: '-75px',
@@ -15,7 +16,7 @@ const BoxPaper = styled(Paper)(({ theme }) => ({
     minWidth: '280px',
     maxWidth: '500px',
     width: '100%',
-    margin: '38px 0 0 0',
+    margin: '59px 0 0 0',
   },
 
   [MEDIA_MD_MODAL_PRODUCT]: {
@@ -32,14 +33,7 @@ const BoxPaper = styled(Paper)(({ theme }) => ({
 const styleTitle = {
   fontWeight: 700,
   textTransform: 'upperCase',
-
-  [MEDIA_XS_MODAL_PRODUCT]: {
-    fontSize: '14px'
-  },
-
-  [MEDIA_MD_MODAL_PRODUCT]: {
-    fontSize: '16px',
-  }
+  fontSize: '16px',
 }
 
 
