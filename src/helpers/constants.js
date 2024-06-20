@@ -133,7 +133,7 @@ const FORBIDDEN_FOR_CHILDREN_PREGNANCY_AND_LACTATING_TYPE_ATTENTION_ICON = 'forb
 
 
 // title in Interpetation
-const SYNONYMS = 'Другие название';
+const SYNONYMS = 'Другие названия';
 
 const WHAT_IS_IT = 'Что это';
 
