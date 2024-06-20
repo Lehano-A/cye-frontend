@@ -1,22 +1,29 @@
 import React from "react"
 import Ingredients from "../Ingredients/Ingredients"
-import { Typography, List, Box } from "@mui/material"
+import { Box, Typography, List } from "@mui/material"
 import { styled } from "@mui/material/styles";
-import { MEDIA_MD_MODAL_PRODUCT, MEDIA_XS_MODAL_PRODUCT } from "../../../../helpers/constants"
 
 
-const styleTitle = {
+const CommonBox = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  wordBreak: 'break-word',
+}))
+
+
+const Title = styled(Typography)(() => ({
   fontWeight: 700,
   textTransform: 'uppercase',
+  display: 'inline-block',
+  borderBottom: '1px dashed #d9d9d9',
+  width: '100%',
+  textAlign: 'center',
+  marginBottom: '13px',
+  fontSize: '16px',
+}))
 
-  [MEDIA_XS_MODAL_PRODUCT]: {
-    fontSize: '14px'
-  },
-
-  [MEDIA_MD_MODAL_PRODUCT]: {
-    fontSize: '16px',
-  },
-}
 
 const StyledList = styled(List)(() => {
   return {
@@ -29,24 +36,17 @@ const StyledList = styled(List)(() => {
 function Composition({ data, setRefSelectedIngredient }) {
 
   return (
-    <Box>
+    <CommonBox>
 
-      <Typography
-        variant="h6"
-        sx={styleTitle}
-      >
-        Состав
-      </Typography>
+      <Title variant="h6">Состав</Title>
 
       <StyledList>
-
         <Ingredients
           data={data}
           setRefSelectedIngredient={setRefSelectedIngredient}
         />
-
       </StyledList>
-    </Box>
+    </CommonBox>
   )
 }
 
