@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Interpretation from "./Interpretation/Interpretation";
 import ModalWindow from "../../../ModalWindow/ModalWindow";
 
@@ -13,7 +13,6 @@ import useBreakpoints from "../../../../hooks/useMediaQuery";
 function PopperInterpretation({ dataInterpretation }) {
 
   const breakpoints = useBreakpoints();
-  const popperRef = useRef(null);
 
 
   return (
@@ -25,7 +24,6 @@ function PopperInterpretation({ dataInterpretation }) {
             setVisible={toggleVisiblePopper}
             positionButtonClose='fixed'
             hideBackdrop={true}
-            ref={popperRef}
           >
             <Interpretation data={dataInterpretation} />
           </ModalWindow>
