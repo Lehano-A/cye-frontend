@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 import ListItemOfOuterList from "../ListItemOfOuterList/ListItemOfOuterList";
 import OuterList from "../../../../../../styled/Interpretation/OuterList";
-import { DANGEROUS_TYPE_ATTENTION_ICON, MEDIA_MD_MODAL_PRODUCT, ORIGIN, SYNONYMS, WHAT_IS_IT, WHERE_USED, WHY_USED, WITH_CAUTION_TYPE_ATTENTION_ICON } from "../../../../../../helpers/constants";
+import { DANGEROUS, DANGEROUS_TYPE_ATTENTION_ICON, MEDIA_MD_MODAL_PRODUCT, ORIGIN, SYNONYMS, WHAT_IS_IT, WHERE_USED, WHY_USED, WITH_CAUTION, WITH_CAUTION_TYPE_ATTENTION_ICON } from "../../../../../../helpers/constants";
 
 
 const BaseBoxSide = styled(Box)(() => ({
@@ -108,7 +108,7 @@ function DesktopInterpretation({ data, breakpoints }) {
           {
             potencialHarm.length > 0 &&
             <ListItemOfOuterList
-              title="Потенциальный вред"
+              title={WITH_CAUTION}
               content={potencialHarm}
               typeAttentionIcon={WITH_CAUTION_TYPE_ATTENTION_ICON}
             />
@@ -117,7 +117,7 @@ function DesktopInterpretation({ data, breakpoints }) {
           {
             danger.length > 0 &&
             <ListItemOfOuterList
-              title="Опасность"
+              title={DANGEROUS}
               content={danger}
               typeAttentionIcon={DANGEROUS_TYPE_ATTENTION_ICON}
             />
