@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Stack, Box, Icon, Typography } from "@mui/material"
+import { Stack, Box, Typography } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
@@ -25,15 +25,9 @@ const StyledMainBox = styled(Box)(() => {
 })
 
 
-const StyledIcon = styled(Icon)(() => {
+const StyledIcon = styled('span')(() => {
   return {
     fontSize: '110px',
-    overflow: 'visible',
-    width: '100%',
-    height: '100%',
-    maxWidth: '125px',
-    display: 'flex',
-    justifyContent: 'center',
 
     [MEDIA_XS_MODAL_PRODUCT]: {
       margin: 0
@@ -64,12 +58,13 @@ function NotFoundPageError() {
 
 
   return (
-    <ModalWindow handleCloseModal={handleCloseModal} padding='32px'>
+    <ModalWindow
+      handleCloseModal={handleCloseModal}
+      padding='32px'
+    >
       <StyledMainBox>
 
-        <StyledIcon>
-          🥺
-        </StyledIcon>
+        <StyledIcon>🥺</StyledIcon>
 
 
         <Stack sx={{ alignItems: 'center' }}>
