@@ -12,7 +12,9 @@ const CommonBox = styled(Box)(() => ({
   width: '100%',
 
   [MEDIA_XS_MODAL_PRODUCT]: {
-    marginBottom: '15px'
+    marginBottom: '15px',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   [MEDIA_MD_MODAL_PRODUCT]: {
@@ -21,17 +23,7 @@ const CommonBox = styled(Box)(() => ({
 }))
 
 
-const BoxTitleAndIcon = styled(Box)(() => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  '&:nth-of-type(1n):not(:last-of-type)': {
-    marginBottom: '10px'
-  }
-}))
-
-
-const BoxTitle = styled(Paper)(({ theme, color }) => {
+const BoxTitleAndIcon = styled(Paper)(({ theme, color }) => {
   return {
     display: 'flex',
     alignItems: 'center',
@@ -40,7 +32,11 @@ const BoxTitle = styled(Paper)(({ theme, color }) => {
     width: '100%',
     backgroundColor: theme.palette[`${color}`].main,
     borderRadius: '10px',
-    marginRight: '5px',
+    padding: "8px 6px 8px 12px",
+
+    '&:nth-of-type(1n):not(:last-of-type)': {
+      marginBottom: '10px'
+    }
   }
 })
 
@@ -48,6 +44,7 @@ const BoxTitle = styled(Paper)(({ theme, color }) => {
 const styleIconInforming = {
   width: '35px',
   height: '35px',
+  color: '#fff'
 }
 
 
@@ -67,16 +64,6 @@ const Title = styled(Typography)(({ theme, color }) => {
 })
 
 
-const StyledBoxTitleIngredients = styled(Box)(() => {
-  return {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    padding: '10px 20px',
-  }
-})
-
-
 
 function FeaturesComposition({ data }) {
   return (
@@ -87,16 +74,11 @@ function FeaturesComposition({ data }) {
           const dataIcon = handleDataAttentionIcon(item.feature)
 
           return (
-            <BoxTitleAndIcon key={id}>
-              <BoxTitle color={dataIcon.color} elevation={3}>
+            <BoxTitleAndIcon key={id} color={dataIcon.color} elevation={3}>
 
-                <StyledBoxTitleIngredients>
-                  <Title color={dataIcon.color}>
-                    {dataIcon.title}
-                  </Title>
-                </StyledBoxTitleIngredients>
-              </BoxTitle>
-
+              <Title color={dataIcon.color}>
+                {dataIcon.title}
+              </Title>
 
               <IconInforming
                 inheritViewBox
