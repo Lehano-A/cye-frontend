@@ -10,7 +10,6 @@ import { setIsDisplayedButtonPagination, setPaginationData } from "../redux/redu
 import useActionsNavigation from "./useActionsNavigation/useActionsNavigation";
 import { selectPaginationData } from "../redux/reducers/selectors/paginationSelectors";
 import { selectApiFoundProductsAfterSubmit } from "../redux/reducers/selectors/searchRequestProductSelectors";
-import { updateStatesWhenPageOpenedByLink } from "../redux/reducers/actions/navigation/navigation";
 import { AFTER_RES_FROM_API, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, OPENING_MODAL_PRODUCT_BY_LINK } from "../helpers/constants";
 import { setCurrentErrorApp } from "../redux/reducers/slices/errorsAppSlice";
 
@@ -113,14 +112,6 @@ function useSaveDataAndUpdateState() {
         message: foundProductForModal.message
       }))
 
-      dispatch(updateStatesWhenPageOpenedByLink(response, {
-        settings: {
-          stage: OPENING_MODAL_PRODUCT_BY_LINK,
-          dataForSavingInStore: {
-            searchValue: search.searchValue
-          }
-        }
-      }))
 
       actionsNavigation.replacePathname({
         stage: OPENING_MODAL_PRODUCT_BY_LINK,

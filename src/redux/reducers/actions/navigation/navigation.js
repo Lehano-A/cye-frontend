@@ -1,5 +1,4 @@
 import loglevel from "loglevel"
-import { setArrForShowSearchResultProducts } from "../../slices/boxSearchResultSlice";
 import { setSelectedCard } from "../../slices/cardProductSlice";
 import { setInputValue, setInputValueAfterSubmit } from "../../slices/inputSearchSlice";
 import { setPathDataBeforeOpeningModalProduct } from "../../slices/navigationSlice"
@@ -53,7 +52,7 @@ const updateStatesWhenPageOpenedByLink = (data, { settings }) => (dispatch) => {
   Обновляем состояния, когда страница открылась по ссылке
   settings: `, settings)
 
-  const { result, search, pagination } = data
+  const { search, pagination } = data
   const { searchValue, foundProductForModal = null } = search
   const { stage, dataForSavingInStore = null } = settings
 
@@ -70,7 +69,6 @@ const updateStatesWhenPageOpenedByLink = (data, { settings }) => (dispatch) => {
   }
 
   dispatch(setInputValue(searchValue))
-  dispatch(setArrForShowSearchResultProducts(result))
   dispatch(setApiFoundProductsAfterSubmit(data))
   dispatch(updateStatePagination(pagination))
 }

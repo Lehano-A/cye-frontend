@@ -9,6 +9,7 @@ import api from "../../api/api"
 import { setIsRedirectionFromModalProductPage } from "../../redux/reducers/slices/navigationSlice"
 import BoxSearchResult from "../../components/Main/BoxSearchResult/BoxSearchResult"
 import { BRAND_AND_CATEGORY, MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK, SEARCH_PRODUCT_RESULT_PAGE } from "../../helpers/constants"
+import useQueryParams from "../../hooks/useQueryParams"
 
 
 const log = loglevel.getLogger(SEARCH_PRODUCT_RESULT_PAGE)
@@ -22,6 +23,7 @@ function SearchProductResultPage({ ErrorComponent }) {
   const sendingReqToApi = useSendingReqToApi()
   const dispatch = useDispatch()
   const navigationType = useNavigationType()
+  const { queryParams } = useQueryParams()
 
   const isRedirectionFromModalProductPage = useSelector((state) => state.navigation.isRedirectionFromModalProductPage)
   const isVisibleModalProduct = useSelector((state) => state.modalProduct.isVisibleModalProduct)
@@ -32,6 +34,7 @@ function SearchProductResultPage({ ErrorComponent }) {
     if (navigationType === 'POP' || (navigationType === 'REPLACE' && isRedirectionFromModalProductPage)) {
       log.debug(`
       Открылась страница "SearchProductResultPage"
+      Тип действия: движение по истории НАЗАД или ВПЕРЁД, или ОБНОВИЛАСЬ страница, или страница ОТКРЫЛАСЬ ПО ССЫЛКЕ
 
       navigationType: ${navigationType}
       search: ${location.search}
@@ -43,22 +46,49 @@ function SearchProductResultPage({ ErrorComponent }) {
         dispatch(setIsRedirectionFromModalProductPage(false))
       }
 
-
       const parsedQueryParams = queryString.parse(location.search)
+      let createdQueryParams
+
+      // если в поисковых параметрах есть "searchBy" с значением - "text", "brand" или "category"
+      // тогда поиск нужно производить исключительно по этим параметрам
+      if (
+        parsedQueryParams.searchBy === "text" ||
+        parsedQueryParams.searchBy === "brand" ||
+        parsedQueryParams.searchBy === "category"
+      ) {
+        createdQueryParams = queryParams.create({ withoutDynamicParams: true })
+      } else {
+        createdQueryParams = queryParams.create()
+      }
 
       sendingReqToApi.findProduct({
         stage: MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK,
         apiMethod: api.findProduct,
-        searchData: createSearchParams({
-          ...parsedQueryParams,
-          ...params,
-          totalPages: null,
-          navPop: true,
-        }),
+        searchData: createdQueryParams,
+        segmentSearch: parsedQueryParams.searchBy || params.searchBy || BRAND_AND_CATEGORY
+      })
+      return
+
+
+      console.log('createdQueryParams', createdQueryParams);
+      sendingReqToApi.findProduct({
+        stage: MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK,
+        apiMethod: api.findProduct,
+        searchData: createdQueryParams,
         segmentSearch: params.searchBy || BRAND_AND_CATEGORY
       })
+      return
     }
 
+    // если происходит "классический поиск" через поле поиска
+    log.debug(`
+      Открылась страница "SearchProductResultPage"
+      Тип действия: "классический поиск" через поле поиска
+
+      navigationType: ${navigationType}
+      search: ${location.search}
+      params: `, params
+    )
   }, [window.history.state.idx])
 
 

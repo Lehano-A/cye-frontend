@@ -143,8 +143,8 @@ function OpenedModalProductPage({ ErrorComponent }) {
     }))
 
     const querySearchParams = createQueryParams({
-      titleProductWithBG: true,
       dataForBG: parsedQueryParams,
+      openingModalProductByLink: true,
       permalinkProductTitle,
     })
 

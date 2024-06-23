@@ -25,8 +25,26 @@ function createQueryParams(data) {
     noTransform = null,
     fullReplace = null,
     titleProductWithBG = null,
-    queryParams = null
+    queryParams = null,
+    openingModalProductByLink = null,
   } = data
+
+  if (openingModalProductByLink) {
+    const { dataForBG, permalinkProductTitle } = data
+
+    const config = {
+      searchBy: PERMALINK,
+      type: PRODUCT_TITLE,
+      permalink: permalinkProductTitle,
+      navPop: true,
+      bgPage: dataForBG.page,
+      bgSearchBy: dataForBG.searchBy,
+      bgType: dataForBG.type,
+      bgSearchValue: dataForBG.searchValue,
+    }
+
+    return stringifyQueryParams(config)
+  }
 
 
   // при открытии модального окна продукта по ссылке

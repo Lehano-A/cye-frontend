@@ -40,15 +40,7 @@ function useSendingReqToApi() {
 
           saveDataAndUpdateState.afterResApi({ response, stage })
 
-
-          if (stage === MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK) {
-
-            actionsNavigation.replacePathname({
-              stage,
-              dataForSavingLocationState: response,
-            })
-          } else {
-
+          if (stage !== MOVEMENT_BY_HISTORY_UPDATE_PAGE_OR_FOLLOWED_LINK) {
             actionsNavigation.pushPathInHistory({
               stage: AFTER_RES_FROM_API,
               dataForSavingLocationState: response

@@ -75,7 +75,7 @@ function FilterCategoriesContainer({ foundProducts, searchBy, categoryName }) {
         box[product.categories.main] = true
       }
 
-      /* если поиск по бренду или подстроке и есть подкатегории, а только основные категории */
+      // если поиск по бренду или подстроке
       if (searchBy === "brand" || searchBy === "text") {
         return
       }

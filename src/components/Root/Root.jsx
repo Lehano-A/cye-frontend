@@ -38,13 +38,29 @@ function Root() {
           element: <MainWithHandleErrors />,
         },
 
+        /*
+         search/products/text/
+         search/products/brand/yashkino
+         search/products/category/napitki
+
+         + возможный пермалинк названия продукта (для модала)
+         search/products/category/napitki/gazirovannyy-napitok-evervess-kola-1-l
+        */
 
         {
           path: '/search/products/:searchBy/:permalink?/',
           element: <SearchProductResultPageWithHandleErrors />,
+          children: [
+            {
+              path: 'category/:permalinkCategory/:permalinkProductTitle/',
+              element: <OpenedModalProductPageWithHandleErrors />,
+            },]
         },
 
-
+        /*
+          когда путь имеет в себе пермалинки бренда и категории + возможный пермалинк названия продукта (для модала)
+          search/products/brand/evervess/category/napitki/gazirovannyy-napitok-evervess-kola-1-l
+        */
         {
           path: '/search/products/brand/:permalinkBrand/category/:permalinkCategory/',
           element: <SearchProductResultPageWithHandleErrors />,
@@ -54,6 +70,7 @@ function Root() {
               element: <OpenedModalProductPageWithHandleErrors />,
             },]
         },
+
       ]
     }
   ]
