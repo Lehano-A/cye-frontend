@@ -37,8 +37,9 @@ const palette = {
   },
 
   preservingAgents: {
-    light: 'rgba(255, 173, 173, 0.5)',
-    main: '#d74141',
+    light: 'rgba(93, 147, 212, 0.5)',
+    main: '#5d93d4',
+    contrastText: '#fff',
   },
 
   withCaution: {
