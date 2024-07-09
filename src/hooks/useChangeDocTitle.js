@@ -3,6 +3,7 @@ import { useLocation, useNavigationType, useParams } from "react-router-dom";
 import loglevel from 'loglevel'
 import changeDocTitle from "../helpers/changeDocTitle";
 import { resetStatesApp } from "../redux/reducers/actions/common/resetStatesApp";
+import { selectApiFoundProductsAfterSubmit } from "../redux/reducers/selectors/searchRequestProductSelectors";
 import { CHANGING_DOC_TITLE } from "../helpers/constants";
 
 const log = loglevel.getLogger(CHANGING_DOC_TITLE)
@@ -16,7 +17,7 @@ function useChangeDocTitle() {
   const navigationType = useNavigationType()
   const params = useParams()
   const selectedCard = useSelector((state) => state.cardProduct.selectedCard)
-
+  const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
 
   return () => {
     /*
@@ -111,7 +112,20 @@ function useChangeDocTitle() {
       Что произошло: страница (без модала продукта) открылась по ссылке
       Что будем делать: изменять docTitle
     `)
-      changeDocTitle(params.value ? params.value : '/')
+      changeDocTitle(params.value ? params.value : apiFoundProductsAfterSubmit?.search.searchValue ? apiFoundProductsAfterSubmit?.search.searchValue : '/')
+      return
+    }
+
+
+    if (location.key === 'default' && selectedCard.data) {
+      log.debug(`
+      Продолжение работы внутри хука: useChangeDocTitle
+
+      Что произошло: страница с модалом продукта открылась по ссылке
+      Что будем делать: изменять docTitle
+    `)
+
+      changeDocTitle(selectedCard.data.title)
       return
     }
 
