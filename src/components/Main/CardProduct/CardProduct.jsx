@@ -33,6 +33,12 @@ const
   font-size: 15px;
 `
 
+const StyledCardContent = styled(CardContent)(() => ({
+  maxHeight: '80px',
+  height: '100%',
+  paddingBottom: 0,
+}))
+
 
 const StyledBoxImageSkeleton = styled(Box)(() => {
   return {
@@ -120,7 +126,7 @@ function CardProduct({ dataProduct }) {
   const inputValue = useSelector(selectInputValue)
   const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
 
-  const { title, imagesUrl, featuresComposition } = dataProduct
+  const { title, imagesUrl, featuresComposition, typesFoodAdditives } = dataProduct
   const mainImageUrl = imagesUrl[0].mediumUrl
 
   const [isLoadedImage, setIsLoadedImage] = useState(false)
@@ -189,7 +195,6 @@ function CardProduct({ dataProduct }) {
   }
 
 
-
   return (
     <>
       <Fade in={true}>
@@ -199,10 +204,10 @@ function CardProduct({ dataProduct }) {
             featuresComposition?.length > 0 &&
             <StyledBoxIconsInforming>
               {
-                featuresComposition.map((item, id) => {
+                typesFoodAdditives.map((item, id) => {
                   return (
                     <IconsInforming
-                      feature={item.feature}
+                      feature={item}
                       key={id}
                     />
                   )
@@ -241,11 +246,11 @@ function CardProduct({ dataProduct }) {
               }
 
 
-              <CardContent>
+              <StyledCardContent>
                 <StyledTypography variant='h2'>
                   {title}
                 </StyledTypography>
-              </CardContent>
+              </StyledCardContent>
 
             </StyledCardActionArea>
           </StyledCard>
