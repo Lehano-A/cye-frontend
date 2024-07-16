@@ -104,6 +104,15 @@ function DesktopInterpretation({ data, breakpoints }) {
 
       <BoxRightSide>
         <OuterList>
+          {
+            danger.length > 0 &&
+            <ListItemOfOuterList
+              title={DANGEROUS}
+              content={danger}
+              typeAttentionIcon={DANGEROUS_TYPE_ATTENTION_ICON}
+            />
+          }
+
 
           {
             potencialHarm.length > 0 &&
@@ -111,15 +120,6 @@ function DesktopInterpretation({ data, breakpoints }) {
               title={WITH_CAUTION}
               content={potencialHarm}
               typeAttentionIcon={WITH_CAUTION_TYPE_ATTENTION_ICON}
-            />
-          }
-
-          {
-            danger.length > 0 &&
-            <ListItemOfOuterList
-              title={DANGEROUS}
-              content={danger}
-              typeAttentionIcon={DANGEROUS_TYPE_ATTENTION_ICON}
             />
           }
 
