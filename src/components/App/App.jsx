@@ -23,6 +23,7 @@ import {
   SEARCH_PRODUCT_RESULT_PAGE,
   HISTORY_SUBMIT,
 } from "../../helpers/constants";
+import { selectApiFoundProductsAfterSubmit } from "../../redux/reducers/selectors/searchRequestProductSelectors";
 
 
 /* trace, debug, info, warn, error, silent */
@@ -60,7 +61,7 @@ function App() {
   const changeDocTitle = useChangeDocTitle()
   const selectedCard = useSelector((state) => state.cardProduct.selectedCard)
   const countPathname = useSelector((state) => state.navigation.countPathname)
-
+  const apiFoundProductsAfterSubmit = useSelector(selectApiFoundProductsAfterSubmit)
 
   useEffect(() => {
     const device = checkUserDevice()
@@ -74,7 +75,7 @@ function App() {
       dispatch(incrementCountPathnames())
     }
     changeDocTitle()
-  }, [location.pathname, location.search, location.state?.store?.docTitle, selectedCard])
+  }, [location.pathname, location.search, location.state?.store?.docTitle, selectedCard, apiFoundProductsAfterSubmit])
 
 
   return (
