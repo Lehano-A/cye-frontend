@@ -21,7 +21,7 @@ function handleDataAttentionIcon(feature) {
     return {
       icon: IconPreservingAgents,
       color: PRESERVING_AGENTS_TYPE_ATTENTION_ICON,
-      title: 'Консерванты',
+      title: 'Наличие консервантов',
     }
   }
 
