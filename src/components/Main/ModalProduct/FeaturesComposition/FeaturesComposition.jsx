@@ -11,7 +11,7 @@ const CommonBox = styled(Box)(() => ({
   flexDirection: 'column',
   width: '100%',
   wordBreak: 'break-word',
-  
+
   [MEDIA_XS_MODAL_PRODUCT]: {
     marginBottom: '15px',
     justifyContent: 'center',
@@ -65,7 +65,7 @@ function FeaturesComposition({ data }) {
       {
         data.map((item, id) => {
 
-          const dataIcon = handleDataAttentionIcon(item.feature)
+          const dataIcon = handleDataAttentionIcon(item)
 
           return (
             <BoxTitleAndIcon key={id} color={dataIcon.color} elevation={3}>

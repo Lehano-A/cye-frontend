@@ -168,7 +168,8 @@ function ModalProduct({ ErrorComponent }) {
   })
 
   const { data, status } = selectedCard || {}
-  const { title, imagesUrl, featuresComposition, company, otherInfo, nutritionalValue, noteToComposition, composition } = data || {}
+  const { title, imagesUrl, company, otherInfo, nutritionalValue, noteToComposition, composition, typesFoodAdditives
+  } = data || {}
 
 
   useEffect(() => {
@@ -311,7 +312,7 @@ function ModalProduct({ ErrorComponent }) {
 
 
                     <Stack sx={{ alignItems: 'center' }}>
-                      <FeaturesComposition data={featuresComposition} />
+                      <FeaturesComposition data={typesFoodAdditives} />
                       <OtherInfo data={{ company: company, otherInfo: otherInfo }} />
                       {nutritionalValue && <TableNutritionalValue data={nutritionalValue} />}
                     </Stack>
