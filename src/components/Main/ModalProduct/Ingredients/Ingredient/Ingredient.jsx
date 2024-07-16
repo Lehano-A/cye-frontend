@@ -13,29 +13,37 @@ import { toggleVisiblePopper, setDataInterpretation } from "../../../../../redux
 const CommonBox = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'center'
+  alignItems: 'center',
+  "&:nth-of-type(1n):not(:last-of-type)": {
+    margin: '0 20px 8px 0'
+  }
 }))
 
 
 const StyledValueWithInterpretation = styled(Typography)(({ color, interpretation, theme }) => {
+
   const typeAttentionIcon = checkAttentionIconsFoodAdditive(color)
+
   const { textColor, bgColor } = calculateColorIngredient(theme, color, typeAttentionIcon)
 
   return {
     display: 'inline-block',
     color: color.length > 0 && typeAttentionIcon ? textColor : grey[600],
     cursor: interpretation && 'pointer',
-    background: color.length > 0 && bgColor,
+    background: color.length > 0 ? bgColor : interpretation ? grey[300] : "none",
     padding: '5px',
     borderRadius: '5px',
     fontWeight: !color && 'bold',
-    margin: '0 20px 0 0',
     transition: 'background-color 0.2s',
     lineHeight: 0.8,
 
+    '&:first-letter': {
+      textTransform: 'lowercase'
+    },
+
     '&:hover': {
       color: color.length > 0 ? theme.palette[typeAttentionIcon].main : grey[600],
-      background: color.length > 0 ? theme.palette.getAlphaColor(typeAttentionIcon, 'light', 0.2) : grey[300]
+      background: color.length > 0 ? theme.palette.getAlphaColor(typeAttentionIcon, 'light', 0.2) : interpretation ? grey[400] : grey[300]
     }
   }
 })
@@ -44,7 +52,11 @@ const StyledSimpleValue = styled(Typography)(() => {
   return {
     display: 'inline-block',
     margin: '0 25px 0 0px',
-    color: grey[500]
+    color: grey[500],
+
+    '&:first-letter': {
+      textTransform: 'lowercase'
+    }
   }
 })
 
@@ -60,7 +72,6 @@ function Ingredient({ data, setRefSelectedIngredient }) {
     dispatch(setDataInterpretation(data))
     dispatch(toggleVisiblePopper())
   }
-
 
   /*
     Здесь отображается два типа односоставных ингредиента:
