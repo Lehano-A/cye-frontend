@@ -1,24 +1,42 @@
 import {
   DANGEROUS_TYPE_ATTENTION_ICON,
   FULL_NATURAL_TYPE_ATTENTION_ICON,
-  PRESERVING_AGENTS_TYPE_ATTENTION_ICON,
+  WITH_CAUTION_TYPE_ATTENTION_ICON,
 } from "../../constants";
+
+
+const priority = [
+  DANGEROUS_TYPE_ATTENTION_ICON,
+  WITH_CAUTION_TYPE_ATTENTION_ICON,
+  FULL_NATURAL_TYPE_ATTENTION_ICON,
+]
+
+
+// проверить приоритетность типов иконки внимания
+function checkPriorityTypesAttentionIcon(type) {
+  return priority.some((item) => type === item)
+}
 
 
 // проверить иконку внимания пищевой добавки
 function checkAttentionIconsFoodAdditive(arr) {
-  const hasDangerous = arr.filter((name) =>
-    name === DANGEROUS_TYPE_ATTENTION_ICON ||
-    name === PRESERVING_AGENTS_TYPE_ATTENTION_ICON ||
-    name === FULL_NATURAL_TYPE_ATTENTION_ICON
-  );
-
-  if (hasDangerous.length > 0) {
-    return hasDangerous.join()
+  if (arr.length === 0) {
+    return []
   }
 
-  return arr.join()
+  let foundPriority
+
+  for (let item of priority) {
+    const id = arr.indexOf(item)
+
+    if (id !== -1) {
+      foundPriority = arr[id]
+      break
+    }
+  }
+  return foundPriority ? foundPriority : []
 }
 
 
-export { checkAttentionIconsFoodAdditive }
+
+export { checkAttentionIconsFoodAdditive, checkPriorityTypesAttentionIcon }

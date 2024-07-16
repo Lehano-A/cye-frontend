@@ -1,18 +1,14 @@
-import {
-  DANGEROUS_TYPE_ATTENTION_ICON,
-  FULL_NATURAL_TYPE_ATTENTION_ICON,
-  WITH_CAUTION_TYPE_ATTENTION_ICON,
-} from "../../constants"
+import { checkPriorityTypesAttentionIcon } from "./checkAttentionIconsFoodAdditive";
 
 
 // вычислить цвет текста ингредиента
 function calculateColorIngredient(theme, color, typeAttentionIcon) {
-  if (
-    typeAttentionIcon === DANGEROUS_TYPE_ATTENTION_ICON ||
-    typeAttentionIcon === WITH_CAUTION_TYPE_ATTENTION_ICON ||
-    typeAttentionIcon === FULL_NATURAL_TYPE_ATTENTION_ICON
-  ) {
 
+  if (color.length === 0) {
+    return { bgColor: null, textColor: null }
+  }
+
+  if (checkPriorityTypesAttentionIcon(typeAttentionIcon)) {
     return {
       bgColor: theme.palette[typeAttentionIcon].main,
       textColor: theme.palette[typeAttentionIcon].contrastText
@@ -20,8 +16,8 @@ function calculateColorIngredient(theme, color, typeAttentionIcon) {
   }
 
   return {
-    bgColor: theme.palette[`${color}`].light,
-    textColor: theme.palette[`${color}`].main,
+    bgColor: theme.palette[color.join()].light,
+    textColor: theme.palette[color.join()].main,
   }
 }
 
