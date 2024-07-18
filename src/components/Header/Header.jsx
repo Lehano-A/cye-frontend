@@ -46,9 +46,9 @@ function Header() {
             </Link>
           </Box>
 
-          <Box sx={styleBoxFormSearch}>
+          <search sx={styleBoxFormSearch}>
             <FormSearchContainer />
-          </Box>
+          </search>
 
         </Stack>
       </Stack>
