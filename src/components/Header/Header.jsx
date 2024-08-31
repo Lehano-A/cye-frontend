@@ -1,4 +1,5 @@
 import React from "react";
+import { styled } from "@mui/styles";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Box, Paper, Stack } from "@mui/material"
@@ -9,13 +10,12 @@ import logo from '../../images/logo/logo.svg'
 import { resetStatesApp } from "../../redux/reducers/actions/common/resetStatesApp";
 
 
-const styleBoxFormSearch = {
+const Search = styled('search')(() => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   width: '100%'
-}
-
+}))
 
 
 function Header() {
@@ -46,9 +46,9 @@ function Header() {
             </Link>
           </Box>
 
-          <search sx={styleBoxFormSearch}>
+          <Search>
             <FormSearchContainer />
-          </search>
+          </Search>
 
         </Stack>
       </Stack>

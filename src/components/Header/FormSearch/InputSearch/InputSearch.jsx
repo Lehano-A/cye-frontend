@@ -18,6 +18,7 @@ const styleMainBox = {
   alignItems: 'center',
   minWidth: '219px',
   maxWidth: '600px',
+  width: '100%'
 }
 
 
@@ -37,7 +38,7 @@ function InputSearch({
   return (
     <Box sx={styleMainBox}>
       <Autocomplete
-        sx={{ width: 3500 }}
+        sx={{ width: '100%' }}
         freeSolo
         includeInputInList
         clearOnEscape
